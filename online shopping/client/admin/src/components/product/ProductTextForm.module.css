@@ -1,0 +1,17 @@
+.form{
+    height: 100%;
+    width: 100%;
+    /* background-color: antiquewhite; */
+    padding: 4% 5%;
+    text-align: center;
+    align-items: center;
+}
+.input{
+    margin: 0 25%;
+    height: 15%;
+    width: 50%;
+    font-size: 3rem;
+}
+.btn{
+    margin: 1% 1%;
+}

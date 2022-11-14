@@ -1,0 +1,9 @@
+.search{
+    border-radius: 1rem;
+    height: 80%;
+    width: 80%;
+    border-color: aqua;
+}
+.search:focus{
+    border: 5px solid aqua;
+}

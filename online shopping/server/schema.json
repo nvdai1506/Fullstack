@@ -1,0 +1,56 @@
+{
+    "ao":[
+        {
+            "ao thun":[],
+            "ao so mi":[],
+            "ao khoac":[]
+        }
+    ],
+    "quan":[
+        {
+            "quan dai":[],
+            "quan short":[]
+        }
+    ],
+    "phukien":[
+        {
+            "non":[],
+            "tat-vo":[],
+            "day nit":[],
+            "vi da":[]
+        }
+    ],
+    "baolo-tui":[],
+    "giay dep":[]
+
+}
+//catalog
+{
+    "name":""
+} 
+// child catalog
+{
+    "parent":"",
+    "title":"",
+    "product":[]
+}
+// product
+{
+    "title":"",
+    "description":"",
+    "imageUrl":"",
+    "material":"",
+    "size":"",
+    "price":100000,
+    "childCatalog":""
+}
+
+{
+    "title":"At 01",
+    "description":"new product",
+    "imageUrl":"http://localhost:8080/iamge",
+    "material":"Cotton",
+    "size":"M",
+    "price":100000,
+    "childCatalog":"6364932858179e871a9e1f4c"
+}

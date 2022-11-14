@@ -1,0 +1,15 @@
+.main{
+    margin: 1rem 1rem;
+    padding: 1rem 1rem;
+    /* background-color: aquamarine; */
+}
+.status{
+    width: 75%;
+    height: 4rem;
+    margin: 0 10%;
+    /* background-color: blueviolet;   */
+}
+.form{
+    display: flex;
+    height: 9rem;
+}
