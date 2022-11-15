@@ -23,7 +23,12 @@ function MainNavigation() {
                 <ul>
                     {isLoggedIn &&
                         <li>
-                            <Link to='/' className={classes[`${ location.pathname==='/' ? 'active' : ''}`]}>Catalog</Link>
+                            <Link to='/' className={classes[`${ location.pathname==='/' ? 'active' : ''}`]}>Dashboard</Link>
+                        </li>
+                    }
+                    {isLoggedIn &&
+                        <li>
+                            <Link to='/catalog' className={classes[`${ location.pathname==='/catalog' ? 'active' : ''}`]}>Catalog</Link>
                         </li>
                     }
                     {isLoggedIn &&

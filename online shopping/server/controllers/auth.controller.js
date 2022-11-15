@@ -67,7 +67,7 @@ auth.login = async (req, res, next) => {
             userId: user._id,
             accessToken,
             refreshToken,
-            expiresIn: 24*60*60
+            role: user.role
         })
 
     } catch (error) {

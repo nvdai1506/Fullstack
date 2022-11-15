@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator';
+import bcrypt from 'bcryptjs';
 
 import clearImage from '../utils/clearImage.js';
 
@@ -10,12 +11,36 @@ import User from '../models/user.model.js';
 
 
 import errorHandler from '../utils/errorHandler.js';
-import e from 'express';
+
 
 let admin = () => { }
-admin.addManager = async(req, res, next)=>{
+
+admin.addManager = async (req, res, next) => {
+    const email = req.body.email;
     if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    try {
+        const isUserExist = await User.findOne({ email: email });
+        if (isUserExist) {
+            throw errorHandler.throwErr('User is existed.', 422);
+        }
+        const password = await bcrypt.hash(req.body.password, 12);
+        const user = new User({
+            email: req.body.email,
+            password: password,
+            role: 2
+        })
+
+        const result = await user.save();
+
+        res.status(201).json({ mess: 'Account is signed up.', id: result._id, email: result.email });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
     }
 }
 // Catalog
@@ -212,7 +237,7 @@ admin.addProduct = async (req, res, next) => {
     if (!req.file) {
         return next(errorHandler.throwErr('No image provided!', 401));
     }
-    const imageUrl = req.file.path.replace("\\" ,"/");
+    const imageUrl = req.file.path.replace("\\", "/");
     // console.log(imageUrl);
     const childCatalogId = req.body.childCatalog;
     try {
@@ -254,20 +279,20 @@ admin.updateProduct = async (req, res, next) => {
         }
         let imageUrl;
         if (req.file) {
-            imageUrl = req.file.path.replace("\\" ,"/");
+            imageUrl = req.file.path.replace("\\", "/");
             clearImage(product.imageUrl);
-        }else{
+        } else {
             imageUrl = product.imageUrl;
         }
-        
-    
+
+
         const newTitle = req.body.title;
         const newDescription = req.body.description;
         const newMaterial = req.body.material;
         const newSize = req.body.size;
         const newPrice = req.body.price;
         const newChildCatalog = req.body.childCatalog
-        const newParentCatalog= req.body.parentCatalog
+        const newParentCatalog = req.body.parentCatalog
         const childCatalog = await ChildCatalog.findById(newChildCatalog);
         if (!childCatalog) {
             throw errorHandler.throwErr('Could not child Catalog!', 422);
@@ -359,13 +384,13 @@ admin.getOrderByUser = async (req, res, next) => {
 
 admin.getOrderByStatus = async (req, res, next) => {
     // console.log(req.params.status);
-    
+
     if (req.accessTokenPayload.role === 0) {
         // console.log(req.accessTokenPayload.role);
         return next(errorHandler.throwErr('Do not have permission!', 401));
     }
     const status = req.params.status; // 0 1 
-    
+
     try {
         const orders = await Order.find({ status: status });
         res.status(200).json({ orders: orders });

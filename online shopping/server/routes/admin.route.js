@@ -7,12 +7,18 @@ const router = express.Router();
 
 // create manager account
 router.post('/account', [
-    body('email').trim().isEmail().not().isEmpty().withMessage('Parent is not empty!'),
+    body('email')
+        .trim()
+        .isEmail()
+        .not()
+        .isEmpty()
+        .withMessage('Parent is not empty!'),
+        
     body('password')
         .trim()
         .isLength({ min: 6 })
         .withMessage('Password has to be valid.')
-],adminController.addManager);
+], adminController.addManager);
 // catalog
 
 router.post('/catalog', [

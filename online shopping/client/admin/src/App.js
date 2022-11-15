@@ -8,9 +8,11 @@ import Login from './pages/Login';
 import Catalog from './pages/Catalog';
 import Product from './pages/Product';
 import Order from './pages/Order';
+import Dashboard from "./pages/Dashboard";
 
 import AuthContext from "./context/auth-context";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 
 import { CatalogContextProvider } from './context/catalog-context';
 import { ProductContextProvider } from './context/product-context';
@@ -27,6 +29,15 @@ function App() {
         </Route>
         <ProtectedRoute
           path='/'
+          render={() =>
+            <Dashboard/>
+          }
+          isAuthentication={isLoggedIn}
+          redirect='/login'
+          exact
+        />
+        <ProtectedRoute
+          path='/catalog'
           // component={Catalog}
           render={() =>
             <CatalogContextProvider>
@@ -35,8 +46,6 @@ function App() {
           }
           isAuthentication={isLoggedIn}
           redirect='/login'
-          // context={CatalogContextProvider}
-          exact
         />
         <ProtectedRoute
           path='/product'

@@ -1,0 +1,17 @@
+.main{
+    height: 50rem;
+    width: 100%;
+    background-color: antiquewhite;
+    margin-top: 1rem;
+    display: flex;
+}
+.menu{
+    width: 15%;
+    height: 100%;
+    background-color: aquamarine;
+}
+.overview{
+    width: 85%;
+    height: 100%;
+    background-color: rgb(49, 35, 35);
+}
