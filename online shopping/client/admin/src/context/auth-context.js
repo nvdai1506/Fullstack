@@ -16,10 +16,9 @@ export const AuthContextProvider = (props) => {
 
   const [accessToken, setAccessToken] = useState(localStorage.getItem('x-access-token'));
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('x-refreshToken'));
-  const [role, setRole] = useState(0);
+  const [role, setRole] = useState(localStorage.getItem('x-role'));
 
-
-  const userIsLoggedIn = !!accessToken;
+  const userIsLoggedIn = (!!accessToken && role !== 0);
 
   const logoutHandler = useCallback(() => {
     setAccessToken(null);
@@ -41,7 +40,7 @@ export const AuthContextProvider = (props) => {
     // console.log(data.accessToken);
     localStorage.setItem('x-access-token', data.accessToken);
     localStorage.setItem('x-refreshToken', data.refreshToken);
-
+    localStorage.setItem('x-role', data.role);
   };
 
   const contextValue = {

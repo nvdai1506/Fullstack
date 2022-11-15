@@ -73,7 +73,51 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    
+    // management Account
+    getManagementAccount: function(){
+        const requestParams = {
+            url: `${domain}/admin/account`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    addManagementAccount: function(params){
+        const requestParams = {
+            url: `${domain}/admin/account`,
+            config:
+            {
+                method: 'POST',
+                body:JSON.stringify(params),
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    deleteManagementAccount: function(id){
+        const requestParams = {
+            url: `${domain}/admin/account/${id}`,
+            config:
+            {
+                method: 'DELETE',
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    // catalog
     addCatalog: function(params){
         const requestParams = {
             url: `${domain}/admin/catalog`,

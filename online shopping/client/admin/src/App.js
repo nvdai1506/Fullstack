@@ -49,7 +49,6 @@ function App() {
         />
         <ProtectedRoute
           path='/product'
-          // component={Product}
           render={() =>
             <ProductContextProvider>
               <Product />
@@ -66,24 +65,6 @@ function App() {
         />
 
       </Switch>
-      {/* <CatalogContextProvider>
-        <Switch>
-          <ProtectedRoute
-            path='/'
-            component={Catalog}
-            isAuthentication={isLoggedIn}
-            redirect='/login'
-            exact
-          />
-          <ProtectedRoute
-            path='/product'
-            component={Product}
-            isAuthentication={isLoggedIn}
-            redirect='/login'
-          />
-        </Switch>
-      </CatalogContextProvider> */}
-
     </Layout>
   );
 }

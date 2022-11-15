@@ -1,11 +1,13 @@
 import express from "express";
 import { body } from 'express-validator';
 
+
 import adminController from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
-// create manager account
+// create management account
+router.get('/account', adminController.getManagementrAccounts);
 router.post('/account', [
     body('email')
         .trim()
@@ -18,7 +20,8 @@ router.post('/account', [
         .trim()
         .isLength({ min: 6 })
         .withMessage('Password has to be valid.')
-], adminController.addManager);
+], adminController.addManagementAccount);
+router.delete('/account/:userId', adminController.deleteManagementAccount);
 // catalog
 
 router.post('/catalog', [

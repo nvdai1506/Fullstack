@@ -15,7 +15,19 @@ import errorHandler from '../utils/errorHandler.js';
 
 let admin = () => { }
 
-admin.addManager = async (req, res, next) => {
+admin.getManagementrAccounts = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    try {
+        const users = await User.find({ role: 2 });
+
+        res.status(200).json({ users: users });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+admin.addManagementAccount = async (req, res, next) => {
     const email = req.body.email;
     if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
@@ -29,16 +41,31 @@ admin.addManager = async (req, res, next) => {
         if (isUserExist) {
             throw errorHandler.throwErr('User is existed.', 422);
         }
-        const password = await bcrypt.hash(req.body.password, 12);
+        // const password = await bcrypt.hash(req.body.password, 12);
         const user = new User({
             email: req.body.email,
-            password: password,
+            password: req.body.password,
             role: 2
         })
 
         const result = await user.save();
 
         res.status(201).json({ mess: 'Account is signed up.', id: result._id, email: result.email });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+
+admin.deleteManagementAccount = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const userId = req.params.userId;
+    try {
+        const result = await User.findByIdAndDelete(userId);
+        
+        res.status(200).json({result: result});
+
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
