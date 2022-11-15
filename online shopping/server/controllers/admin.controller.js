@@ -13,20 +13,12 @@ import errorHandler from '../utils/errorHandler.js';
 import e from 'express';
 
 let admin = () => { }
-
+admin.addManager = async(req, res, next)=>{
+    if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+}
 // Catalog
-// admin.getCatalog = async (req, res, next) => {
-//     try {
-//         const catalogs = await Catalog.find();
-//         res.status(200).json({ catalogs: catalogs });
-//     } catch (error) {
-//         if (!error.statusCode) {
-//             error.statusCode = 500;
-//         }
-//         next(error);
-//     }
-// }
-
 admin.addCatalog = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
@@ -209,36 +201,6 @@ admin.deleteChildCatalog = async (req, res, next) => {
 }
 // product
 
-// admin.getProducts = async (req, res, next) => {
-//     try {
-//         const products = await Product.find();
-//         res.status(200).json({ products: products });
-//     } catch (error) {
-//         next(errorHandler.defaultErr(error));
-//     }
-// }
-// admin.getProductById = async (req, res, next) => {
-//     const productId = req.params.productId;
-//     try {
-//         const product = await Product.findById(productId);
-//         if (!product) {
-//             throw errorHandler.throwErr('Could not find product!', 422);
-//         }
-//         res.status(200).json({ product: product });
-//     } catch (error) {
-//         next(errorHandler.defaultErr(error));
-//     }
-// }
-// admin.getProductsByChildCatalogId = async (req, res, next) => {
-//     const childCatalogId = req.params.childCatalogId;
-//     try {
-//         const childCatalog = await ChildCatalog.findById(childCatalogId).populate('products');
-//         const products = childCatalog.products;
-//         res.status(200).json({ products: products });
-//     } catch (error) {
-//         next(errorHandler.defaultErr(error));
-//     }
-// }
 admin.addProduct = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0) {
         return next(errorHandler.throwErr('Do not have permission!', 401));

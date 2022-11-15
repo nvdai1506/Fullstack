@@ -9,8 +9,7 @@ import ProductForm from '../components/product/ProductForm';
 import ProductList from '../components/product/ProductList';
 import Search from '../components/ui/Search';
 
-import { AgGridReact } from 'ag-grid-react';
-
+import ProductList_Aggrid from '../components/product/ProductList_Aggrid';
 
 
 function Product() {
@@ -25,18 +24,20 @@ function Product() {
 
 
   useEffect(() => {
+    // console.log('catalog');
     Api.shop.getCatalog()
       .then(result => {
         return result.json();
       })
       .then(data => {
         setSelectValues(data.catalogs);
+        console.log(data.catalogs);
       })
       .catch(err => {
         productStatusHandler({ error: 'Could not load Catalog!' });
       }
       );
-  });
+  },[productStatusHandler]);
 
   useEffect(() => {
     console.log('product');
@@ -72,11 +73,14 @@ function Product() {
         <Search onChange={searchHandler} />
       </div>
       <div className={classes.list}>
-        <ProductList products={listProductsFiltered} />
+        {/* <ProductList products={listProductsFiltered} /> */}
+        {/* {(listProductsFiltered.length!==0) && <ProductList_Aggrid products={listProductsFiltered} />} */}
+        <ProductList_Aggrid products={listProductsFiltered} />
+        
       </div>
     </div>
 
   )
 }
 
-export default Product
+export default Product;

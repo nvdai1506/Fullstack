@@ -1,35 +1,42 @@
 import express from "express";
-import {body} from 'express-validator';
+import { body } from 'express-validator';
 
 import adminController from '../controllers/admin.controller.js';
 
 const router = express.Router();
 
-// router.get('/catalog', adminController.getCatalog);
+// create manager account
+router.post('/account', [
+    body('email').trim().isEmail().not().isEmpty().withMessage('Parent is not empty!'),
+    body('password')
+        .trim()
+        .isLength({ min: 6 })
+        .withMessage('Password has to be valid.')
+],adminController.addManager);
+// catalog
 
-router.post('/catalog',[
+router.post('/catalog', [
     body('name').trim().not().isEmpty().withMessage('Name is not empty!')
 ], adminController.addCatalog);
 
-router.patch('/catalog/:id',[
+router.patch('/catalog/:id', [
     body('name').trim().not().isEmpty().withMessage('Name is not empty!')
 ], adminController.updateCatalog);
 
 router.delete('/catalog/:id', adminController.deleteCatalog);
 
 // childCatalog
-// router.get('/childCatalog/:catalogId', adminController.getChildCatalog);
 
-router.post('/childCatalog',[
+router.post('/childCatalog', [
     body('parent').trim().not().isEmpty().withMessage('Parent is not empty!'),
     body('title').trim().not().isEmpty().withMessage('title is not empty!')
 ], adminController.addChildCatalog);
 
-router.patch('/childCatatlog/:childId',[
+router.patch('/childCatatlog/:childId', [
     body('parent').trim().not().isEmpty().withMessage('parent is not empty!'),
     body('title').trim().not().isEmpty().withMessage('title is not empty!')
 ],
-adminController.updateChildCatalog);
+    adminController.updateChildCatalog);
 
 router.delete('/childCatalog/:childId', adminController.deleteChildCatalog);
 
@@ -39,7 +46,7 @@ router.delete('/childCatalog/:childId', adminController.deleteChildCatalog);
 // router.get('/product/:productId', adminController.getProductById);
 // router.get('/products/:childCatalogId', adminController.getProductsByChildCatalogId);
 
-router.post('/product',[
+router.post('/product', [
     body('title').trim().not().isEmpty().withMessage('title is not empty!'),
     body('material').trim().not().isEmpty().withMessage('material is not empty!'),
     body('size').trim().not().isEmpty().withMessage('size is not empty!'),
@@ -47,7 +54,7 @@ router.post('/product',[
     body('childCatalog').trim().not().isEmpty().withMessage('childCatalog is not empty!')
 ], adminController.addProduct);
 
-router.patch('/product/:productId',[
+router.patch('/product/:productId', [
     body('title').trim().not().isEmpty().withMessage('title is not empty!'),
     body('material').trim().not().isEmpty().withMessage('material is not empty!'),
     body('size').trim().not().isEmpty().withMessage('size is not empty!'),
@@ -61,7 +68,7 @@ router.delete('/product/:productId', adminController.deleteProduct);
 router.get('/order', adminController.getOrderByUser);
 router.get('/order/:status', adminController.getOrderByStatus);
 
-router.post('/order',[
+router.post('/order', [
     body('cart').not().isEmpty().withMessage('Cart should not be empty!'),
     body('email').trim().isEmail().not().isEmpty().withMessage('Email is not valid!')
 ], adminController.postOrder);

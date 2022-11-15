@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const useInput = (validateValue) => {
   const [enteredValue, setEnteredValue] = useState('');
@@ -6,9 +6,9 @@ const useInput = (validateValue) => {
   const valueIsValid = validateValue(enteredValue);
   const hasError = !valueIsValid;
 
-  const valueChangeHandler = (event) => {
+  const valueChangeHandler = useCallback ((event) => {
     setEnteredValue(event.target.value);
-  };
+  },[]);
 
 
   const reset = () => {

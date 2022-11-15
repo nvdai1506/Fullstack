@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 
 const ProductContext = React.createContext({
@@ -19,9 +19,9 @@ export const ProductContextProvider = (props) => {
     const [selectValues, setSelectValues] = useState({});
 
 
-    const productStatusHandler = (value) => {
+    const productStatusHandler = useCallback((value) => {
         setProductStatus(value);
-    };
+    },[]);
     const productEditHandler = (value) => {
         setProductEditValue(value);
     };

@@ -23,8 +23,10 @@ function ProductForm(props) {
 
   useEffect(()=>{
     if(updateMode){
+      
       catalogs.map(catalog =>{
         if(catalog._id.toString() === productEditValue.parentCatalog.toString()){
+          // console.log(productEditValue);
           setCatalogSelectValue(catalog._id);
           setChilds(catalog.ChildCatalogs);
           setChildSelectValue(productEditValue.childCatalog);

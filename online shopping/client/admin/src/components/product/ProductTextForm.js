@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import classes from './ProductTextForm.module.css';
 
 import Input from '../ui/Input';
@@ -6,6 +6,7 @@ import Button from '../ui/Button';
 import useInput from '../../hooks/use-input';
 import Api from '../../service/api';
 import ProductContext from '../../context/product-context';
+
 
 const ProductTextForm = (props) => {
     const { parentSelectValue, childSelectValue, imageUrl, imageToSend } = props;
@@ -87,6 +88,21 @@ const ProductTextForm = (props) => {
         productStatusHandler({});
         productEditHandler({});
         resetAll();
+    }
+    const onDeleteHandler = () => {
+        const id = productCtx.productEditValue.id;
+        Api.admin.deletetProduct(id)
+            .then(result => {
+                return result.json();
+            })
+            .then(data => {
+                productCtx.productStatusHandler({ success: "You have successfully deleted product." })
+                productCtx.productEditHandler({});
+                resetAll();
+            })
+            .catch(err => {
+                productCtx.productStatusHandler({ error: "Could not delete Product!" })
+            });
     }
 
     const onSubmitHandler = event => {
@@ -194,6 +210,9 @@ const ProductTextForm = (props) => {
             }
             {updateMode &&
                 <Button className={classes.btn} type='submit'>Update</Button>
+            }
+            {updateMode &&
+                <Button className={`${classes.btn} ${classes.delete}`} onClick={onDeleteHandler}>Delete</Button>
             }
 
 
