@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef } from 'react'
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 
 import classes from './AddAccount.module.css';
@@ -28,19 +28,23 @@ function AddAccount(props) {
         reset: resetPasswordInput
     } = useInput(value => value.trim().length >= 6);
 
+    
     const onClickHandler = () => {
         setStatus({});
     }
-    const onAddHandler = () => {
-        Api.admin.addManagementAccount({email: enteredEmail, password:enteredPassword, role:2})
-        .then(result =>{
-            if(result.status === 201){
-                setStatus({success:'User is created successfully.'});
-            }
-        })
-        .catch(err=>{
-            setStatus({error:'Can not create user!'});
-        });
+    const onSubmitHandler = (event) => {
+        event.preventDefault();
+        Api.admin.addManagementAccount({ email: enteredEmail, password: enteredPassword, role: 2 })
+            .then(result => {
+                if (result.status === 201) {
+                    setStatus({ success: 'User is created successfully.' });
+                    resetEmailInput();
+                    resetPasswordInput();
+                }
+            })
+            .catch(err => {
+                setStatus({ error: 'Can not create user!' });
+            });
     }
 
     // ag grid
@@ -53,23 +57,21 @@ function AddAccount(props) {
             field: '', cellRenderer: (p) => {
                 const onDeleteHandler = () => {
                     Api.admin.deleteManagementAccount(p.data._id)
-                    .then(result =>{
-                        if(result.status === 200){
-                            setStatus({success:'User is deleted.'});
-                        }
-                    })
-                    .catch(err=>{
-                        setStatus({error:'Can not delete this user!'});
-                    });
+                        .then(result => {
+                            if (result.status === 200) {
+                                setStatus({ success: 'User is deleted.' });
+                            }
+                        })
+                        .catch(err => {
+                            setStatus({ error: 'Can not delete this user!' });
+                        });
                 }
-                return <Button className={classes.deletebtn} onClick={onDeleteHandler}>Delete</Button>
+                return <Button className={classes.deletebtn} state='delete' onClick={onDeleteHandler}>Delete</Button>
             }, cellStyle: { 'textAlign': 'center' }
         }
     ]);
-
-
-
     const onGridReady = useCallback(() => {
+        // console.log('onGridReady');
         Api.admin.getManagementAccount()
             .then(result => {
                 return result.json();
@@ -88,12 +90,17 @@ function AddAccount(props) {
             .catch(err => {
                 setStatus({ error: 'Could not load accounts!' });
             });
-    }, [status])
-
+    }, [])
+    
+    useEffect(() => {
+        onGridReady();
+    }, [status, onGridReady]);
+    
     const defaultColDef = useMemo(() => ({
         sortable: true,
         filter: true
     }), []);
+
 
     return (
         <Modal onClose={props.onClose} className={classes.main}>
@@ -101,7 +108,7 @@ function AddAccount(props) {
                 {status.error && <StatusMess state='error'>{status.error}</StatusMess>}
                 {status.success && <StatusMess state='success'>{status.success}</StatusMess>}
             </div>
-            <div className={classes.form}>
+            <form className={classes.form} onSubmit={onSubmitHandler}>
                 <Input title='Email'
                     className={classes.input}
                     onClick={onClickHandler}
@@ -113,8 +120,8 @@ function AddAccount(props) {
                     onClick={onClickHandler}
                     value={enteredPassword}
                     onChange={passwordChangedHandler} />
-                <Button className={classes.btn} onClick={onAddHandler}>Add</Button>
-            </div>
+                <Button className={classes.btn} type='submit'>Add</Button>
+            </form>
             <div className={classes.list}>
                 <div className={`${classes.ag_grid} ag-theme-alpine`}>
                     <AgGridReact
@@ -128,7 +135,7 @@ function AddAccount(props) {
                     </AgGridReact>
                 </div>
             </div>
-            <Button className={classes.closebtn} onClick={props.onClose}>Close</Button>
+            <Button className={classes.closebtn} state='cancle' onClick={props.onClose}>Close</Button>
         </Modal>
     )
 }

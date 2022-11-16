@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import classes from './ProductForm.module.css';
 
 import Select from '../ui/Select.js';
@@ -36,14 +36,14 @@ function ProductForm(props) {
     }
   },[updateMode, productEditValue]);
 
-  const onChangeSelectCatalogHandler = event => {
+  const onChangeSelectCatalogHandler = useCallback(event => {
     setCatalogSelectValue(event.target.value);
     catalogs.map(catalog => {
       if (catalog._id.toString() === event.target.value.toString()) {
         setChilds(catalog.ChildCatalogs);
       }
     })
-  };
+  });
   const onChangeSelectChildHandler = event => {
     setChildSelectValue(event.target.value);
   };

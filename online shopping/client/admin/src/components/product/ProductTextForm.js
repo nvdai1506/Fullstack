@@ -206,13 +206,13 @@ const ProductTextForm = (props) => {
                 <Button className={classes.btn} type='submit'>Add</Button>
             }
             {updateMode &&
-                <Button className={classes.btn} onClick={onClickCancleHandler}>Cancle</Button>
+                <Button className={classes.btn} state='cancle' onClick={onClickCancleHandler}>Cancle</Button>
             }
             {updateMode &&
                 <Button className={classes.btn} type='submit'>Update</Button>
             }
             {updateMode &&
-                <Button className={`${classes.btn} ${classes.delete}`} onClick={onDeleteHandler}>Delete</Button>
+                <Button className={`${classes.btn}`} state='delete' onClick={onDeleteHandler}>Delete</Button>
             }
 
 

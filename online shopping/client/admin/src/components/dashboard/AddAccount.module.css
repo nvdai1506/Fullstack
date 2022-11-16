@@ -24,7 +24,7 @@
   margin: 2% 1%;
 }
 .list {
-  height: 30rem;
+  height: 25rem;
   width: 100%;
   /* background-color: bisque; */
 }
@@ -33,30 +33,9 @@
   width: 96%;
   margin: 5% 2%;
 }
-.deletebtn {
-  background-color: red;
-  color: white;
-  /* box-shadow: rgb(112, 48, 48) 0 -25px 18px -14px inset,rgba(112, 48, 48) 0 1px 2px,rgba(112, 48, 48) 0 2px 4px,rgba(112, 48, 48) 0 4px 8px,rgba(112, 48, 48) 0 8px 16px,rgba(112, 48, 48) 0 16px 32px; */
-  transition: all 250ms;
-  box-shadow: none;
-}
-.deletebtn:hover {
-  /* box-shadow: rgb(112, 48, 48) 0 -25px 18px -14px inset,rgba(112, 48, 48) 0 1px 2px,rgba(112, 48, 48) 0 2px 4px,rgba(112, 48, 48) 0 4px 8px,rgba(112, 48, 48) 0 8px 16px,rgba(112, 48, 48) 0 16px 32px; */
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: none;
-}
 .closebtn {
   position: fixed;
   bottom: 6%;
   right: 3%;
-  background-color: orange;
-  color: white;
-  /* box-shadow: rgb(112, 48, 48) 0 -25px 18px -14px inset,rgba(112, 48, 48) 0 1px 2px,rgba(112, 48, 48) 0 2px 4px,rgba(112, 48, 48) 0 4px 8px,rgba(112, 48, 48) 0 8px 16px,rgba(112, 48, 48) 0 16px 32px; */
-  transition: all 250ms;
-  box-shadow: none;
 }
-.closebtn:hover {
-  /* box-shadow: rgb(112, 48, 48) 0 -25px 18px -14px inset,rgba(112, 48, 48) 0 1px 2px,rgba(112, 48, 48) 0 2px 4px,rgba(112, 48, 48) 0 4px 8px,rgba(112, 48, 48) 0 8px 16px,rgba(112, 48, 48) 0 16px 32px; */
-  transform: scale(1.05) rotate(-1deg);
-  box-shadow: none;
-}
+

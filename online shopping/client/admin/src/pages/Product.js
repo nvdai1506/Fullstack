@@ -6,7 +6,7 @@ import ProductContext from '../context/product-context';
 
 import StatusMess from '../components/ui/StatusMess';
 import ProductForm from '../components/product/ProductForm';
-import ProductList from '../components/product/ProductList';
+// import ProductList from '../components/product/ProductList';
 import Search from '../components/ui/Search';
 
 import ProductList_Aggrid from '../components/product/ProductList_Aggrid';
@@ -31,7 +31,7 @@ function Product() {
       })
       .then(data => {
         setSelectValues(data.catalogs);
-        console.log(data.catalogs);
+        // console.log(data.catalogs);
       })
       .catch(err => {
         productStatusHandler({ error: 'Could not load Catalog!' });
@@ -76,7 +76,6 @@ function Product() {
         {/* <ProductList products={listProductsFiltered} /> */}
         {/* {(listProductsFiltered.length!==0) && <ProductList_Aggrid products={listProductsFiltered} />} */}
         <ProductList_Aggrid products={listProductsFiltered} />
-        
       </div>
     </div>
 

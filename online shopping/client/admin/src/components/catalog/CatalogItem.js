@@ -29,7 +29,7 @@ function CatalogItem(props) {
                 </div>
                 <div>
                     <Button className={classes.btn} onClick={onEditHandler}>Edit</Button>
-                    <Button className={classes.btn} onClick={onDeleteHandler}>Delete</Button>
+                    <Button className={classes.btn}  state='delete'  onClick={onDeleteHandler}>Delete</Button>
                 </div>
             </div>
         

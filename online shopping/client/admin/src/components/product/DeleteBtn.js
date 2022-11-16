@@ -2,7 +2,6 @@
 import React,{useContext, useCallback} from 'react'
 import Button from '../ui/Button'
 import Api from '../../service/api';
-import classes from './DeleteBtn.module.css';
 
 import ProductContext from '../../context/product-context';
 
@@ -23,7 +22,7 @@ const DeleteBtn = (props) => {
             });
     };
     
-    return <Button onClick={onDelete} className={`${classes.btn} ${classes.delete}`}>Delete</Button>
+    return <Button onClick={onDelete} state='delete'>Delete</Button>
 }
 
 export default DeleteBtn;

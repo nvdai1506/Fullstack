@@ -99,7 +99,7 @@ function ChildForm(props) {
                     <Button className={classes.btn} type='submit'>Add</Button>
                 }
                 {updateMode &&
-                    <Button className={classes.btn} onClick={onCancelHandler}>Cancel</Button>
+                    <Button className={classes.btn} state='cancle' onClick={onCancelHandler}>Cancel</Button>
                 }
                 {updateMode &&
                     <Button className={classes.btn} type='submit'>Update</Button>

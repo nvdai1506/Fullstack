@@ -9,39 +9,61 @@ import DeleteBtn from './DeleteBtn.js';
 function ProductList_Aggrid(props) {
     const products = props.products;
     const productCtx = useContext(ProductContext);
+    const { productEditHandler, productStatus } = productCtx;
 
 
 
     const gridRef = useRef();
-    // const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-    // const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-
     const [rowData, setRowData] = useState([]);
-    const [columnDefs, setColumnDefs] = useState([
+    const [columnDefs] = useState([
         // { field: '_id' },
         { field: 'title' },
         // { field: 'imageUrl' },
         { field: 'material' },
         { field: 'size' },
         { field: 'price' },
-        { field: 'description', width:500 },
-        { field: '', cellRenderer: DeleteBtn, resizable: null, cellStyle:{'textAlign': 'center'} }
+        { field: 'description' },
+        { field: '', cellRenderer: DeleteBtn, resizable: null, cellStyle: { 'textAlign': 'center' } }
     ]);
 
 
-    useEffect(() => {
-        // gridRef.current.api.sizeColumnsToFit();
-        setRowData(products);
+    const onGridReady = useCallback(() => {
+        // console.log('onGridReady');
+
+        const ready = new Promise((resolve, reject) => {
+            if (products.length > 0) {
+                setRowData(products);
+                return resolve();
+            }
+        });
+        ready.then(() => {
+            gridRef.current.api.sizeColumnsToFit(
+                {
+                    defaultMinWidth: 50,
+                    columnLimits: [
+                        { key: 'description', minWidth: 600 },
+                        { key: 'title', minWidth: 250 },
+                    ],
+                }
+            );
+        });
+
     }, [products])
+
+    useEffect(() => {
+        // console.log('effect');
+        onGridReady();
+    }, [productStatus, onGridReady])
 
     const defaultColDef = useMemo(() => ({
         sortable: true,
         filter: true,
         resizable: true
-    }));
+    }), []);
+
 
     const cellClickedListener = useCallback(event => {
-        productCtx.productEditHandler({
+        productEditHandler({
             'parentCatalog': event.data.parentCatalog,
             'childCatalog': event.data.childCatalog,
             'id': event.data._id,
@@ -52,17 +74,18 @@ function ProductList_Aggrid(props) {
             'price': event.data.price,
             'description': event.data.description,
         });
-    }, []);
+    }, [productEditHandler]);
 
     return (
         <div className={`${classes.main} ag-theme-alpine`}>
             <AgGridReact
+                ref={gridRef}
                 rowData={rowData}
                 columnDefs={columnDefs}
                 animateRows={true}
-                defaultColDef={defaultColDef} // Default Column Properties
-                onCellClicked={cellClickedListener} // Optional - registering for Grid Event
-                ref={gridRef}
+                defaultColDef={defaultColDef}
+                onGridReady={onGridReady}
+                onCellClicked={cellClickedListener}
             >
             </AgGridReact>
         </div>
