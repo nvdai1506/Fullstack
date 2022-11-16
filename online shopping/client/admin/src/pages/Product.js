@@ -66,7 +66,8 @@ function Product() {
         {productStatus.success && <StatusMess state='success'>{productStatus.success}</StatusMess>}
       </div>
       <div className={classes.form}>
-        {selectValues && <ProductForm selectValues={selectValues} />}
+        {/* {selectValues && <ProductForm selectValues={selectValues} />} */}
+        <ProductForm selectValues={selectValues} />
 
       </div>
       <div className={classes.search}>

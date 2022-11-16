@@ -3,17 +3,32 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const catalogSchema = new Schema({
-    name:{
-        type:String,
+    name: {
+        type: String,
         require: true
     },
-    ChildCatalogs:[
+    ChildCatalogs: [
         {
             type: Schema.Types.ObjectId,
-            ref:'ChildCatalog',
-            default:[]
+            ref: 'ChildCatalog',
+            default: []
         }
-]
+    ],
+    salesFigures: [
+        {
+            numProducts: {
+                type: Number,
+                default: 0
+            },
+            turnovers: {
+                type: Number,
+                default: 0
+            },
+            date:{
+                type:String
+            }
+        }
+    ]
 });
 
 const model = mongoose.model('Catalog', catalogSchema);

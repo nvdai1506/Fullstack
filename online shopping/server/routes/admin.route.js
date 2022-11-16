@@ -77,11 +77,8 @@ router.delete('/product/:productId', adminController.deleteProduct);
 router.get('/order', adminController.getOrderByUser);
 router.get('/order/:status', adminController.getOrderByStatus);
 
-router.post('/order', [
-    body('cart').not().isEmpty().withMessage('Cart should not be empty!'),
-    body('email').trim().isEmail().not().isEmpty().withMessage('Email is not valid!')
-], adminController.postOrder);
 
 router.patch('/order/:orderId', adminController.updateOrderStatus);
-
+// overview
+router.get('/overview', adminController.getOverview);
 export default router;

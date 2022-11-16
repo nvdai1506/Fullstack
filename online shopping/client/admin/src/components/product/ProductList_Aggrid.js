@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback, useContext, useEffect } from 'react'
+import React, { useState, useRef, useMemo, useCallback, useContext, useEffect, memo } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 
 import classes from './ProductList_Aggrid.module.css';
@@ -23,7 +23,7 @@ function ProductList_Aggrid(props) {
         { field: 'size' },
         { field: 'price' },
         { field: 'description' },
-        { field: '', cellRenderer: DeleteBtn, resizable: null, cellStyle: { 'textAlign': 'center' } }
+        { field: '', cellRenderer: memo(DeleteBtn), resizable: null, cellStyle: { 'textAlign': 'center' } }
     ]);
 
 

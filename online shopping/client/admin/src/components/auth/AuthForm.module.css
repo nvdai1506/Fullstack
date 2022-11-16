@@ -7,15 +7,18 @@
     box-shadow: black;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+.status{
+    height: 10%;
+}
 .form h1{
     font-size: 3rem;
-    margin: 6rem 0;
+    margin: 3rem 0;
     padding-top:2rem;
 }
 .form button{
     height: 3rem;
     width: 6rem;
-    margin-top: 5rem;
+    margin-top: 2rem;
     background-color: rgb(70, 143, 117);
     color:white;
     cursor: pointer;
@@ -44,4 +47,7 @@
 }
 .info input{
     width: 20rem;
+}
+.loginFail{
+    color:red;
 }

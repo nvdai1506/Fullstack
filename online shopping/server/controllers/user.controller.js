@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/user.model.js';
 import Product from '../models/product.model.js';
-
+import Order from '../models/order.model.js';
 
 import errorHandler from '../utils/errorHandler.js';
 
@@ -79,7 +79,7 @@ user.editUser = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 };
-
+// cart
 user.getCart = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     try {
@@ -132,4 +132,6 @@ user.removeFromCart = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 };
+
+
 export default user;

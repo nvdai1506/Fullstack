@@ -284,6 +284,21 @@ Api.admin = {
         // console.log(params);
         return request(requestParams);
     },
+    // overview
+    getOverview: function (){
+        const requestParams = {
+            url: `${domain}/admin/overview`,
+            config:
+            {
+                method: 'GET',
+                headers:{
+                    'x-access-token': token,
+                    'Content-Type':'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
 }
 
 Api.shop = {

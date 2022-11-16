@@ -16,23 +16,32 @@ function ProductForm(props) {
   const [catalogSelectValue, setCatalogSelectValue] = useState(0);
   const [childSelectValue, setChildSelectValue] = useState(0);
 
-  const catalogs = props.selectValues;
+  const catalogs = props.selectValues || [];
 
   const [imageUrl, setImageUrl] = useState(null);
   const [imageToSend, setimageToSend] = useState(null);
 
   useEffect(()=>{
     if(updateMode){
-      
-      catalogs.map(catalog =>{
+      for(const catalog of catalogs){
         if(catalog._id.toString() === productEditValue.parentCatalog.toString()){
-          // console.log(productEditValue);
+          setImageUrl(productEditValue.image);
           setCatalogSelectValue(catalog._id);
           setChilds(catalog.ChildCatalogs);
           setChildSelectValue(productEditValue.childCatalog);
+          return ;
         }
-      })
-      setImageUrl(productEditValue.image);
+      }
+      // catalogs.map(catalog =>{
+      //   if(catalog._id.toString() === productEditValue.parentCatalog.toString()){
+      //     setCatalogSelectValue(catalog._id);
+      //     setChilds(catalog.ChildCatalogs);
+      //     setChildSelectValue(productEditValue.childCatalog);
+      //     return ;
+      //   }
+      // })
+      // console.log(productEditValue.image);
+      // setImageUrl(productEditValue.image);
     }
   },[updateMode, productEditValue]);
 
@@ -89,9 +98,9 @@ function ProductForm(props) {
 
         </div>
         <div className={classes.image}>
-          <input onChange={onChangeFileHandler} type='file' title=' '/>
+          <input onChange={onChangeFileHandler} type='file' className={classes.customFileInput}/>
           <div className={classes.image_show}>
-            <img src={imageUrl}></img>
+            <img src={imageUrl} alt=''></img>
           </div>
         </div>
       </div>

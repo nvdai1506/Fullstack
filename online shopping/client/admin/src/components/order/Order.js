@@ -16,7 +16,7 @@ function Order() {
             .then(result => { return result.json() })
             .then(data => {
                 setOrderingList(data.orders);
-                console.log(data.orders);
+                // console.log(data.orders);
             })
             .catch(err => {
                 setError(true);

@@ -35,7 +35,7 @@ function ChildForm(props) {
 
 
     useEffect(() => {
-        console.log('updateMode');
+        // console.log('updateMode');
         if (updateMode) {
             setEnteredTitle(editChildValue.title);
             setSelectValue(editChildValue.parent);

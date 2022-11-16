@@ -38,11 +38,10 @@ router.patch('/', [
 ], userController.editUser);
 
 // cart
-// get cart
 router.get('/cart', userController.getCart);
-// add product to cart
 router.post('/cart', userController.addToCart);
-// remove product from cart
 router.delete('/cart', userController.removeFromCart);
+
+
 
 export default router;

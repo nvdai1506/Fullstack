@@ -9,7 +9,7 @@ function AuthForm() {
     const history = useHistory();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
     const emailInputRef = useRef();
     const passwordInputRef = useRef();
@@ -31,21 +31,34 @@ function AuthForm() {
             authCtx.login(data);
             setIsLoading(false);
             history.replace('/');
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            setError(true);
+            setIsLoading(false);
+        }
+        );
 
+    }
+    const onClickHandler = () => {
+        setError(false);
+        setIsLoading(false);
     }
     return (
         <form onSubmit={submitHandler} className={classes.form}>
             <h1>Login</h1>
+            <div className={classes.status}>
+                {isLoading && <div><span>........</span></div>}
+                {error && <div><span><p className={classes.loginFail}>Login Failed!</p></span></div>}
+            </div>
+
             <div className={classes.info}>
                 <label>Email: </label>
-                <input type='email' id='email' ref={emailInputRef}></input>
+                <input type='email' id='email' ref={emailInputRef} onClick={onClickHandler}></input>
             </div>
             <div className={classes.info}>
                 <label>Password: </label>
                 <input type='password' id='password' ref={passwordInputRef}></input>
             </div>
-            {isLoading && <div><span>........</span></div>}
+
             <button>Login</button>
         </form>
     )

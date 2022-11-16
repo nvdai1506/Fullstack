@@ -68,7 +68,32 @@ shop.getProductsByChildCatalogId = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+//Order
+shop.postOrder = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
 
+    const cart = req.body.cart;
+    const email = req.body.email;
+    try {
+        const order = new Order({ cart: cart, email: email });
+        const result = await order.save();
 
+        const user = await User.find({ email: email });
+        if (user.length > 0) {
+            result.user = user._id;
+            // console.log(user);
+            user[0].orders.push(result._id);
+            await user[0].save();
+            await result.save();
+        }
+        res.status(200).json({ order: order });
+
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 
 export default shop;

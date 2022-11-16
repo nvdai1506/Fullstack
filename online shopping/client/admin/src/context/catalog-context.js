@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 const CatalogContext = React.createContext({
     // catalog+child
@@ -23,9 +23,9 @@ export const CatalogContextProvider = (props) => {
     const editChildHandler = (value) => {
         setEditChildValue(value);
     };
-    const statusHandler = (value) => {
+    const statusHandler = useCallback((value) => {
         setStatus(value);
-    };
+    },[]);
 
     const contextValue = {
         editValue: editValue,

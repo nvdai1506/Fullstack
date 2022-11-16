@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
+import moment from 'moment';
 
 import clearImage from '../utils/clearImage.js';
 
@@ -15,6 +16,7 @@ import errorHandler from '../utils/errorHandler.js';
 
 let admin = () => { }
 
+// management account
 admin.getManagementrAccounts = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0 || req.accessTokenPayload.role === 2) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
@@ -41,10 +43,10 @@ admin.addManagementAccount = async (req, res, next) => {
         if (isUserExist) {
             throw errorHandler.throwErr('User is existed.', 422);
         }
-        // const password = await bcrypt.hash(req.body.password, 12);
+        const password = await bcrypt.hash(req.body.password, 12);
         const user = new User({
             email: req.body.email,
-            password: req.body.password,
+            password: password,
             role: 2
         })
 
@@ -63,8 +65,8 @@ admin.deleteManagementAccount = async (req, res, next) => {
     const userId = req.params.userId;
     try {
         const result = await User.findByIdAndDelete(userId);
-        
-        res.status(200).json({result: result});
+
+        res.status(200).json({ result: result });
 
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -367,32 +369,6 @@ admin.deleteProduct = async (req, res, next) => {
 
 // order
 
-admin.postOrder = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
-    }
-
-    const cart = req.body.cart;
-    const email = req.body.email;
-    try {
-        const order = new Order({ cart: cart, email: email });
-        const result = await order.save();
-
-        const user = await User.find({ email: email });
-        if (user) {
-            result.user = user._id;
-            // console.log(user);
-            user[0].orders.push(result._id);
-            await user[0].save();
-            await result.save();
-        }
-        res.status(200).json({ order: order });
-
-    } catch (error) {
-        next(errorHandler.defaultErr(error));
-    }
-}
 admin.getOrderByUser = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     if (!userId) {
@@ -420,6 +396,7 @@ admin.getOrderByStatus = async (req, res, next) => {
 
     try {
         const orders = await Order.find({ status: status });
+        
         res.status(200).json({ orders: orders });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -431,19 +408,102 @@ admin.updateOrderStatus = async (req, res, next) => {
     }
     const orderId = req.params.orderId;
     const status = req.body.status;
-    // console.log(orderId);
-    // console.log(status);
     try {
         const order = await Order.findById(orderId);
         if (!order) {
             throw errorHandler.throwErr('Could not find this order!', 422);
         }
         order.status = status;
-        const updatedOrder = await order.save();
+        const today = moment().format('L');
+        if (status === 1)//completed
+        {
+            for (const item of order.cart.items) {
+                const productId = item.product;
+                const quantity = Number(item.quantity);
+                const product = await Product.findById(productId);
 
+                const childCatalogId = product.childCatalog;
+                const parentCatalogId = product.parentCatalog;
+
+                const childCatalog = await ChildCatalog.findById(childCatalogId);
+                if (childCatalog.salesFigures.length === 0) {
+                    childCatalog.salesFigures.push({
+                        numProducts: quantity,
+                        turnovers: product.price * quantity,
+                        date: moment().format()
+                    })
+                }else{
+                    const lastSalesFigures = childCatalog.salesFigures.slice(-1);
+                    const lastDay = moment(lastSalesFigures[0].date).format('L');
+                    const index = childCatalog.salesFigures.length - 1;
+                    if(lastDay === today){
+                        childCatalog.salesFigures[index].numProducts+=quantity;
+                        childCatalog.salesFigures[index].turnovers+=product.price * quantity;
+                    }else{
+                        childCatalog.salesFigures.push({
+                            numProducts: quantity,
+                            turnovers: product.price * quantity,
+                            date: moment().format()
+                        })
+                    }
+                }
+                await childCatalog.save();
+
+                const parentCatalog = await Catalog.findById(parentCatalogId);
+                if (parentCatalog.salesFigures.length === 0) {
+                    parentCatalog.salesFigures.push({
+                        numProducts: quantity,
+                        turnovers: product.price * quantity,
+                        date: moment().format()
+                    })
+                }else{
+                    const lastSalesFigures = parentCatalog.salesFigures.slice(-1);
+                    const lastDay = moment(lastSalesFigures[0].date).format('L');
+                    const index = parentCatalog.salesFigures.length - 1;
+                    if(lastDay === today){
+                        parentCatalog.salesFigures[index].numProducts+=quantity;
+                        parentCatalog.salesFigures[index].turnovers+=product.price * quantity;
+                    }else{
+                        parentCatalog.salesFigures.push({
+                            numProducts: quantity,
+                            turnovers: product.price * quantity,
+                            date: moment().format()
+                        })
+                    }
+                }
+                await parentCatalog.save();
+            }
+        }
+        const updatedOrder = await order.save();
         res.status(200).json({ mess: 'Order is updated.', updatedOrder: updatedOrder });
     } catch (error) {
         next(errorHandler.defaultErr(error));
+    }
+}
+
+// Overview
+admin.getOverview = async (req, res, next) => {
+    let overview = [];
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    try {
+        const catalogs = await Catalog.find();
+        for (const catalog of catalogs) {
+            let turnovers = 0;
+            for(const f of catalog.salesFigures){
+                turnovers+=f.turnovers;
+            }
+
+            overview.push({
+                catalog: catalog.name,
+                turnovers: turnovers
+            })
+        }
+        res.status(200).json({ overview: overview });
+
+    } catch (error) {
+
     }
 }
 export default admin;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useMemo, useCallback, useRef, useEffect, memo } from 'react'
 import { AgGridReact } from 'ag-grid-react';
 
 import classes from './AddAccount.module.css';
@@ -28,7 +28,7 @@ function AddAccount(props) {
         reset: resetPasswordInput
     } = useInput(value => value.trim().length >= 6);
 
-    
+
     const onClickHandler = () => {
         setStatus({});
     }
@@ -54,7 +54,8 @@ function AddAccount(props) {
         { field: 'email' },
         { field: 'password' },
         {
-            field: '', cellRenderer: (p) => {
+            field: '',
+            cellRenderer: memo((p) => {
                 const onDeleteHandler = () => {
                     Api.admin.deleteManagementAccount(p.data._id)
                         .then(result => {
@@ -67,7 +68,8 @@ function AddAccount(props) {
                         });
                 }
                 return <Button className={classes.deletebtn} state='delete' onClick={onDeleteHandler}>Delete</Button>
-            }, cellStyle: { 'textAlign': 'center' }
+            }),
+            cellStyle: { 'textAlign': 'center' }
         }
     ]);
     const onGridReady = useCallback(() => {
@@ -91,11 +93,11 @@ function AddAccount(props) {
                 setStatus({ error: 'Could not load accounts!' });
             });
     }, [])
-    
+
     useEffect(() => {
         onGridReady();
     }, [status, onGridReady]);
-    
+
     const defaultColDef = useMemo(() => ({
         sortable: true,
         filter: true
