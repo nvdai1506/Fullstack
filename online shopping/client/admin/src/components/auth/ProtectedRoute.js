@@ -1,11 +1,12 @@
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-function ProtectedRoute(props) {
-  if (!props.isAuthentication) {
-    return <Redirect to={props.redirect} />;
+function ProtectedRoute({isAuthentication, redirect, children}) {
+  
+  if (!isAuthentication) {
+    return <Navigate to={redirect} replace/>;
   }
-  return <Route {...props} />;
+  return children ? children : <Outlet />;
 }
 
 export default ProtectedRoute;

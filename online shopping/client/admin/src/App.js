@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Routes,Navigate } from "react-router-dom";
 
 import Layout from "./components/layout/Layout";
 
@@ -9,6 +9,7 @@ import Catalog from './pages/Catalog';
 import Product from './pages/Product';
 import Order from './pages/Order';
 import Dashboard from "./pages/Dashboard";
+import DashboardScreen from "./pages/DashboardScreen";
 
 import AuthContext from "./context/auth-context";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -16,6 +17,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { CatalogContextProvider } from './context/catalog-context';
 import { ProductContextProvider } from './context/product-context';
+import AddAccount from "./components/dashboard/AddAccount";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -23,48 +25,20 @@ function App() {
   const isLoggedIn = authCtx.isLoggedIn;
   return (
     <Layout>
-      <Switch>
-        <Route path='/login'>
-          <Login />
+      <Routes>
+        {/* <Route path='/' element={<Navigate to='/login'/>} /> */}
+        <Route path='/login' element={<Login />} />
+        <Route element={<ProtectedRoute isAuthentication={isLoggedIn} redirect='/login'/>}>
+          <Route path="/">
+            <Route index element={<Dashboard/>}></Route>
+            <Route path="dashboard" element={<Dashboard/>}/>
+            <Route path="account" element={<AddAccount/>}/>
+          </Route>
+          <Route path='/catalog' element={<Catalog/>}/>
+          <Route path='/product' element={<Product/>}/>
+          <Route path='/order' element={<Order/>}/>
         </Route>
-        <ProtectedRoute
-          path='/'
-          render={() =>
-            <Dashboard/>
-          }
-          isAuthentication={isLoggedIn}
-          redirect='/login'
-          exact
-        />
-        <ProtectedRoute
-          path='/catalog'
-          // component={Catalog}
-          render={() =>
-            <CatalogContextProvider>
-              <Catalog />
-            </CatalogContextProvider>
-          }
-          isAuthentication={isLoggedIn}
-          redirect='/login'
-        />
-        <ProtectedRoute
-          path='/product'
-          render={() =>
-            <ProductContextProvider>
-              <Product />
-            </ProductContextProvider>
-          }
-          isAuthentication={isLoggedIn}
-          redirect='/login'
-        />
-        <ProtectedRoute
-          path='/order'
-          component={Order}
-          isAuthentication={isLoggedIn}
-          redirect='/login'
-        />
-
-      </Switch>
+      </Routes>
     </Layout>
   );
 }

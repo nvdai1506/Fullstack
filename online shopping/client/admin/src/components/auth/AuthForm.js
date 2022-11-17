@@ -1,12 +1,12 @@
 import { useState, useRef, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 
 import classes from './AuthForm.module.css';
 import AuthContext from '../../context/auth-context';
 import Api from '../../service/api';
 
 function AuthForm() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -28,9 +28,11 @@ function AuthForm() {
         }).then(result => {
             return result.json();
         }).then(data => {
+            console.log(data);
             authCtx.login(data);
             setIsLoading(false);
-            history.replace('/');
+            setError(false);
+            navigate('/dashboard');
         }).catch(err => {
             setError(true);
             setIsLoading(false);

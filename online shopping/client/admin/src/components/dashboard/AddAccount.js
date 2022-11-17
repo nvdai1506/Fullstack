@@ -8,9 +8,11 @@ import Button from '../ui/Button';
 import StatusMess from '../ui/StatusMess';
 import useInput from '../../hooks/use-input';
 import Api from '../../service/api';
+import { useNavigate } from 'react-router-dom';
 
 function AddAccount(props) {
 
+    const navigate = useNavigate();
     const [status, setStatus] = useState({});
 
     const {
@@ -45,6 +47,9 @@ function AddAccount(props) {
             .catch(err => {
                 setStatus({ error: 'Can not create user!' });
             });
+    }
+    const onCloseHandler = ()=>{
+        navigate(-1);
     }
 
     // ag grid
@@ -137,7 +142,7 @@ function AddAccount(props) {
                     </AgGridReact>
                 </div>
             </div>
-            <Button className={classes.closebtn} state='cancle' onClick={props.onClose}>Close</Button>
+            <Button className={classes.closebtn} state='cancle' onClick={onCloseHandler}>Close</Button>
         </Modal>
     )
 }
