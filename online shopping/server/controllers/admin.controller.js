@@ -396,10 +396,38 @@ admin.getOrderByStatus = async (req, res, next) => {
 
     try {
         const orders = await Order.find({ status: status });
-        
+
         res.status(200).json({ orders: orders });
     } catch (error) {
         next(errorHandler.defaultErr(error));
+    }
+}
+const addDataToSalesFigures = async (object, quantity, price, today) => {
+    if (object.salesFigures.length === 0) {
+        object.salesFigures.push({
+            numProducts: quantity,
+            turnovers: price * quantity,
+            date: moment().format()
+        })
+    } else {
+        const lastSalesFigures = object.salesFigures.slice(-1);
+        const lastDay = moment(lastSalesFigures[0].date).format('L');
+        const index = object.salesFigures.length - 1;
+        if (lastDay === today) {
+            object.salesFigures[index].numProducts += quantity;
+            object.salesFigures[index].turnovers += price * quantity;
+        } else {
+            object.salesFigures.push({
+                numProducts: quantity,
+                turnovers: price * quantity,
+                date: moment().format()
+            })
+        }
+    }
+    try {
+        await object.save();
+    } catch (error) {
+        throw error;
     }
 }
 admin.updateOrderStatus = async (req, res, next) => {
@@ -420,58 +448,29 @@ admin.updateOrderStatus = async (req, res, next) => {
             for (const item of order.cart.items) {
                 const productId = item.product;
                 const quantity = Number(item.quantity);
-                const product = await Product.findById(productId);
 
-                const childCatalogId = product.childCatalog;
-                const parentCatalogId = product.parentCatalog;
+                try {
+                    const product = await Product.findById(productId);
+                    const price = Number(product.price);
 
-                const childCatalog = await ChildCatalog.findById(childCatalogId);
-                if (childCatalog.salesFigures.length === 0) {
-                    childCatalog.salesFigures.push({
-                        numProducts: quantity,
-                        turnovers: product.price * quantity,
-                        date: moment().format()
-                    })
-                }else{
-                    const lastSalesFigures = childCatalog.salesFigures.slice(-1);
-                    const lastDay = moment(lastSalesFigures[0].date).format('L');
-                    const index = childCatalog.salesFigures.length - 1;
-                    if(lastDay === today){
-                        childCatalog.salesFigures[index].numProducts+=quantity;
-                        childCatalog.salesFigures[index].turnovers+=product.price * quantity;
-                    }else{
-                        childCatalog.salesFigures.push({
-                            numProducts: quantity,
-                            turnovers: product.price * quantity,
-                            date: moment().format()
-                        })
-                    }
+
+
+                    const childCatalogId = product.childCatalog;
+                    const parentCatalogId = product.parentCatalog;
+
+                    const childCatalog = await ChildCatalog.findById(childCatalogId);
+                    addDataToSalesFigures(childCatalog, quantity, price, today);
+                    // await childCatalog.save();
+
+                    const parentCatalog = await Catalog.findById(parentCatalogId);
+                    addDataToSalesFigures(parentCatalog, quantity, price, today);
+                    // await parentCatalog.save();
+                    // await product.save();
+                    addDataToSalesFigures(product, quantity, price, today);
+                } catch (error) {
+                    throw errorHandler.throwErr('Add salesFigures have error!', 422);
                 }
-                await childCatalog.save();
 
-                const parentCatalog = await Catalog.findById(parentCatalogId);
-                if (parentCatalog.salesFigures.length === 0) {
-                    parentCatalog.salesFigures.push({
-                        numProducts: quantity,
-                        turnovers: product.price * quantity,
-                        date: moment().format()
-                    })
-                }else{
-                    const lastSalesFigures = parentCatalog.salesFigures.slice(-1);
-                    const lastDay = moment(lastSalesFigures[0].date).format('L');
-                    const index = parentCatalog.salesFigures.length - 1;
-                    if(lastDay === today){
-                        parentCatalog.salesFigures[index].numProducts+=quantity;
-                        parentCatalog.salesFigures[index].turnovers+=product.price * quantity;
-                    }else{
-                        parentCatalog.salesFigures.push({
-                            numProducts: quantity,
-                            turnovers: product.price * quantity,
-                            date: moment().format()
-                        })
-                    }
-                }
-                await parentCatalog.save();
             }
         }
         const updatedOrder = await order.save();
@@ -491,8 +490,8 @@ admin.getOverview = async (req, res, next) => {
         const catalogs = await Catalog.find();
         for (const catalog of catalogs) {
             let turnovers = 0;
-            for(const f of catalog.salesFigures){
-                turnovers+=f.turnovers;
+            for (const f of catalog.salesFigures) {
+                turnovers += f.turnovers;
             }
 
             overview.push({

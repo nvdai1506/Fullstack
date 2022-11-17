@@ -36,7 +36,22 @@ const productSchema = new Schema({
         type:Schema.Types.ObjectId,
         require:true,
         ref:'Catalog'
-    }
+    },
+    salesFigures: [
+        {
+            numProducts: {
+                type: Number,
+                default: 0
+            },
+            turnovers: {
+                type: Number,
+                default: 0
+            },
+            date:{
+                type:String
+            }
+        }
+    ]
 });
 
 // const model = mongoose.model('Product', productSchema);
