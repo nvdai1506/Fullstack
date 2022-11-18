@@ -80,5 +80,5 @@ router.get('/order/:status', adminController.getOrderByStatus);
 
 router.patch('/order/:orderId', adminController.updateOrderStatus);
 // overview
-router.get('/overview', adminController.getOverview);
+router.post('/overview', adminController.getOverview);
 export default router;

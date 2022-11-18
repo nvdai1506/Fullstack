@@ -407,7 +407,7 @@ const addDataToSalesFigures = async (object, quantity, price, today) => {
         object.salesFigures.push({
             numProducts: quantity,
             turnovers: price * quantity,
-            date: moment().format()
+            date: moment().toDate()
         })
     } else {
         const lastSalesFigures = object.salesFigures.slice(-1);
@@ -420,7 +420,7 @@ const addDataToSalesFigures = async (object, quantity, price, today) => {
             object.salesFigures.push({
                 numProducts: quantity,
                 turnovers: price * quantity,
-                date: moment().format()
+                date: moment().toDate()
             })
         }
     }
@@ -480,29 +480,111 @@ admin.updateOrderStatus = async (req, res, next) => {
     }
 }
 
+//     try {
+//         const objects = await object.find();
+//         for (const item of objects) {
+//             overview.push({
+//                 _id: item._id,
+//                 name: { (object === 'catalog') ? item.name : item.title
+//             },
+//                 turnovers: 0
+//             })
+//     }
+//         const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+
+//     for (const order of orders) {
+//         const items = order.cart.items;
+//         for (const item of items) {
+//             const { product: productId, quantity } = item;
+//             try {
+//                 // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
+
+//                 const product = await Product.findById(productId);
+//                 const catalogId = product.parentCatalog;
+//                 const childCatalogId = product.childCatalog;
+
+//                 const index = overview.findIndex(c => {
+//                     return (c._id.toString() === catalogId.toString())
+//                 });
+//                 overview[index].turnovers += product.price * quantity;
+//             } catch (error) {
+//                 return next(errorHandler.throwErr('Something wrong with order!', 401));
+//             }
+//         }
+
+//     }
+//     // console.log(overview);
+//     res.status(200).json({ overview: overview });
+
+// } catch (error) {
+//     next(errorHandler.throwErr('Something wrong with order!', 401));
+// }
+// }
 // Overview
 admin.getOverview = async (req, res, next) => {
     let overview = [];
     if (req.accessTokenPayload.role === 0) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
     }
+    const startDate = moment(req.body.startDate).format('YYYY-MM-DD');
+    const endDate = moment(req.body.endDate).format('YYYY-MM-DD');
+    const type = req.body.type;
+    // console.log(startDate, '-', endDate);
     try {
-        const catalogs = await Catalog.find();
-        for (const catalog of catalogs) {
-            let turnovers = 0;
-            for (const f of catalog.salesFigures) {
-                turnovers += f.turnovers;
+        if (type === 'catalog') {
+            const catalogs = await Catalog.find();
+            for (const catalog of catalogs) {
+                overview.push({
+                    _id: catalog._id,
+                    name: catalog.name,
+                    turnovers: 0
+                })
+            }
+        } else if (type === 'childCatalog') {
+            const childs = await ChildCatalog.find().populate('parent', 'name');
+            for (const child of childs) {
+                overview.push({
+                    _id: child._id,
+                    parent: child.parent.name,
+                    name: child.title,
+                    turnovers: 0
+                })
+            }
+        }
+
+        const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+
+        for (const order of orders) {
+            const items = order.cart.items;
+            for (const item of items) {
+                const { product: productId, quantity } = item;
+                try {
+                    // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
+
+                    const product = await Product.findById(productId);
+                    let id;
+                    if (type === 'catalog') {
+                        id = product.parentCatalog;
+
+                    } else if (type === 'childCatalog') {
+                        id = product.childCatalog;
+                    }
+                    const index = overview.findIndex(c => {
+                        return (c._id.toString() === id.toString())
+                    });
+                    overview[index].turnovers += product.price * quantity;
+
+                } catch (error) {
+                    return next(errorHandler.throwErr('Something wrong with order!', 401));
+                }
             }
 
-            overview.push({
-                catalog: catalog.name,
-                turnovers: turnovers
-            })
         }
+        // console.log(overview);
         res.status(200).json({ overview: overview });
 
     } catch (error) {
-
+        next(errorHandler.throwErr('Something wrong with order!', 401));
     }
 }
 export default admin;

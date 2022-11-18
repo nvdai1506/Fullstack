@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react";
+import { Outlet } from "react-router-dom";
 
 
 const ProductContext = React.createContext({
@@ -44,5 +45,11 @@ export const ProductContextProvider = (props) => {
         </ProductContext.Provider>
     );
 }
-
+export const ProductContextLayout = ()=>{
+    return (
+        <ProductContextProvider>
+            <Outlet />
+        </ProductContextProvider>
+    );
+}
 export default ProductContext;

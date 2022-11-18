@@ -2,25 +2,28 @@ import React, { Component, useEffect, useState } from 'react';
 import * as agCharts from 'ag-charts-community';
 import { AgChartsReact } from 'ag-charts-react';
 import Api from '../../service/api';
+import Loading from '../ui/Loading';
 
 
-function OverviewChart() {
-    // let data;
-    // let total;
-    // let options;
-    // const numFormatter = new Intl.NumberFormat('en-US');
-
+function OverviewChart(props) {
+    const [startDate, endDate] = props.date;
     const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
-        Api.admin.getOverview()
-        .then(result => {
-            return result.json();
-        })
-        .then(data=>{
-            setData(data.overview);
-        })
-    }, []);
-    
+        if (startDate !== null && endDate !== null) {
+            setIsLoading(true);
+            Api.admin.getOverview({ startDate: startDate, endDate: endDate, type: 'catalog' })
+                .then(result => {
+                    return result.json();
+                })
+                .then(data => {
+                    setData(data.overview);
+                    setIsLoading(false);
+                })
+        }
+    }, [endDate]);
+
     const total = data.reduce((sum, d) => sum + d['turnovers'], 0);
     const numFormatter = new Intl.NumberFormat('en-US');
     const options = {
@@ -31,12 +34,12 @@ function OverviewChart() {
             fontSize: 18,
         },
         subtitle: {
-            text: 'Shopping Online',
+            text: '',
         },
         series: [
             {
                 type: 'pie',
-                calloutLabelKey: 'catalog',
+                calloutLabelKey: 'name',
                 fillOpacity: 0.9,
                 strokeWidth: 0,
                 angleKey: 'turnovers',
@@ -98,7 +101,12 @@ function OverviewChart() {
         ],
     };
 
-    return <AgChartsReact options={options} />;
+    return (
+        <>
+            {isLoading && <Loading/>}
+            {!isLoading &&<AgChartsReact options={options} />}
+        </>
+    );
 }
 
 export default React.memo(OverviewChart);

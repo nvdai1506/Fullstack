@@ -110,7 +110,7 @@ function AddAccount(props) {
 
 
     return (
-        <Modal onClose={props.onClose} className={classes.main}>
+        <Modal onClose={onCloseHandler} className={classes.main}>
             <div className={classes.status}>
                 {status.error && <StatusMess state='error'>{status.error}</StatusMess>}
                 {status.success && <StatusMess state='success'>{status.success}</StatusMess>}

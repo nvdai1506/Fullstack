@@ -285,12 +285,13 @@ Api.admin = {
         return request(requestParams);
     },
     // overview
-    getOverview: function (){
+    getOverview: function (params){
         const requestParams = {
             url: `${domain}/admin/overview`,
             config:
             {
-                method: 'GET',
+                method: 'POST',
+                body:JSON.stringify(params),
                 headers:{
                     'x-access-token': token,
                     'Content-Type':'application/json'

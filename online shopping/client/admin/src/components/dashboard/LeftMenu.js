@@ -9,8 +9,7 @@ function LeftMenu() {
                 <summary></summary>
                 <nav className={classes.menu}>
                     <Link to='/account'>Account</Link>
-                    <Link to='/'>Detail</Link>
-                    <Link to='/'>Detail</Link>
+                    <Link to='/details'>Details</Link>
                 </nav>
             </details>
 

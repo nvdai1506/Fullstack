@@ -85,7 +85,7 @@ details[open] summary::after {
 }
 
 details::before {
-  content: "← Menu";
+  content: "← More";
   color: var(--secoColor);
   position: absolute;
   margin-left: 80px;

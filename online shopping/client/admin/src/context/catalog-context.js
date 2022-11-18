@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { Outlet } from 'react-router-dom';
 
 const CatalogContext = React.createContext({
     // catalog+child
@@ -11,7 +12,7 @@ const CatalogContext = React.createContext({
 });
 
 
-export const CatalogContextProvider = (props) => {
+const CatalogContextProvider = (props) => {
     // catalog+child
     const [editValue, setEditValue] = useState({});
     const [editChildValue, setEditChildValue] = useState({});
@@ -43,4 +44,11 @@ export const CatalogContextProvider = (props) => {
     )
 }
 
+export const CatalogContextLayout = ()=>{
+    return (
+        <CatalogContextProvider>
+            <Outlet/>
+        </CatalogContextProvider>
+    );
+}
 export default CatalogContext;
