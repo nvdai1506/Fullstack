@@ -1,9 +1,11 @@
 import { useState, useRef, useContext } from 'react';
 import { useNavigate  } from 'react-router-dom';
 
+
 import classes from './AuthForm.module.css';
 import AuthContext from '../../context/auth-context';
 import Api from '../../service/api';
+import Loading from '../ui/Loading';
 
 function AuthForm() {
     const navigate = useNavigate();
@@ -48,7 +50,7 @@ function AuthForm() {
         <form onSubmit={submitHandler} className={classes.form}>
             <h1>Login</h1>
             <div className={classes.status}>
-                {isLoading && <div><span>........</span></div>}
+                {isLoading && <div><span><Loading className={classes.loading}/></span></div>}
                 {error && <div><span><p className={classes.loginFail}>Login Failed!</p></span></div>}
             </div>
 

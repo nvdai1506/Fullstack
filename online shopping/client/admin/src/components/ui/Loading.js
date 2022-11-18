@@ -1,9 +1,9 @@
 import React from 'react'
 import classes from './Loading.module.css';
 
-function Loading() {
+function Loading(props) {
     return (
-        <div className={classes["sbl-seven-circles"]}>
+        <div className={`${classes["sbl-seven-circles"]} ${props.className}`}>
             <div></div>
             <div></div>
             <div></div>

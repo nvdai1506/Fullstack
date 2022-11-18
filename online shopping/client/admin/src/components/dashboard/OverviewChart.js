@@ -103,6 +103,7 @@ function OverviewChart(props) {
 
     return (
         <>
+            {/* <Loading /> */}
             {isLoading && <Loading/>}
             {!isLoading &&<AgChartsReact options={options} />}
         </>
