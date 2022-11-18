@@ -59,14 +59,14 @@ function OverviewChart(props) {
                     text: 'TurnOver (VND)',
                 },
                 fills: [
-                    '#fb7451',
-                    '#f4b944',
-                    '#57cc8b',
                     '#49afda',
+                    '#57cc8b',
+                    '#fb7451',
                     '#3988dc',
                     '#72508c',
                     '#b499b5',
                     '#b7b5ba',
+                    '#f4b944',
                 ],
                 innerRadiusRatio: 0.5,
                 innerLabels: [
@@ -104,8 +104,8 @@ function OverviewChart(props) {
     return (
         <>
             {/* <Loading /> */}
-            {isLoading && <Loading/>}
-            {!isLoading &&<AgChartsReact options={options} />}
+            {isLoading && <Loading />}
+            {!isLoading && <AgChartsReact options={options} />}
         </>
     );
 }

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { useLocation } from 'react-router-dom';
 import classes from './Dashboard.module.css';
-import Menu from './Menu';
 import OverviewChart from './OverviewChart';
 import LeftMenu from './LeftMenu';
 import DetailsChart from './DetailsChart';
@@ -13,8 +12,6 @@ import "react-datepicker/dist/react-datepicker.css";
 function Dashboard() {
   let location = useLocation();
   const path = location.pathname;
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
 
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
@@ -27,7 +24,6 @@ function Dashboard() {
   return (
     <div className={classes.main}>
       <div className={classes.menu}>
-        {/* <Menu /> */}
         <LeftMenu />
       </div>
       <div className={classes.overview}>

@@ -57,6 +57,20 @@ function DetailsChart(props) {
             yKeys: ['turnovers'],
             label: {},
         }],
+        theme:{
+            baseTheme: 'ag-default',
+            palette: {
+                fills: [
+                    '#21B372',
+                    '#FDDE02',
+                    '#F76700',
+                    '#D30018',
+                    '#49afda',
+                    '#fb7451',
+                ],
+                strokes: ['black']
+            }
+        },
     }
 
 
