@@ -7,6 +7,7 @@ function DetailsChart(props) {
     const [startDate, endDate] = props.date;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [keys, setKeys] = useState([]);
     useEffect(() => {
         if (startDate !== null && endDate !== null) {
             setIsLoading(true);
@@ -15,34 +16,32 @@ function DetailsChart(props) {
                     return result.json();
                 })
                 .then(data => {
-                    setData(data.overview);
+                    console.log(data.overview);
+                    const newOverview = [];
+                    const keysValue = [];
+                    const overview = data.overview;
+                    overview.map(o => {
+                        keysValue.push(o.name);
+                        let index = newOverview.findIndex(e => { return e.parent === o.parent });
+                        if (index >= 0) {
+                            newOverview[index][o.name] = o.turnovers;
+                        } else {
+                            newOverview.push({
+                                parent: o.parent,
+                                [o.name]: o.turnovers,
+                            });
+                        }
+
+                    });
+                    setData(newOverview);
+                    setKeys(keysValue);
                     setIsLoading(false);
+                    console.log(newOverview);
                 })
         }
     }, [endDate]);
 
-    //     {
-    //         'beverage': 'Coffee',
-    //         'Q1': 450,
-    //         'Q2': 560,
-    //         'Q3': 600,
-    //         'Q4': 700,
-    //     },
-    //     {
-    //         'beverage': 'Tea',
-    //         'Q1': 270,
-    //         'Q2': 380,
-    //         'Q3': 450,
-    //         'Q4': 520,
-    //     },
-    //     {
-    //         'beverage': 'Milk',
-    //         'Q1': 180,
-    //         'Q2': 170,
-    //         'Q3': 190,
-    //         'Q4': 200,
-    //     },
-    // ];
+
     const options = {
         data: data,
         title: {
@@ -53,20 +52,24 @@ function DetailsChart(props) {
         },
         series: [{
             type: 'column',
-            xKey: 'name',
-            yKeys: ['turnovers'],
+            xKey: 'parent',
+            yKeys: keys,
             label: {},
         }],
-        theme:{
+        theme: {
             baseTheme: 'ag-default',
             palette: {
                 fills: [
-                    '#21B372',
-                    '#FDDE02',
-                    '#F76700',
-                    '#D30018',
-                    '#49afda',
-                    '#fb7451',
+                    "AliceBlue",
+                    "Beige",
+                    "CornflowerBlue",
+                    "DarkGoldenRod",
+                    "FireBrick",
+                    "Gainsboro",
+                    "HoneyDew",
+                    "IndianRed",
+                    "Khaki",
+                    "LightCyan",
                 ],
                 strokes: ['black']
             }

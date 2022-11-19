@@ -34,6 +34,7 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="account" element={<Dashboard />} />
             <Route path="details" element={<Dashboard />} />
+            <Route path="history" element={<Dashboard />} />
           </Route>
           <Route element={<CatalogContextLayout />}>
             <Route path='/catalog' element={<Catalog />} />

@@ -479,48 +479,6 @@ admin.updateOrderStatus = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
-
-//     try {
-//         const objects = await object.find();
-//         for (const item of objects) {
-//             overview.push({
-//                 _id: item._id,
-//                 name: { (object === 'catalog') ? item.name : item.title
-//             },
-//                 turnovers: 0
-//             })
-//     }
-//         const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
-
-//     for (const order of orders) {
-//         const items = order.cart.items;
-//         for (const item of items) {
-//             const { product: productId, quantity } = item;
-//             try {
-//                 // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
-
-//                 const product = await Product.findById(productId);
-//                 const catalogId = product.parentCatalog;
-//                 const childCatalogId = product.childCatalog;
-
-//                 const index = overview.findIndex(c => {
-//                     return (c._id.toString() === catalogId.toString())
-//                 });
-//                 overview[index].turnovers += product.price * quantity;
-//             } catch (error) {
-//                 return next(errorHandler.throwErr('Something wrong with order!', 401));
-//             }
-//         }
-
-//     }
-//     // console.log(overview);
-//     res.status(200).json({ overview: overview });
-
-// } catch (error) {
-//     next(errorHandler.throwErr('Something wrong with order!', 401));
-// }
-// }
-// Overview
 admin.getOverview = async (req, res, next) => {
     let overview = [];
     if (req.accessTokenPayload.role === 0) {
@@ -586,5 +544,38 @@ admin.getOverview = async (req, res, next) => {
     } catch (error) {
         next(errorHandler.throwErr('Something wrong with order!', 401));
     }
+}
+admin.getHistory = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const history = [];
+    const year = moment().format('YYYY');
+
+    for (let i = 1; i <= 12; i++) {
+        history.push({month: i, turnovers:0});
+        // history[i].month = i;
+        let startDate;
+        let endDate;
+        if (i >= 10) {
+            startDate = moment(`${year}-${i}`).startOf('month');
+            endDate = moment(`${year}-${i}`).endOf('month');
+        } else {
+            startDate = moment(`${year}-0${i}`).startOf('month');
+            endDate = moment(`${year}-0${i}`).endOf('month');
+        }
+        console.log(startDate, '-', endDate);
+        try {
+            const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
+            for(const order of orders){
+                history[i-1].turnovers+=order.cart.subTotal;
+            }
+
+        } catch (error) {
+            return next(errorHandler.throwErr('Something wrong with order!', 401));
+        }
+    }
+    res.status(200).json({history:history});
+
 }
 export default admin;

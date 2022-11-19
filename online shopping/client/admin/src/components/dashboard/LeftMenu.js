@@ -10,6 +10,7 @@ function LeftMenu() {
                 <nav className={classes.menu}>
                     <Link to='/account'>Account</Link>
                     <Link to='/details'>Details</Link>
+                    <Link to='/history'>History</Link>
                 </nav>
             </details>
 

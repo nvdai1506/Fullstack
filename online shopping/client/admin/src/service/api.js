@@ -300,6 +300,20 @@ Api.admin = {
         }
         return request(requestParams);
     },
+    getHistory: function (){
+        const requestParams = {
+            url: `${domain}/admin/history`,
+            config:
+            {
+                method: 'GET',
+                headers:{
+                    'x-access-token': token,
+                    'Content-Type':'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
 }
 
 Api.shop = {

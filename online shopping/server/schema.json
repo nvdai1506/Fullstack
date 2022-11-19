@@ -54,3 +54,12 @@
     "price":100000,
     "childCatalog":"6364932858179e871a9e1f4c"
 }
+{
+    "parent":"aas",
+    "name":"asas",
+    "turnovers":123
+}
+{
+    "parent":"asas",
+    "ASdasd":123
+}

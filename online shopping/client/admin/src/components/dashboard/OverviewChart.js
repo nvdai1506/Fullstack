@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as agCharts from 'ag-charts-community';
 import { AgChartsReact } from 'ag-charts-react';
 import Api from '../../service/api';
