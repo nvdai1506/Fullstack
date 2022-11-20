@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from '../ui/Button';
 
 import classes from './OrderItem.module.css';
 import Api from '../../service/api';
 function OrderItem(props) {
-
-    // const [ordering, setOrdering] = useState(false);
     const main = props.main;
     let ordering=false;
     if (main === 'ordering') {

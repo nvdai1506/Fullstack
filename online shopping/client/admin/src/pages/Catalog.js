@@ -20,7 +20,7 @@ function Catalog() {
 
   useEffect(() => {
     // console.log('effect');
-    console.log(status);
+    // console.log(status);
     Api.shop.getCatalog()
       .then(result => {
         return result.json();

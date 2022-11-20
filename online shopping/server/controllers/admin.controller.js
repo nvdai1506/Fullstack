@@ -564,7 +564,7 @@ admin.getHistory = async (req, res, next) => {
             startDate = moment(`${year}-0${i}`).startOf('month');
             endDate = moment(`${year}-0${i}`).endOf('month');
         }
-        console.log(startDate, '-', endDate);
+        // console.log(startDate, '-', endDate);
         try {
             const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
             for(const order of orders){

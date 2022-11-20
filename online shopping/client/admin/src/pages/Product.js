@@ -40,7 +40,7 @@ function Product() {
   },[productStatusHandler]);
 
   useEffect(() => {
-    console.log('product');
+    // console.log('product');
     Api.shop.getProducts()
       .then(result => {
         return result.json();

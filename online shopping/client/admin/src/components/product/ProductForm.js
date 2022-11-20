@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState} from 'react'
 import classes from './ProductForm.module.css';
 
 import Select from '../ui/Select.js';
@@ -21,37 +21,28 @@ function ProductForm(props) {
   const [imageUrl, setImageUrl] = useState(null);
   const [imageToSend, setimageToSend] = useState(null);
 
-  useEffect(()=>{
-    if(updateMode){
-      for(const catalog of catalogs){
-        if(catalog._id.toString() === productEditValue.parentCatalog.toString()){
+  useEffect(() => {
+    if (updateMode) {
+      for (const catalog of catalogs) {
+        if (catalog._id.toString() === productEditValue.parentCatalog.toString()) {
           setImageUrl(productEditValue.image);
           setCatalogSelectValue(catalog._id);
           setChilds(catalog.ChildCatalogs);
           setChildSelectValue(productEditValue.childCatalog);
-          return ;
+          return;
         }
       }
-      // catalogs.map(catalog =>{
-      //   if(catalog._id.toString() === productEditValue.parentCatalog.toString()){
-      //     setCatalogSelectValue(catalog._id);
-      //     setChilds(catalog.ChildCatalogs);
-      //     setChildSelectValue(productEditValue.childCatalog);
-      //     return ;
-      //   }
-      // })
-      // console.log(productEditValue.image);
-      // setImageUrl(productEditValue.image);
     }
-  },[updateMode, productEditValue]);
+  }, [updateMode, productEditValue]);
 
   const onChangeSelectCatalogHandler = useCallback(event => {
     setCatalogSelectValue(event.target.value);
-    catalogs.map(catalog => {
+    for (const catalog of catalogs) {
       if (catalog._id.toString() === event.target.value.toString()) {
         setChilds(catalog.ChildCatalogs);
+        return;
       }
-    })
+    }
   });
   const onChangeSelectChildHandler = event => {
     setChildSelectValue(event.target.value);
@@ -63,13 +54,13 @@ function ProductForm(props) {
     }
   };
 
-  const resetHandler = ()=>{
+  const resetHandler = () => {
     setCatalogSelectValue(0);
     setChildSelectValue(0);
     setImageUrl(null);
   }
 
-  const onClickCatalogHandler = event =>{
+  const onClickCatalogHandler = event => {
     productCtx.productStatusHandler({});
   }
 
@@ -98,7 +89,7 @@ function ProductForm(props) {
 
         </div>
         <div className={classes.image}>
-          <input onChange={onChangeFileHandler} type='file' className={classes.customFileInput}/>
+          <input onChange={onChangeFileHandler} type='file' className={classes.customFileInput} />
           <div className={classes.image_show}>
             <img src={imageUrl} alt=''></img>
           </div>
