@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import classes from './OrderingList_ag.module.css';
 import Api from '../../service/api';
 function OrderedList_ag(props) {
-    const { status, statusChangeHandler } = props;
+    const { status, statusChangeHandler, viewHandler } = props;
 
 
     const gridRef = useRef();
@@ -24,7 +24,7 @@ function OrderedList_ag(props) {
                     const splitDate = o.createdAt.split('T');
                     const date = splitDate[0];
                     const time = splitDate[1].split('.')[0];
-                    const formatTime = time + ' ' + date;
+                    const formatTime = date + ' ' + time;
                     newOrders.push({
                         email: o.email,
                         created: formatTime,
@@ -59,6 +59,9 @@ function OrderedList_ag(props) {
         filter: true,
         resizable: true,
     }), []);
+    const CellDoubleClickedHandler = useCallback(event => {
+        viewHandler(event.data.items, event.data.total);
+    },[viewHandler]);
 
     return (
         <div className={`ag-theme-alpine ${classes.main}`}>
@@ -69,7 +72,7 @@ function OrderedList_ag(props) {
                 animateRows={true}
                 defaultColDef={defaultColDef}
                 onGridReady={onGridReady}
-            // onCellClicked={cellClickedListener}
+            onCellDoubleClicked={CellDoubleClickedHandler}
             >
             </AgGridReact>
         </div>

@@ -395,7 +395,7 @@ admin.getOrderByStatus = async (req, res, next) => {
     const status = req.params.status; // 0 1 
 
     try {
-        const orders = await Order.find({ status: status });
+        const orders = await Order.find({ status: status }).populate({path: 'cart.items.product',select:['title','price']});
 
         res.status(200).json({ orders: orders });
     } catch (error) {

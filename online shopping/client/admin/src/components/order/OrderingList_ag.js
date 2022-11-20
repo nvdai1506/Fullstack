@@ -3,8 +3,9 @@ import { AgGridReact } from 'ag-grid-react';
 import Button from '../ui/Button';
 import classes from './OrderingList_ag.module.css';
 import Api from '../../service/api';
+
 function OrderingList_ag(props) {
-    const { status, statusChangeHandler } = props;
+    const { status, statusChangeHandler,viewHandler } = props;
 
     const buttonField = {
         field: '', cellRenderer: memo((p) => {
@@ -37,12 +38,13 @@ function OrderingList_ag(props) {
             .then(result => { return result.json() })
             .then(data => {
                 const orders = data.orders;
+                // console.log(orders);
                 const newOrders = [];
                 for (const o of orders) {
                     const splitDate = o.createdAt.split('T');
                     const date = splitDate[0];
                     const time = (splitDate[1].split('.')[0])
-                    const formatTime = time + ' ' + date;
+                    const formatTime = date + ' ' + time;
                     newOrders.push({
                         email: o.email,
                         created: formatTime,
@@ -79,8 +81,12 @@ function OrderingList_ag(props) {
         resizable: true,
     }), []);
 
+    const CellDoubleClickedHandler = useCallback(event => {
+        viewHandler(event.data.items, event.data.total);
+    },[viewHandler]);
+
     return (
-        <div className={`ag-theme-alpine ${classes.main}`}>
+        <div className={`${classes.main} ag-theme-alpine`}>
             <AgGridReact
                 ref={gridRef}
                 rowData={rowData}
@@ -88,7 +94,7 @@ function OrderingList_ag(props) {
                 animateRows={true}
                 defaultColDef={defaultColDef}
                 onGridReady={onGridReady}
-            // onCellClicked={cellClickedListener}
+                onCellDoubleClicked={CellDoubleClickedHandler}
             >
             </AgGridReact>
         </div>

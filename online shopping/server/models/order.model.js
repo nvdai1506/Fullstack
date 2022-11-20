@@ -8,9 +8,25 @@ const orderSchema = new Schema(
             type: String,
             require: true
         },
-        cart: {
-            type: Object,
-            require: true
+        // cart: {
+        //     type: Object,
+        //     require: true
+        // },
+        cart:{
+            items:[{
+                product:{
+                    type: Schema.Types.ObjectId,
+                    ref:'Product'
+                },
+                quantity:{
+                    type:Number,
+                    default: 0
+                }
+            }],
+            subTotal:{
+                type:Number,
+                default: 0
+            }
         },
         shippingAddress: {
             type: String,

@@ -42,7 +42,9 @@ function App() {
           <Route element={<ProductContextLayout />}>
             <Route path='/product' element={<Product />} />
           </Route>
-          <Route path='/order' element={<Order />} />
+          <Route path='/order'>
+            <Route index element={<Order />} />
+          </Route>
         </Route>
       </Routes>
     </Layout>
