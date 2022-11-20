@@ -443,36 +443,36 @@ admin.updateOrderStatus = async (req, res, next) => {
         }
         order.status = status;
         const today = moment().format('L');
-        if (status === 1)//completed
-        {
-            for (const item of order.cart.items) {
-                const productId = item.product;
-                const quantity = Number(item.quantity);
+        // if (status === 1)//completed
+        // {
+        //     for (const item of order.cart.items) {
+        //         const productId = item.product;
+        //         const quantity = Number(item.quantity);
 
-                try {
-                    const product = await Product.findById(productId);
-                    const price = Number(product.price);
+        //         try {
+        //             const product = await Product.findById(productId);
+        //             const price = Number(product.price);
 
 
 
-                    const childCatalogId = product.childCatalog;
-                    const parentCatalogId = product.parentCatalog;
+        //             const childCatalogId = product.childCatalog;
+        //             const parentCatalogId = product.parentCatalog;
 
-                    const childCatalog = await ChildCatalog.findById(childCatalogId);
-                    addDataToSalesFigures(childCatalog, quantity, price, today);
-                    // await childCatalog.save();
+        //             const childCatalog = await ChildCatalog.findById(childCatalogId);
+        //             addDataToSalesFigures(childCatalog, quantity, price, today);
+        //             // await childCatalog.save();
 
-                    const parentCatalog = await Catalog.findById(parentCatalogId);
-                    addDataToSalesFigures(parentCatalog, quantity, price, today);
-                    // await parentCatalog.save();
-                    // await product.save();
-                    addDataToSalesFigures(product, quantity, price, today);
-                } catch (error) {
-                    throw errorHandler.throwErr('Add salesFigures have error!', 422);
-                }
+        //             const parentCatalog = await Catalog.findById(parentCatalogId);
+        //             addDataToSalesFigures(parentCatalog, quantity, price, today);
+        //             // await parentCatalog.save();
+        //             // await product.save();
+        //             addDataToSalesFigures(product, quantity, price, today);
+        //         } catch (error) {
+        //             throw errorHandler.throwErr('Add salesFigures have error!', 422);
+        //         }
 
-            }
-        }
+        //     }
+        // }
         const updatedOrder = await order.save();
         res.status(200).json({ mess: 'Order is updated.', updatedOrder: updatedOrder });
     } catch (error) {
@@ -510,7 +510,7 @@ admin.getOverview = async (req, res, next) => {
             }
         }
 
-        const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+        const orders = await Order.find({status:1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
 
         for (const order of orders) {
             const items = order.cart.items;
@@ -566,7 +566,7 @@ admin.getHistory = async (req, res, next) => {
         }
         // console.log(startDate, '-', endDate);
         try {
-            const orders = await Order.find({ createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
+            const orders = await Order.find({ status:1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
             for(const order of orders){
                 history[i-1].turnovers+=order.cart.subTotal;
             }

@@ -41,7 +41,7 @@ function OrderingList_ag(props) {
                 for (const o of orders) {
                     const splitDate = o.createdAt.split('T');
                     const date = splitDate[0];
-                    const time = splitDate[1].split('.')[0];
+                    const time = (splitDate[1].split('.')[0])
                     const formatTime = time + ' ' + date;
                     newOrders.push({
                         email: o.email,

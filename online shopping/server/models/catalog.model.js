@@ -14,21 +14,21 @@ const catalogSchema = new Schema({
             default: []
         }
     ],
-    salesFigures: [
-        {
-            numProducts: {
-                type: Number,
-                default: 0
-            },
-            turnovers: {
-                type: Number,
-                default: 0
-            },
-            date:{
-                type:String
-            }
-        }
-    ]
+    // salesFigures: [
+    //     {
+    //         numProducts: {
+    //             type: Number,
+    //             default: 0
+    //         },
+    //         turnovers: {
+    //             type: Number,
+    //             default: 0
+    //         },
+    //         date:{
+    //             type:String
+    //         }
+    //     }
+    // ]
 });
 
 const model = mongoose.model('Catalog', catalogSchema);
