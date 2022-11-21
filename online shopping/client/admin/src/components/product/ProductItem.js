@@ -12,7 +12,7 @@ function ProductItem(props) {
             'parentCatalog':props.parentCatalog,
             'childCatalog': props.childCatalog,
             'id':props.id,
-            'image': `http://localhost:8080/${props.image}`,
+            'image': `${process.env.REACT_APP_DOMAIN}/${props.image}`,
             'title': props.title,
             'material': props.material,
             'size': props.size,

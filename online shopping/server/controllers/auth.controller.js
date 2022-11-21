@@ -52,9 +52,9 @@ auth.login = async (req, res, next) => {
             role: user.role
         }
         const opts = {
-            expiresIn: 24*60*60 // seconds
+            expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN // seconds
         }
-        const accessToken = jwt.sign(payload, 'nVdai1506', opts);
+        const accessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY, opts);
         const refreshToken = randomstring.generate(80);
 
         user.rfToken = refreshToken;
@@ -96,9 +96,9 @@ auth.refresh = async (req, res, next) => {
             role: user.role
         }
         const newOpts = {
-            expiresIn: 24*60*60 // seconds
+            expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN// seconds
         }
-        const newAccessToken = jwt.sign(payload, 'nVdai1506',newOpts);
+        const newAccessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY,newOpts);
         
         res.status(200).json({newAccessToken: newAccessToken});
 

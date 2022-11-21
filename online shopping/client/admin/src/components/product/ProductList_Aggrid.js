@@ -67,7 +67,7 @@ function ProductList_Aggrid(props) {
             'parentCatalog': event.data.parentCatalog,
             'childCatalog': event.data.childCatalog,
             'id': event.data._id,
-            'image': `http://localhost:8080/${event.data.imageUrl}`,
+            'image': `${process.env.REACT_APP_DOMAIN}/${event.data.imageUrl}`,
             'title': event.data.title,
             'material': event.data.material,
             'size': event.data.size,

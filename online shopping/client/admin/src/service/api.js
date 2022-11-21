@@ -1,4 +1,5 @@
-const domain = "http://localhost:8080";
+const domain = process.env.REACT_APP_DOMAIN;
+console.log(domain);
 let token = localStorage.getItem("x-access-token");
 
 let Api = () => { };
