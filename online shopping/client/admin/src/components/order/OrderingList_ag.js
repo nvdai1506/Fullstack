@@ -5,7 +5,7 @@ import classes from './OrderingList_ag.module.css';
 import Api from '../../service/api';
 
 function OrderingList_ag(props) {
-    const { status, statusChangeHandler,viewHandler } = props;
+    const { status, statusChangeHandler, viewHandler } = props;
 
     const buttonField = {
         field: '', cellRenderer: memo((p) => {
@@ -20,7 +20,23 @@ function OrderingList_ag(props) {
                         statusChangeHandler(true);
                     });
             }
-            return <Button className={classes.deletebtn} onClick={onMarkDone}>Done</Button>
+            const onCancel = () => {
+                Api.admin.updateOrder({ status: 2 }, p.data._id)
+                    .then(result => {
+                        if (result.status === 200) {
+                            statusChangeHandler(false);
+                        }
+                    })
+                    .catch(err => {
+                        statusChangeHandler(true);
+                    });
+            }
+            return (
+                <div className={classes.btn}>
+                    <Button state='cancle' onClick={onCancel}>Cancel</Button>
+                    <Button onClick={onMarkDone}>Done</Button>
+                </div>
+            );
         }), resizable: null, cellStyle: { 'textAlign': 'center' }
     }
 
@@ -83,7 +99,7 @@ function OrderingList_ag(props) {
 
     const CellDoubleClickedHandler = useCallback(event => {
         viewHandler(event.data.items, event.data.total);
-    },[viewHandler]);
+    }, [viewHandler]);
 
     return (
         <div className={`${classes.main} ag-theme-alpine`}>
