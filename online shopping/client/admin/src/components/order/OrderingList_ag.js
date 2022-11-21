@@ -37,7 +37,7 @@ function OrderingList_ag(props) {
                     <Button onClick={onMarkDone}>Done</Button>
                 </div>
             );
-        }), resizable: null, cellStyle: { 'textAlign': 'center' }
+        }), cellStyle: { 'textAlign': 'center' }
     }
 
     const gridRef = useRef();
@@ -95,6 +95,7 @@ function OrderingList_ag(props) {
         sortable: true,
         filter: true,
         resizable: true,
+        // cellStyle:{'background-color':blue}
     }), []);
 
     const CellDoubleClickedHandler = useCallback(event => {
