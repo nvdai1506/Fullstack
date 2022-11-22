@@ -25,6 +25,7 @@ export const AuthContextProvider = (props) => {
     setRefreshToken(null);
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refreshToken');
+    localStorage.removeItem('x-role');
 
     if (logoutTimer) {
       clearTimeout(logoutTimer);

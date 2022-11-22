@@ -16,7 +16,7 @@ function DetailsChart(props) {
                     return result.json();
                 })
                 .then(data => {
-                    console.log(data.overview);
+                    // console.log(data.overview);
                     const newOverview = [];
                     const keysValue = [];
                     const overview = data.overview;
@@ -36,7 +36,7 @@ function DetailsChart(props) {
                     setData(newOverview);
                     setKeys(keysValue);
                     setIsLoading(false);
-                    console.log(newOverview);
+                    // console.log(newOverview);
                 })
         }
     }, [endDate]);
