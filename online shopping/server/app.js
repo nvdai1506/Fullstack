@@ -4,19 +4,28 @@ import { fileURLToPath } from 'url';
 import * as dotenv from 'dotenv' 
 dotenv.config()
 import express from 'express';
+import morgan from 'morgan';//logger
+import helmet from 'helmet';//for header security
 import mongoose from 'mongoose';
 import cors from "cors";
+import { v4 } from'uuid';
+import  multer from'multer';//serve for files
 
 import AdminRouter from './routes/admin.route.js';
 import AuthRouter from './routes/auth.route.js';
 import UserRouter from './routes/user.route.js';
 import ShopRouter from './routes/shop.route.js';
-import { v4 } from'uuid';
-import  multer from'multer';
+
 
 import Auth from './middlewares/auth.mdw.js';
 
 const app= express();
+
+
+app.use(express.json());
+app.use(morgan("dev"));
+app.use(cors());
+app.use(helmet());
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -43,9 +52,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 
-app.use(express.json());
-app.use(cors());
-
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
 );
@@ -55,7 +61,6 @@ app.use('/', AuthRouter);
 app.use('/shop', ShopRouter);
 app.use('/admin',Auth, AdminRouter);
 app.use('/user', Auth , UserRouter);
-
 
 app.use((error, req, res, next) => {
   console.log(error);
@@ -68,7 +73,7 @@ app.use((error, req, res, next) => {
 
 const PORT = process.env.PORT || 8080;
 
-mongoose.connect('mongodb+srv://ochimot:Vandai1506@cluster0.bhpjcf9.mongodb.net/onlineShop').then( result =>{
+mongoose.connect(process.env.MONGODB_URI).then( result =>{
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);
   });
