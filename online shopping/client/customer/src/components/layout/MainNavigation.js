@@ -1,48 +1,29 @@
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import classes from './MainNavigation.module.css';
+import AuthContext from "../../context/auth-context";
 
 
 function MainNavigation() {
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
 
-    // const authCtx = useContext(AuthContext);
-    // const isLoggedIn = authCtx.isLoggedIn;
+    const authCtx = useContext(AuthContext);
+    const isLoggedIn = authCtx.isLoggedIn;
+    // console.log(isLoggedIn);
 
     const logoutHandler = () => {
-        // authCtx.logout();
-        // navigate('/login');
+        authCtx.logout();
+        navigate('/login');
     }
-    const isLoggedIn = true;
     return (
         <header className={classes.headerNav}>
-            <div className={classes.logo}>Admin</div>
+            <div className={classes.logo}>Shop</div>
             <nav>
                 <ul>
-                    {isLoggedIn &&
-                        <li>
-                            <Link to='/dashboard' className={classes[`${(location.pathname === '/' || location.pathname === '/dashboard') ? 'active' : ''}`]}>Dashboard</Link>
-                        </li>
-                    }
-                    {isLoggedIn &&
-                        <li>
-                            <Link to='/catalog' className={classes[`${location.pathname === '/catalog' ? 'active' : ''}`]}>Catalog</Link>
-                        </li>
-                    }
-                    {isLoggedIn &&
-                        <li>
-                            <Link to='/product' className={classes[`${location.pathname === '/product' ? 'active' : ''}`]}>Product</Link>
-                        </li>
-                    }
-                    {isLoggedIn &&
-                        <li>
-                            <Link to='/order' className={classes[`${location.pathname === '/order' ? 'active' : ''}`]}>Order</Link>
-                        </li>
-                    }
                     {!isLoggedIn &&
                         <li>
-                            <Link className={classes[`${location.pathname === '/login' ? 'active' : ''}`]}>Login</Link>
+                            <Link to='/login' className={classes[`${location.pathname === '/login' ? 'active' : ''}`]}>Login</Link>
                         </li>
                     }
                     {isLoggedIn &&

@@ -14,6 +14,7 @@ router.post('/login', [
     body('password')
         .trim()
         .isLength({ min: 6 })
+        .withMessage('Password has to be valid.')
 ], authController.login);
 
 router.post('/signup', [

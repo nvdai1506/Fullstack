@@ -1,5 +1,4 @@
 const domain = process.env.REACT_APP_DOMAIN;
-console.log(domain);
 let token = localStorage.getItem("x-access-token");
 
 let Api = () => { };
@@ -67,7 +66,6 @@ Api.admin = {
                 method: 'POST',
                 body: JSON.stringify(params),
                 headers: {
-                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
