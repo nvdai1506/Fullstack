@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from 'react';
-import { useNavigate  } from 'react-router-dom';
+import { resolvePath, useNavigate } from 'react-router-dom';
 
 
 import classes from './AuthForm.module.css';
@@ -21,21 +21,23 @@ function AuthForm() {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        setError(false);
         setIsLoading(true);
         const enteredEmail = emailInputRef.current.value;
         const enteredPassword = passwordInputRef.current.value;
-        const result = Api.admin.login({
+        Api.admin.login({
             email: enteredEmail,
             password: enteredPassword
         }).then(result => {
             return result.json();
         }).then(data => {
-            console.log(data);
+            // console.log(data);
             authCtx.login(data);
             setIsLoading(false);
             setError(false);
-            navigate('/dashboard');
+            navigate('/');
         }).catch(err => {
+            console.log(err);
             setError(true);
             setIsLoading(false);
         }
@@ -50,7 +52,7 @@ function AuthForm() {
         <form onSubmit={submitHandler} className={classes.form}>
             <h1>Login</h1>
             <div className={classes.status}>
-                {isLoading && <div><span><Loading className={classes.loading}/></span></div>}
+                {isLoading && <div><span><Loading className={classes.loading} /></span></div>}
                 {error && <div><span><p className={classes.loginFail}>Login Failed!</p></span></div>}
             </div>
 
@@ -63,7 +65,7 @@ function AuthForm() {
                 <input type='password' id='password' ref={passwordInputRef}></input>
             </div>
 
-            <button>Login</button>
+            <button type='submit'>Login</button>
         </form>
     )
 }

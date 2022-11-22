@@ -6,6 +6,7 @@ import Loading from '../ui/Loading';
 
 
 function OverviewChart(props) {
+    
     const [startDate, endDate] = props.date;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);

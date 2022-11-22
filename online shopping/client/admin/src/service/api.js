@@ -1,6 +1,5 @@
 const domain = process.env.REACT_APP_DOMAIN;
 let token = localStorage.getItem("x-access-token");
-
 let Api = () => { };
 
 function request(params) {
@@ -285,6 +284,9 @@ Api.admin = {
     },
     // overview
     getOverview: function (params){
+        if(token === null){
+            token = localStorage.getItem("x-access-token");
+        }
         const requestParams = {
             url: `${domain}/admin/overview`,
             config:

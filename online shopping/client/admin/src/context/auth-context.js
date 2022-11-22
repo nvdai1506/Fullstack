@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 let logoutTimer;
 
 const AuthContext = React.createContext({
@@ -20,6 +20,12 @@ export const AuthContextProvider = (props) => {
 
   const userIsLoggedIn = (!!accessToken && role !== 0);
 
+  // useEffect(()=>{
+  //   console.log(accessToken);
+  //   console.log(refreshToken);
+  //   console.log(role);
+  // },[accessToken]);
+
   const logoutHandler = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
@@ -33,21 +39,22 @@ export const AuthContextProvider = (props) => {
   }, []);
 
   const loginHandler = (data) => {
-    // console.log(data);
-    setAccessToken(data.accessToken);
-    setRefreshToken(data.refreshToken);
-    setRole(data.role);
+      // console.log(data);
+      setAccessToken(data.accessToken);
+      setRefreshToken(data.refreshToken);
+      setRole(data.role);
 
-    // console.log(data.accessToken);
-    localStorage.setItem('x-access-token', data.accessToken);
-    localStorage.setItem('x-refreshToken', data.refreshToken);
-    localStorage.setItem('x-role', data.role);
+      // console.log(data.accessToken);
+      localStorage.setItem('x-access-token', data.accessToken);
+      localStorage.setItem('x-refreshToken', data.refreshToken);
+      localStorage.setItem('x-role', data.role);
+
   };
 
   const contextValue = {
     accessToken,
     refreshToken,
-    role:role,
+    role: role,
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
