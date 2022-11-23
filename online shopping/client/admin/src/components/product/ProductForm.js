@@ -91,7 +91,7 @@ function ProductForm(props) {
         <div className={classes.image}>
           <input onChange={onChangeFileHandler} type='file' className={classes.customFileInput} />
           <div className={classes.image_show}>
-            <img src={imageUrl} alt=''></img>
+            <img crossOrigin='true' src={imageUrl} alt=''></img>
           </div>
         </div>
       </div>

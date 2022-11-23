@@ -8,9 +8,10 @@
 }
 .input{
     margin: 0 25%;
-    height: 15%;
-    width: 50%;
+    height: 15% !important;
+    width: 50% !important;
     font-size: 3rem;
+    margin-bottom: 0 !important;
 }
 .btn{
     margin: 1% 1%;
