@@ -1,8 +1,15 @@
 const domain = process.env.REACT_APP_DOMAIN;
-let token = localStorage.getItem("x-access-token");
+
 let Api = () => { };
+let token = null;
+
+export function setToken(value) {
+    token = value;
+}
+
 
 function request(params) {
+    // console.log(token);
     return new Promise(async (resolve, reject) => {
         // console.log(params);
         let res = await fetch(params.url, params.config).catch(res => ({
@@ -25,8 +32,8 @@ function request(params) {
                         accessToken: token,
                         refreshToken: refreshToken
                     }),
-                    headers:{
-                        'Content-Type':'application/json'
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).catch(res => ({
                     ...res.response,
@@ -36,7 +43,7 @@ function request(params) {
                 if (refresh && refresh.status === 200) {
                     const data = await refresh.json();
                     token = data.newAccessToken;
-                    console.log('token: ', token);
+                    // console.log('token: ', token);
                     localStorage.setItem("x-access-token", token);
                     params.config.headers["x-access-token"] = token;
                     // params.headers.set["x-access-token"] = token;
@@ -48,9 +55,9 @@ function request(params) {
             } else {
                 return reject(res);
             }
-        }else{
+        } else {
             return reject(res);
-        } 
+        }
 
     })
 }
@@ -72,7 +79,7 @@ Api.admin = {
         return request(requestParams);
     },
     // management Account
-    getManagementAccount: function(){
+    getManagementAccount: function () {
         const requestParams = {
             url: `${domain}/admin/account`,
             config:
@@ -86,13 +93,13 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    addManagementAccount: function(params){
+    addManagementAccount: function (params) {
         const requestParams = {
             url: `${domain}/admin/account`,
             config:
             {
                 method: 'POST',
-                body:JSON.stringify(params),
+                body: JSON.stringify(params),
                 headers: {
                     'x-access-token': token,
                     'Content-Type': 'application/json'
@@ -101,7 +108,7 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    deleteManagementAccount: function(id){
+    deleteManagementAccount: function (id) {
         const requestParams = {
             url: `${domain}/admin/account/${id}`,
             config:
@@ -116,13 +123,13 @@ Api.admin = {
         return request(requestParams);
     },
     // catalog
-    addCatalog: function(params){
+    addCatalog: function (params) {
         const requestParams = {
             url: `${domain}/admin/catalog`,
             config:
             {
                 method: 'POST',
-                body:JSON.stringify(params),
+                body: JSON.stringify(params),
                 headers: {
                     'x-access-token': token,
                     'Content-Type': 'application/json'
@@ -131,7 +138,7 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    deleteCatalog: function(id){
+    deleteCatalog: function (id) {
         const requestParams = {
             url: `${domain}/admin/catalog/${id}`,
             config:
@@ -145,13 +152,13 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    updateCatalog: function(params, id){
+    updateCatalog: function (params, id) {
         const requestParams = {
             url: `${domain}/admin/catalog/${id}`,
             config:
             {
                 method: 'PATCH',
-                body:JSON.stringify(params),
+                body: JSON.stringify(params),
                 headers: {
                     'x-access-token': token,
                     'Content-Type': 'application/json'
@@ -161,28 +168,13 @@ Api.admin = {
         return request(requestParams);
     },
     // child catalog
-    addChildCatalog: function(params){
+    addChildCatalog: function (params) {
         const requestParams = {
             url: `${domain}/admin/childcatalog`,
             config:
             {
                 method: 'POST',
-                body:JSON.stringify(params),
-                headers: {
-                    'x-access-token': token,
-                    'Content-Type': 'application/json'
-                }
-            }
-        }
-        return request(requestParams);
-    }, 
-    updateChildCatalog: function(params, id){
-        const requestParams = {
-            url: `${domain}/admin/childCatatlog/${id}`,
-            config:
-            {
-                method: 'PATCH',
-                body:JSON.stringify(params),
+                body: JSON.stringify(params),
                 headers: {
                     'x-access-token': token,
                     'Content-Type': 'application/json'
@@ -191,7 +183,22 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    deleteChildCatalog: function(id){
+    updateChildCatalog: function (params, id) {
+        const requestParams = {
+            url: `${domain}/admin/childCatatlog/${id}`,
+            config:
+            {
+                method: 'PATCH',
+                body: JSON.stringify(params),
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    deleteChildCatalog: function (id) {
         const requestParams = {
             url: `${domain}/admin/childcatalog/${id}`,
             config:
@@ -206,28 +213,28 @@ Api.admin = {
         return request(requestParams);
     },
     // product
-    addProduct: function(params){
+    addProduct: function (params) {
         const requestParams = {
             url: `${domain}/admin/product`,
             config:
             {
                 method: 'POST',
-                body:params,
+                body: params,
                 headers: {
                     'x-access-token': token,
                 }
             }
         }
         return request(requestParams);
-    }, 
-    updateProduct: function(params, id){
+    },
+    updateProduct: function (params, id) {
         // console.log('update product');
         const requestParams = {
             url: `${domain}/admin/product/${id}`,
             config:
             {
                 method: 'PATCH',
-                body:params,
+                body: params,
                 headers: {
                     'x-access-token': token
                 }
@@ -236,7 +243,7 @@ Api.admin = {
         // console.log(params);
         return request(requestParams);
     },
-    deletetProduct: function(id){
+    deletetProduct: function (id) {
         const requestParams = {
             url: `${domain}/admin/product/${id}`,
             config:
@@ -251,31 +258,31 @@ Api.admin = {
         return request(requestParams);
     },
     // order
-    getOrders: function (status){
+    getOrders: function (status) {
         const requestParams = {
             url: `${domain}/admin/order/${status}`,
             config:
             {
                 method: 'GET',
-                headers:{
+                headers: {
                     'x-access-token': token,
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 }
             }
         }
         return request(requestParams);
     },
-    updateOrder: function(params, id){
+    updateOrder: function (params, id) {
         // console.log('update product');
         const requestParams = {
             url: `${domain}/admin/order/${id}`,
             config:
             {
                 method: 'PATCH',
-                body:JSON.stringify(params),
+                body: JSON.stringify(params),
                 headers: {
                     'x-access-token': token,
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 }
             }
         }
@@ -283,33 +290,30 @@ Api.admin = {
         return request(requestParams);
     },
     // overview
-    getOverview: function (params){
-        if(token === null){
-            token = localStorage.getItem("x-access-token");
-        }
+    getOverview: function (params) {
         const requestParams = {
             url: `${domain}/admin/overview`,
             config:
             {
                 method: 'POST',
-                body:JSON.stringify(params),
-                headers:{
+                body: JSON.stringify(params),
+                headers: {
                     'x-access-token': token,
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 }
             }
         }
         return request(requestParams);
     },
-    getHistory: function (){
+    getHistory: function () {
         const requestParams = {
             url: `${domain}/admin/history`,
             config:
             {
                 method: 'GET',
-                headers:{
+                headers: {
                     'x-access-token': token,
-                    'Content-Type':'application/json'
+                    'Content-Type': 'application/json'
                 }
             }
         }
@@ -318,7 +322,7 @@ Api.admin = {
 }
 
 Api.shop = {
-    getCatalog: function (){
+    getCatalog: function () {
         const requestParams = {
             url: `${domain}/shop/catalog`,
             config:
@@ -328,7 +332,7 @@ Api.shop = {
         }
         return request(requestParams);
     },
-    getProducts: function (){
+    getProducts: function () {
         const requestParams = {
             url: `${domain}/shop/products`,
             config:

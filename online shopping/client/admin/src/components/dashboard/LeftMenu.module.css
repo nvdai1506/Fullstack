@@ -73,6 +73,7 @@ details[open] summary::after {
   text-decoration: none;
   text-align: center;
   transition: filter 200ms linear 0s;
+  font-weight: bold;
 }
 .menu a:nth-of-type(1) {
   padding-top: 24px;

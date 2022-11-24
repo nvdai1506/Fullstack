@@ -369,21 +369,7 @@ admin.deleteProduct = async (req, res, next) => {
 
 // order
 
-admin.getOrderByUser = async (req, res, next) => {
-    const userId = req.accessTokenPayload.userId;
-    if (!userId) {
-        return next(errorHandler.throwErr('Can not find User!', 401));
-    }
-    try {
-        const user = await User.findById(userId).populate('orders');
-        if (!user) {
-            throw errorHandler.throwErr('Can not find User!', 401);
-        }
-        res.status(200).json({ orders: user.orders });
-    } catch (error) {
-        next(errorHandler.defaultErr(error));
-    }
-}
+
 
 admin.getOrderByStatus = async (req, res, next) => {
     // console.log(req.params.status);
@@ -487,7 +473,7 @@ admin.getOverview = async (req, res, next) => {
     const startDate = moment(req.body.startDate).format('YYYY-MM-DD');
     const endDate = moment(req.body.endDate).format('YYYY-MM-DD');
     const type = req.body.type;
-    // console.log(startDate, '-', endDate);
+    console.log(startDate, '-', endDate, '-', type);
     try {
         if (type === 'catalog') {
             const catalogs = await Catalog.find();
@@ -520,6 +506,7 @@ admin.getOverview = async (req, res, next) => {
                     // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
 
                     const product = await Product.findById(productId);
+                    
                     let id;
                     if (type === 'catalog') {
                         id = product.parentCatalog;
@@ -533,7 +520,7 @@ admin.getOverview = async (req, res, next) => {
                     overview[index].turnovers += product.price * quantity;
 
                 } catch (error) {
-                    return next(errorHandler.throwErr('Something wrong with order!', 401));
+                    break;
                 }
             }
 

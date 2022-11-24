@@ -1,5 +1,5 @@
 import { useState, useRef, useContext } from 'react';
-import { resolvePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 import classes from './AuthForm.module.css';

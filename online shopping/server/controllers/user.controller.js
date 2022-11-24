@@ -18,7 +18,7 @@ user.getUser = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find user!', 422);
         }
 
-        res.status(200).json({ user: user });
+        res.status(200).json({ user: {email: user.email, phone:user.phone, points:user.points} });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -132,6 +132,21 @@ user.removeFromCart = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 };
-
+// order
+user.getOrder = async (req, res, next) => {
+    const userId = req.accessTokenPayload.userId;
+    if (!userId) {
+        return next(errorHandler.throwErr('Can not find User!', 401));
+    }
+    try {
+        const user = await User.findById(userId).populate('orders');
+        if (!user) {
+            throw errorHandler.throwErr('Can not find User!', 401);
+        }
+        res.status(200).json({ orders: user.orders });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 
 export default user;

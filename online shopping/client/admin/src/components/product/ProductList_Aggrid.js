@@ -22,8 +22,8 @@ function ProductList_Aggrid(props) {
         { field: 'material' },
         { field: 'size' },
         { field: 'price' },
-        { field: 'description' },
-        { field: '', cellRenderer: memo(DeleteBtn), resizable: null, cellStyle: { 'textAlign': 'center' } }
+        { field: 'description', },
+        { colId: 'action', cellRenderer: memo(DeleteBtn),floatingFilter:null, resizable: null, cellStyle: { 'textAlign': 'center' } }
     ]);
 
 
@@ -58,11 +58,16 @@ function ProductList_Aggrid(props) {
     const defaultColDef = useMemo(() => ({
         sortable: true,
         filter: true,
-        resizable: true
+        resizable: true,
+        floatingFilter: true,
     }), []);
 
 
     const cellClickedListener = useCallback(event => {
+        const colId = event.column.colId;
+        if(colId === 'action'){
+            return;
+        }
         productEditHandler({
             'parentCatalog': event.data.parentCatalog,
             'childCatalog': event.data.childCatalog,

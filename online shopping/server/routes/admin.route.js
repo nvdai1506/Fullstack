@@ -74,7 +74,7 @@ router.patch('/product/:productId', [
 router.delete('/product/:productId', adminController.deleteProduct);
 
 // order
-router.get('/order', adminController.getOrderByUser);
+
 router.get('/order/:status', adminController.getOrderByStatus);
 
 

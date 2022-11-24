@@ -1,12 +1,14 @@
 .headerNav {
+  position: fixed;
+  top: 0;
   width: 100%;
   height: 5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #16090e;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
 }
 
 .logo {
@@ -15,113 +17,57 @@
   font-weight: bold;
   padding-left: 1rem;
 }
-
-/* .header ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* 
+.headerNav ul {
   display: flex;
-  align-items: baseline;
-  margin-right: 3rem;
-} */
-/* 
-.header li {
-  margin-left: 3rem;
-}
-
-.header a {
-  text-decoration: none;
-  font-size: 1.5rem;
-  color: #ffffff;
-}
-
-.header a:hover,
-.header a:active,
-.header a.active {
-  color: #16090e;
-  background-color: white;
-}
-
-.badge {
-  background-color: #cc2062;
-  color: white;
-  border-radius: 12px;
-  padding: 0 1rem;
-  margin-left: 0.5rem;
-}
-.btn {
-  padding: 0;
-  border: none;
-  background: none;
-  text-decoration: none;
-  font-size: 1.5rem;
-  color: #ffffff;
-  cursor:pointer;
-  font-weight: bold;
-}
-.btn:hover,
-.btn:active,
-.btn.active {
-  color: #16090e;
-  background-color: white;
-  border-radius: 12px;
-  height: 3rem;
-}
-.active{
-  background-color: white;
-  color:#16090e;
-} */
-/* 
- */
- /* * {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-} */
-.headerNav ul{
-	display: flex;
-	width: 95%;
-	height: 80vh;
-	margin: auto;
-	max-width: 1000px;
-	justify-content: space-between;
-	text-align: center;
+  width: 95%;
+  height: 80vh;
+  margin: auto;
+  max-width: 1000px;
+  justify-content: space-between;
+  text-align: center;
   list-style-type: none;
   margin: 0;
-	padding:0;
-  margin-right:1.5rem;
+  padding: 0;
+  margin-right: 1.5rem;
+}
+.icons {
+  color: white;
+  width: 5rem;
+  height: 5rem;
+  background-color: #ef816c;
 }
 .headerNav li {
-	padding: 1rem 0.2rem 1.15rem;
+  padding: 1rem 0.2rem 1.15rem;
   cursor: pointer;
   color: #ebebeb;
-	min-width: 80px;
-	margin: auto;
+  min-width: 80px;
+  margin: auto;
 }
 .headerNav a {
   width: 100%;
-	padding: 1rem 2rem 1.15rem;
+  padding: 1rem 2rem 1.15rem;
   cursor: pointer;
   color: #ebebeb;
-	min-width: 80px;
-	margin: auto;
+  min-width: 80px;
+  margin: auto;
   font-weight: normal;
 }
 .headerNav li:hover {
-  /* background-image: url('../../../public/img/button.webp'); */
+  background-image: url('../../../public/img/button.webp');
   background-size: 100% 100%;
   color: #27262c;
   animation: spring 300ms ease-out;
   text-shadow: 0 -1px 0 #ef816c;
-	font-weight: bold;
+  font-weight: bold;
 }
-.active{
-  /* background-image: url('../../../public/img/button.webp'); */
+.active {
+  background-image: url('../../../public/img/button.webp');
   background-size: 100% 100%;
   color: #27262c;
   animation: spring 300ms ease-out;
   text-shadow: 0 -1px 0 #ef816c;
-	font-weight: bold;
+  font-weight: bold;
   width: 100%;
 }
 @keyframes spring {
@@ -141,4 +87,73 @@
     -webkit-transform-origin: center center;
     -webkit-transform: scale(1, 1);
   }
+} */
+
+/*  */
+
+.nav_dropdown {
+  font-family: monospace;
+  margin-right: 5rem;
+}
+
+.nav_dropdown ul {
+  /* background: darkorange; */
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.nav_dropdown li {
+  color: #fff;
+  /* background: darkorange; */
+  display: block;
+  float: left;
+  padding: 1rem 2rem;
+  position: relative;
+  text-decoration: none;
+  transition-duration: 0.5s;
+}
+
+.nav_dropdown li a {
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+}
+
+.nav_dropdown li:hover,
+.nav_dropdown li:focus-within {
+  /* background: rgb(78, 78, 78); */
+  cursor: pointer;
+  animation: spring 300ms ease-out;
+}
+
+.nav_dropdown li:focus-within a {
+  outline: none;
+}
+
+.nav_dropdown ul li ul {
+  background: rgb(255, 255, 255);
+  visibility: hidden;
+  opacity: 0;
+  min-width: 5rem;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1rem;
+  left: 0;
+  display: none;
+}
+.nav_dropdown ul li ul li:hover{
+  background-color: #362b2f;
+}
+.nav_dropdown ul li:hover > ul,
+.nav_dropdown ul li:focus-within > ul,
+.nav_dropdown ul li ul:hover,
+.nav_dropdown ul li ul:focus {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+
+.nav_dropdown ul li ul li {
+  clear: both;
+  width: 5rem;
 }

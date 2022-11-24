@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import {setToken} from '../service/api';
 let logoutTimer;
 
 const AuthContext = React.createContext({
@@ -20,11 +21,9 @@ export const AuthContextProvider = (props) => {
 
   const userIsLoggedIn = (!!accessToken && role !== 0);
 
-  // useEffect(()=>{
-  //   console.log(accessToken);
-  //   console.log(refreshToken);
-  //   console.log(role);
-  // },[accessToken]);
+  useEffect(()=>{
+    setToken(accessToken);
+  },[accessToken]);
 
   const logoutHandler = useCallback(() => {
     setAccessToken(null);
@@ -48,7 +47,7 @@ export const AuthContextProvider = (props) => {
       localStorage.setItem('x-access-token', data.accessToken);
       localStorage.setItem('x-refreshToken', data.refreshToken);
       localStorage.setItem('x-role', data.role);
-
+      
   };
 
   const contextValue = {

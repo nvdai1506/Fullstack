@@ -45,10 +45,10 @@ select {
   color: #f39c12;
 }
 
-h1 {
+.select-option h1 {
   margin: 0 0 0.25em;
 }
-a {
+.select-option a {
   font-weight: bold;
   color: #34495e;
   text-decoration: none;

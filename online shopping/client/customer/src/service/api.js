@@ -56,6 +56,36 @@ function request(params) {
 }
 
 Api.shop = {
+    getProducts: function () {
+        const requestParams = {
+            url: `${domain}/shop/products`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token':token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    getProduct: function (productId) {
+        const requestParams = {
+            url: `${domain}/shop/product/${productId}`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token':token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+}
+Api.user = {
     login: function (params) {
         // console.log(params);
         const requestParams = {
@@ -86,6 +116,35 @@ Api.shop = {
         }
         return request(requestParams);
     },
+    getProfile: function () {
+        const requestParams = {
+            url: `${domain}/user`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token':token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    getOrders: function () {
+        const requestParams = {
+            url: `${domain}/user/order`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token':token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    
 }
 
 export default Api;

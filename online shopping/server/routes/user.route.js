@@ -41,7 +41,8 @@ router.patch('/', [
 router.get('/cart', userController.getCart);
 router.post('/cart', userController.addToCart);
 router.delete('/cart', userController.removeFromCart);
-
+// order
+router.get('/order', userController.getOrder);
 
 
 export default router;

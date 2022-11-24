@@ -26,7 +26,7 @@ function AuthForm({ loginMode }) {
 
     if (loginMode) {
       setIsLoading(true);
-      Api.shop.login({
+      Api.user.login({
         email: enteredEmail,
         password: enteredPassword
       }).then(result => {
@@ -48,7 +48,7 @@ function AuthForm({ loginMode }) {
     } else {
       setIsLoading(true);
       const enteredConfirmPassword = confirmPasswordInputRef.current.value;
-      Api.shop.signup({
+      Api.user.signup({
         email: enteredEmail,
         password: enteredPassword,
         confirmPassword: enteredConfirmPassword

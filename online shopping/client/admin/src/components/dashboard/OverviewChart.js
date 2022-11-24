@@ -19,6 +19,7 @@ function OverviewChart(props) {
                     return result.json();
                 })
                 .then(data => {
+                    // console.log(data.overview);
                     setData(data.overview);
                     setIsLoading(false);
                 })

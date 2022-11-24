@@ -17,15 +17,15 @@ function AddAccount(props) {
 
     const {
         value: enteredEmail,
-        setValue: setEnteredEmail,
-        isValid: enteredEmailIsValid,
+        // setValue: setEnteredEmail,
+        // isValid: enteredEmailIsValid,
         valueChangeHandler: emailChangedHandler,
         reset: resetEmailInput
     } = useInput(value => value.trim().includes('@'));
     const {
         value: enteredPassword,
-        setValue: setEnteredPassword,
-        isValid: enteredPasswordIsValid,
+        // setValue: setEnteredPassword,
+        // isValid: enteredPasswordIsValid,
         valueChangeHandler: passwordChangedHandler,
         reset: resetPasswordInput
     } = useInput(value => value.trim().length >= 6);
@@ -55,7 +55,7 @@ function AddAccount(props) {
     // ag grid
     const gridRef = useRef();
     const [rowData, setRowData] = useState([]);
-    const [columnDefs, setColumnDefs] = useState([
+    const [columnDefs] = useState([
         { field: 'email' },
         { field: 'password' },
         {
