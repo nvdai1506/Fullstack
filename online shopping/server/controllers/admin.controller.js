@@ -473,7 +473,7 @@ admin.getOverview = async (req, res, next) => {
     const startDate = moment(req.body.startDate).format('YYYY-MM-DD');
     const endDate = moment(req.body.endDate).format('YYYY-MM-DD');
     const type = req.body.type;
-    console.log(startDate, '-', endDate, '-', type);
+    // console.log(startDate, '-', endDate, '-', type);
     try {
         if (type === 'catalog') {
             const catalogs = await Catalog.find();
@@ -520,7 +520,7 @@ admin.getOverview = async (req, res, next) => {
                     overview[index].turnovers += product.price * quantity;
 
                 } catch (error) {
-                    break;
+                    continue;
                 }
             }
 

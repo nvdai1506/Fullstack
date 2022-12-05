@@ -18,7 +18,7 @@ function App() {
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
-          <Route path="product/:productId" element={<ProductDetails />}/>
+          <Route path="product/:productId" element={<ProductDetails />} />
         </Route>
         <Route path='/signup' element={<Auth loginMode={false} />} />
         <Route path='/login' element={<Auth loginMode={true} />} />
@@ -27,7 +27,7 @@ function App() {
           <Route path='/profile' element={<Profile />} />
           <Route path='/order' element={<Order />} />
         </Route>
-        <Route path='/*' element={<NotFound />}/>
+        <Route path='/*' element={<NotFound />} />
       </Routes >
     </Layout >
   );

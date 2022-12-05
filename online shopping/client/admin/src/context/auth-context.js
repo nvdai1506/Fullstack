@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {setToken} from '../service/api';
-let logoutTimer;
 
 const AuthContext = React.createContext({
   accessToken: '',
@@ -31,10 +30,6 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refreshToken');
     localStorage.removeItem('x-role');
-
-    if (logoutTimer) {
-      clearTimeout(logoutTimer);
-    }
   }, []);
 
   const loginHandler = (data) => {

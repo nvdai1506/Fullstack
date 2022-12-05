@@ -5,15 +5,15 @@ import classes from './ProductDetails.module.css';
 import Api from '../../service/api';
 function ProductDetails() {
     const location = useLocation();
-    const {productId} = useParams();
+    const { productId } = useParams();
     const [product, setProduct] = useState({});
     useEffect(() => {
         Api.shop.getProduct(productId)
-        .then(result => {return result.json()})
-        .then(data => {
-            setProduct(data.product);
-        })
-    }, []);
+            .then(result => { return result.json() })
+            .then(data => {
+                setProduct(data.product);
+            })
+    }, [productId]);
     return (
         <div>
             <h1>{product.title}</h1>

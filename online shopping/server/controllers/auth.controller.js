@@ -34,7 +34,7 @@ auth.login = async (req, res, next) => {
         return next(errorHandler.throwErr(errors.errors[0].msg, 422));
     }
     const { email, password } = req.body;
-    
+
     try {
         const user = await User.findOne({ email: email });
 
@@ -77,18 +77,18 @@ auth.login = async (req, res, next) => {
 
 auth.refresh = async (req, res, next) => {
     const { accessToken, refreshToken } = req.body;
-    
+
     try {
         const opts = {
             ignoreExpiration: true
         };
         // decode to get userID
-        const { userId } = jwt.verify(accessToken, 'nVdai1506', opts);
+        const { userId } = jwt.verify(accessToken, process.env.ACCESSTOKEN_SECRET_KEY, opts);
         const user = await User.findById(userId);
-        if(!user){
+        if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }
-        if(user.rfToken !== refreshToken){
+        if (user.rfToken.toString() !== refreshToken.toString()) {
             throw errorHandler.throwErr('RefreshToken is revoked.', 401);
         }
         const payload = {
@@ -98,9 +98,9 @@ auth.refresh = async (req, res, next) => {
         const newOpts = {
             expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN// seconds
         }
-        const newAccessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY,newOpts);
-        
-        res.status(200).json({newAccessToken: newAccessToken});
+        const newAccessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY, newOpts);
+
+        res.status(200).json({ newAccessToken: newAccessToken });
 
     } catch (error) {
         next(errorHandler.throwErr('Invalid accessToken.', 401));

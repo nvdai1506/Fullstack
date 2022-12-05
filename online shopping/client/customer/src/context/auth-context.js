@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-let logoutTimer;
+import React, { useState, useCallback, useEffect } from 'react';
+import {setToken} from '../service/api';
 
 const AuthContext = React.createContext({
   accessToken: '',
@@ -18,16 +18,17 @@ export const AuthContextProvider = (props) => {
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('x-refreshToken'));
   const [role, setRole] = useState(localStorage.getItem('x-role'));
 
+  useEffect(()=>{
+    setToken(accessToken);
+  },[accessToken]);
+
   const userIsLoggedIn = (!!accessToken);
+  
   const logoutHandler = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
     localStorage.removeItem('x-access-token');
     localStorage.removeItem('x-refreshToken');
-
-    if (logoutTimer) {
-      clearTimeout(logoutTimer);
-    }
   }, []);
 
   const loginHandler = (data) => {

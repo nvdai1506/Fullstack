@@ -1,5 +1,8 @@
 const domain = process.env.REACT_APP_DOMAIN;
-let token = localStorage.getItem("x-access-token");
+let token = null;
+export const setToken = (value) =>{
+    token = value
+}
 
 let Api = () => { };
 function request(params) {

@@ -14,7 +14,7 @@ function ListProduct() {
     }, []);
     return (
         <div className={classes.list_product}>
-            {listProduct.map(p => <ProductItem key={p._id} id={p._id} title={p.title} imageUrl={p.imageUrl}/>)}
+            {listProduct.map(p => <ProductItem key={p._id} id={p._id} title={p.title} price={p.price} imageUrl={p.imageUrl}/>)}
         </div>
     )
 }

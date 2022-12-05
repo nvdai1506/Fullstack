@@ -1,0 +1,24 @@
+.nav_column {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.nav_column a:link,
+:visited {
+  text-decoration: none;
+  color: #f1f3f5;
+  transition: color 0.2s;
+}
+.nav_column a:hover,
+:active {
+  color: #66d9e8;
+}
+.nav_column li {
+  list-style: none;
+}
+.nav_column__parentItem {
+  margin-bottom: 2rem;
+}
+.nav_column__childItem {
+}

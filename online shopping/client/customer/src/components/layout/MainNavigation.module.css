@@ -1,159 +1,102 @@
-.headerNav {
+.header {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 5rem;
+  height: 8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #16090e;
-  margin: 0;
-  padding: 0;
+  background-color: #1a1a1a;
+  padding: 0 8rem;
+  z-index: 10;
 }
-
-.logo {
-  font-size: 2rem;
-  color: white;
-  font-weight: bold;
-  padding-left: 1rem;
-}
-/* 
-.headerNav ul {
+.logo_container {
+  width: 15%;
   display: flex;
-  width: 95%;
-  height: 80vh;
-  margin: auto;
-  max-width: 1000px;
-  justify-content: space-between;
-  text-align: center;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  margin-right: 1.5rem;
+  align-items: center;
+  justify-content: start;
 }
-.icons {
-  color: white;
-  width: 5rem;
-  height: 5rem;
-  background-color: #ef816c;
+.logo {
+  height: 6rem;
+  width: 6rem;
+  max-width: 100%;
 }
-.headerNav li {
-  padding: 1rem 0.2rem 1.15rem;
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #e6e6e6;
   cursor: pointer;
-  color: #ebebeb;
-  min-width: 80px;
-  margin: auto;
-}
-.headerNav a {
-  width: 100%;
-  padding: 1rem 2rem 1.15rem;
-  cursor: pointer;
-  color: #ebebeb;
-  min-width: 80px;
-  margin: auto;
-  font-weight: normal;
-}
-.headerNav li:hover {
-  background-image: url('../../../public/img/button.webp');
-  background-size: 100% 100%;
-  color: #27262c;
-  animation: spring 300ms ease-out;
-  text-shadow: 0 -1px 0 #ef816c;
-  font-weight: bold;
-}
-.active {
-  background-image: url('../../../public/img/button.webp');
-  background-size: 100% 100%;
-  color: #27262c;
-  animation: spring 300ms ease-out;
-  text-shadow: 0 -1px 0 #ef816c;
-  font-weight: bold;
-  width: 100%;
-}
-@keyframes spring {
-  15% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: scale(1.2, 1.1);
-  }
-  40% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: scale(0.95, 0.95);
-  }
-  75% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: scale(1.05, 1);
-  }
-  100% {
-    -webkit-transform-origin: center center;
-    -webkit-transform: scale(1, 1);
-  }
-} */
-
-/*  */
-
-.nav_dropdown {
-  font-family: monospace;
-  margin-right: 5rem;
-}
-
-.nav_dropdown ul {
-  /* background: darkorange; */
-  list-style: none;
-  margin: 0;
-  padding-left: 0;
-}
-
-.nav_dropdown li {
-  color: #fff;
-  /* background: darkorange; */
-  display: block;
-  float: left;
-  padding: 1rem 2rem;
   position: relative;
-  text-decoration: none;
-  transition-duration: 0.5s;
+  transition: all 0.2s;
 }
 
-.nav_dropdown li a {
-  color: rgb(0, 0, 0);
-  text-decoration: none;
-}
-
-.nav_dropdown li:hover,
-.nav_dropdown li:focus-within {
-  /* background: rgb(78, 78, 78); */
-  cursor: pointer;
-  animation: spring 300ms ease-out;
-}
-
-.nav_dropdown li:focus-within a {
-  outline: none;
-}
-
-.nav_dropdown ul li ul {
-  background: rgb(255, 255, 255);
-  visibility: hidden;
-  opacity: 0;
-  min-width: 5rem;
+.menu_hide {
+  width: 100vw;
+  height: 30rem;
   position: absolute;
-  transition: all 0.5s ease;
-  margin-top: 1rem;
+  top: 100%;
   left: 0;
-  display: none;
+  transform: translateX(-49%);
+  cursor: inherit;
+
+  z-index: 10;
+  transition: all 0.3s;
+
+  /* Hide navigation */
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  padding: 2rem 0;
 }
-.nav_dropdown ul li ul li:hover{
-  background-color: #362b2f;
+.menu_hide_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #333333;
+  border-top: 2px solid #66d9e8;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
 }
-.nav_dropdown ul li:hover > ul,
-.nav_dropdown ul li:focus-within > ul,
-.nav_dropdown ul li ul:hover,
-.nav_dropdown ul li ul:focus {
-  visibility: visible;
+.menu_item {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+/*  */
+/* .menu_item .menu_hide {
   opacity: 1;
-  display: block;
+  pointer-events: auto;
+  visibility: visible;
+} */
+/*  */
+.menu_icon {
+  font-size: 1.5rem;
 }
 
-.nav_dropdown ul li ul li {
-  clear: both;
-  width: 5rem;
+.menu_item:hover {
+  background-color: rgba(244, 244, 244, 0.2);
+  color: #66d9e8;
+}
+.menu_item:hover .menu_icon {
+  transform: scale(1.2);
+}
+.menu_item:hover .menu_hide {
+  opacity: 1;
+  pointer-events: all;
+  visibility: visible;
+}
+.actions {
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transition: all 2s;
 }
