@@ -1,36 +1,44 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import CartContext from '../../../context/cart-context';
 import classes from './Cart.module.css';
 import CartItem from './CartItem';
 function Cart() {
+  const navigate = useNavigate();
   const cartCtx = useContext(CartContext);
-  const [hover, setHover] = useState(false);
-  const [classValue, setClassValue] = useState();
+  const { totalAmount } = cartCtx;
+  const [bump, setBump] = useState(false);
+  const amountClass = `${classes.amount} ${bump ? classes.bump : ''}`;
 
-  const onHoverHandler = event => {
-    setHover(true);
-  }
-  const onHoverLeaveHandler = event => {
-    setHover(false);
-  }
   useEffect(() => {
-    const classtmp = hover ? `${classes.hidden_cart_container} ${classes.hidden_cart_container_enable}` : `${classes.hidden_cart_container}`;
-    setClassValue(classtmp);
-  }, [hover]);
+    if (totalAmount === 0) {
+      return;
+    }
+    setBump(true);
+    const timer = setTimeout(() => {
+      setBump(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [totalAmount]);
+  const onCartClicked = () => {
+    navigate('/cart');
+  }
   return (
     <div className={classes.cart_container}>
-      <div className={`action_item ${classes.cart}`}
-        onMouseEnter={onHoverHandler}
-        onMouseLeave={onHoverLeaveHandler}>
+      <div className={`action_item ${classes.cart}`} onClick={onCartClicked}>
         <HiOutlineShoppingBag className='icon' />
       </div>
+      <span className={amountClass}>{totalAmount}</span>
       <div className={classes.hidden_cart_container}>
         <div className={classes.hidden_cart}>
           {cartCtx.items.length === 0 && <span>Hiện chưa có sản phẩm nào</span>}
           {cartCtx.items.length !== 0 &&
-            <div>
-              {cartCtx.items.map(item => { return <CartItem key={item.id} item={item} /> })}
+            <div className={classes.cart_list}>
+              {cartCtx.items.map(item => { return <CartItem key={`${item.id} ${item.size}`} item={item} /> })}
             </div>
           }
         </div>

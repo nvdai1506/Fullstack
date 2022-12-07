@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import MainNavigation from './MainNavigation'
 
-import classes from './Layout.module.css';
+import './Layout.module.css';
 
 
 function Layout(props) {

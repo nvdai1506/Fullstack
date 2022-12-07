@@ -13,6 +13,7 @@ router.get('/childCatalog/:catalogId', shopController.getChildCatalog);
 // product
 
 router.get('/products', shopController.getProducts);
+router.get('/:value', shopController.getProductByType);
 router.get('/product/:productId', shopController.getProductById);
 router.get('/products/:childCatalogId', shopController.getProductsByChildCatalogId);
 // order

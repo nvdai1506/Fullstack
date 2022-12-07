@@ -1,27 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useReducer } from 'react';
+import { DBConfig } from '../service/IndexDBConfig';
+import { initDB } from 'react-indexed-db';
+import { useIndexedDB } from 'react-indexed-db';
+
+import Api from '../service/api';
+
+initDB(DBConfig);
+
+
 
 const CartContext = React.createContext({
   items: [],
   totalPrice: 0,
+  totalAmount: 0,
+  initCart: (cart) => { },
   addItem: (item) => { },
-  removeItem: (id) => { },
-  clearItem: (id) => { },
+  removeItem: (id, size) => { },
+  clearItem: (id, size) => { },
   clearCart: () => { },
   showCart: () => { },
 })
+
 const defaultCartState = {
-  items: [],//{_id,title,price,amount}
-  totalPrice: 0
+  items: [],//{_id,title,price,amount,size}
+  totalPrice: 0,
+  totalAmount: 0,
 };
 
+
 const cartReducer = (state, action) => {
+
+  if (action.type === 'INIT') {
+    // console.log(action.cart);
+    const cart = action.cart.cart;
+    return {
+      items: cart.items,
+      totalPrice: cart.totalPrice,
+      totalAmount: cart.totalAmount
+    }
+  }
   if (action.type === 'ADD') {
+    // console.log(action.item.amount);
+    const updatedTotalAmount = state.totalAmount + Number(action.item.amount);
     const updatedTotalPrice =
       state.totalPrice + action.item.price * action.item.amount;
 
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id == action.item.id
+      (item) => {
+        return (item.id.toString() === action.item.id.toString() && item.size === action.item.size)
+      }
     );
     const existingCartItem = state.items[existingCartItemIndex];
     let updatedItems;
@@ -40,40 +68,51 @@ const cartReducer = (state, action) => {
 
     return {
       items: updatedItems,
-      totalPrice: updatedTotalPrice
+      totalPrice: updatedTotalPrice,
+      totalAmount: updatedTotalAmount
     };
   }
   if (action.type === 'REMOVE') {
+    const updatedTotalAmount = state.totalAmount - 1;
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id == action.id
+      (item) => (item.id.toString() === action.id.toString() && item.size === action.size)
     );
     const existingItem = state.items[existingCartItemIndex];
 
     const updatedTotalPrice = state.totalPrice - existingItem.price;
     let updatedItems;
     if (existingItem.amount === 1) {
-      updatedItems = state.items.filter(item => item.id !== action.id);
+      updatedItems = state.items.filter(item => (item.id !== action.id || item.size === action.size));
     } else {
       const updatedItem = { ...existingItem, amount: existingItem.amount - 1 };
       updatedItems = [...state.items];
       updatedItems[existingCartItemIndex] = updatedItem;
     }
-    const cartIsShown = state.cartIsShown;
     return {
       items: updatedItems,
-      totalPrice: updatedTotalPrice
+      totalPrice: updatedTotalPrice,
+      totalAmount: updatedTotalAmount
     };
   }
   if (action.type === 'CLEAR_ITEM') {
+    // console.log(state.items);
+
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id == action.id
+      (item) => {
+        return (item.id.toString() === action.id.toString() && item.size === action.size)
+      }
     );
     const existingItem = state.items[existingCartItemIndex];
+
+    const updatedTotalAmount = state.totalAmount - existingItem.amount;
     const updatedTotalPrice = state.totalPrice - existingItem.amount * existingItem.price;
-    const updatedItems = state.items.filter(item => item.id !== action.id);
+    const updatedItems = state.items.filter(item => {
+      return (item.id !== action.id || item.size !== action.size)
+    });
     return {
       items: updatedItems,
-      totalPrice: updatedTotalPrice
+      totalPrice: updatedTotalPrice,
+      totalAmount: updatedTotalAmount
     };
   }
   if (action.type === 'CLEAR') {
@@ -95,17 +134,49 @@ export const CartContextProvider = (props) => {
     cartReducer,
     defaultCartState
   );
+  const { clear, update } = useIndexedDB('cart');
 
+  useEffect(() => {
+    // console.log(cartState);
+    if (cartState !== defaultCartState) {
+      clear().then(() => {
+        update({ cart: cartState }).then(() => {
+          // console.log(cartState);
+          const newFormatItems = cartState.items.map(item => {
+            return {
+              product: item.id,
+              amount: item.amount,
+              currentSize: item.size,
+            }
+          })
+          const newCartFormat = {
+            items: newFormatItems,
+            totalPrice: cartState.totalPrice,
+            totalAmount: cartState.totalAmount
+          };
+          Api.user.updateCart({ cart: newCartFormat })
+            .then(result => { return result.json(); })
+            .then(data => {
+              // console.log(data);
+            })
+            .catch(err => { })
+        })
+      });
+    }
+  }, [cartState]);
+  const initCartHandler = (cart) => {
+    dispatchCartAction({ type: 'INIT', cart: cart });
+  }
   const addItemToCartHandler = (item) => {
     dispatchCartAction({ type: 'ADD', item: item });
   };
 
-  const removeItemFromCartHandler = (id) => {
-    dispatchCartAction({ type: 'REMOVE', id: id });
+  const removeItemFromCartHandler = (id, size) => {
+    dispatchCartAction({ type: 'REMOVE', id: id, size: size });
   };
 
-  const clearItemHandler = (id) => {
-    dispatchCartAction({ type: 'CLEAR_ITEM', id: id })
+  const clearItemHandler = (id, size) => {
+    dispatchCartAction({ type: 'CLEAR_ITEM', id: id, size: size })
   };
 
   const clearCartHandler = () => {
@@ -119,7 +190,9 @@ export const CartContextProvider = (props) => {
   const cartContext = {
     items: cartState.items,
     totalPrice: cartState.totalPrice,
+    totalAmount: cartState.totalAmount,
     cartIsShown: cartState.cartIsShown,
+    initCart: initCartHandler,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
     clearItem: clearItemHandler,

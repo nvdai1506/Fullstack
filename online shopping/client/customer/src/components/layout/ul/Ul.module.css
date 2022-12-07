@@ -10,8 +10,7 @@
   color: #f1f3f5;
   transition: color 0.2s;
 }
-.nav_column a:hover,
-:active {
+.nav_column a:hover {
   color: #66d9e8;
 }
 .nav_column li {

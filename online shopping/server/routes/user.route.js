@@ -40,6 +40,7 @@ router.patch('/', [
 // cart
 router.get('/cart', userController.getCart);
 router.post('/cart', userController.addToCart);
+router.patch('/cart', userController.updateCart);
 router.delete('/cart', userController.removeFromCart);
 // order
 router.get('/order', userController.getOrder);

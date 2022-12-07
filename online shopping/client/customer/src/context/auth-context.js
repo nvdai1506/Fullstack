@@ -1,10 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import {setToken} from '../service/api';
-
+import React, { useState, useCallback, useEffect, useContext } from 'react';
+import Api, { setToken } from '../service/api';
+import CartContext from './cart-context';
 const AuthContext = React.createContext({
   accessToken: '',
   refreshToken: '',
-  role: 0,
   isLoggedIn: false,
   login: (data) => { },
   logout: () => { },
@@ -16,14 +15,14 @@ export const AuthContextProvider = (props) => {
 
   const [accessToken, setAccessToken] = useState(localStorage.getItem('x-access-token'));
   const [refreshToken, setRefreshToken] = useState(localStorage.getItem('x-refreshToken'));
-  const [role, setRole] = useState(localStorage.getItem('x-role'));
+  const cartCtx = useContext(CartContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     setToken(accessToken);
-  },[accessToken]);
+  }, [accessToken]);
 
   const userIsLoggedIn = (!!accessToken);
-  
+
   const logoutHandler = useCallback(() => {
     setAccessToken(null);
     setRefreshToken(null);
@@ -35,18 +34,64 @@ export const AuthContextProvider = (props) => {
     console.log(data);
     setAccessToken(data.accessToken);
     setRefreshToken(data.refreshToken);
-    setRole(data.role);
 
     // console.log(data.accessToken);
     localStorage.setItem('x-access-token', data.accessToken);
     localStorage.setItem('x-refreshToken', data.refreshToken);
-    localStorage.setItem('x-role', data.role);
+    // send request to get cart of user
+    Api.user.getCart()
+      .then((result) => {
+        return result.json();
+      })
+      .then(data => {
+        const cart = data.cart;
+        // console.log(cart);
+        if (cart.totalPrice === 0) {
+          const newFormatItems = cartCtx.items.map(item => {
+            return {
+              product: item.id,
+              amount: item.amount,
+              currentSize: item.size
+            }
+          })
+          const newCartFormat = {
+            items: newFormatItems,
+            totalPrice: cartCtx.totalPrice,
+            totalAmount: cartCtx.totalAmount
+          };
+          Api.user.updateCart({ cart: newCartFormat })
+            .then(result => { return result.json(); })
+            .then(data => {
+              console.log(data);
+            })
+            .catch(err => { console.log(err); })
+        } else {
+          const newFormatItems = cart.items.map(item => {
+            const p = item.product;
+            return {
+              id: p._id,
+              title: p.title,
+              price: p.price,
+              imageUrl: p.imageUrl,
+              size: item.currentSize,
+              amount: item.amount
+            }
+          })
+          console.log('newFormatItems: ', newFormatItems);
+          const newCartFormat = {
+            items: newFormatItems,
+            totalPrice: cart.totalPrice,
+            totalAmount: cart.totalAmount
+          };
+          cartCtx.initCart({ cart: newCartFormat });
+        }
+      })
+      .catch(err => { console.log(err); })
   };
 
   const contextValue = {
     accessToken,
     refreshToken,
-    role:role,
     isLoggedIn: userIsLoggedIn,
     login: loginHandler,
     logout: logoutHandler,

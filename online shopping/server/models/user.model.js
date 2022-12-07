@@ -35,41 +35,55 @@ const userSchema = new Schema({
                     ref: 'Product',
                     required: true
                 },
-                quantity: {
+                amount: {
                     type: Number,
                     required: true
-                }
+                },
+                currentSize: {
+                    type: String,
+                    required: true
+                },
             }
         ],
-        subTotal: {
+        totalPrice: {
             type: Number,
             default: 0
-        }
+        },
+        totalAmount: {
+            type: Number,
+            default: 0
+        },
     },
-    orders:[{
+    orders: [{
         type: Schema.Types.ObjectId,
-        ref:'Order',
-        default:[]
+        ref: 'Order',
+        default: []
     }]
 });
 
+userSchema.methods.updateCart = async function (cart) {
+    console.log('in user update');
+    this.cart = cart;
+    return this.save();
+}
 userSchema.methods.addToCart = async function (product) {
     const indexOfProduct = this.cart.items.findIndex(item => {
         return item.product.toString() === product._id.toString();
     })
     const updatedCart = this.cart;
-    let newQuantity = 1;
+    let newAmount = 1;
     if (indexOfProduct >= 0) {
-        newQuantity = this.cart.items[indexOfProduct].quantity + 1;
-        updatedCart.items[indexOfProduct].quantity = newQuantity;
-        updatedCart.subTotal += product.price;
+        newAmount = this.cart.items[indexOfProduct].amount + 1;
+        updatedCart.items[indexOfProduct].amount = newAmount;
+        updatedCart.totalPrice += product.price;
     } else {
         const item = {
             product: product._id,
-            quantity: newQuantity
+            amount: newAmount
         }
         updatedCart.items.push(item);
-        updatedCart.subTotal += product.price;
+        updatedCart.totalPrice += product.price;
+        updatedCart.totalAmount += 1;
     }
     this.cart = updatedCart;
     return this.save();
@@ -80,21 +94,24 @@ userSchema.methods.removeFromCart = function (product) {
         return item.product.toString() === product._id.toString();
     })
     let updatedCart = this.cart;
-    let quantity = updatedCart.items[indexOfProduct].quantity;
-    if (quantity > 1) {
-        updatedCart.items[indexOfProduct].quantity = quantity - 1;
+    let amount = updatedCart.items[indexOfProduct].amount;
+    if (amount > 1) {
+        updatedCart.items[indexOfProduct].amount = amount - 1;
     } else {
         updatedCart.items = updatedCart.items.filter(item => {
             return item.product.toString() !== product._id.toString();
         });
     }
-    updatedCart.subTotal -= product.price;
+    updatedCart.totalPrice -= product.price;
+    updatedCart.totalAmount -= 1;
     this.cart = updatedCart;
     return this.save();
 };
 
 userSchema.methods.clearCart = function () {
     this.cart.items = [];
+    this.cart.totalPrice = 0;
+    this.cart.totalAmount = 0;
     return this.save();
 };
 

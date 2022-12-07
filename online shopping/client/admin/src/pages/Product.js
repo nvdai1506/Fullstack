@@ -37,7 +37,7 @@ function Product() {
         productStatusHandler({ error: 'Could not load Catalog!' });
       }
       );
-  },[productStatusHandler]);
+  }, [productStatusHandler]);
 
   useEffect(() => {
     // console.log('product');

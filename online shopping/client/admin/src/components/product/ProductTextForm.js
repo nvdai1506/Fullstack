@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import classes from './ProductTextForm.module.css';
 
 import Input from '../ui/Input';
@@ -58,6 +58,7 @@ const ProductTextForm = (props) => {
         reset: resetDescriptionInput
     } = useInput(value => value.trim() !== '');
 
+    const [checkboxValue, setCheckboxValue] = useState(0);
     useEffect(() => {
         if (updateMode) {
             setEnteredTitle(title);
@@ -103,6 +104,9 @@ const ProductTextForm = (props) => {
             .catch(err => {
                 productCtx.productStatusHandler({ error: "Could not delete Product!" })
             });
+    }
+    const checkboxHandler = event => {
+        setCheckboxValue(event.target.checked);
     }
 
     const onSubmitHandler = event => {
@@ -160,7 +164,9 @@ const ProductTextForm = (props) => {
                 })
                 .then(data => {
                     productCtx.productStatusHandler({ success: "You have successfully added Product." });
-                    resetAll();
+                    if (!checkboxValue) {
+                        resetAll();
+                    }
                 })
                 .catch(err => {
                     productCtx.productStatusHandler({ error: "Could not add Product!" });
@@ -202,8 +208,15 @@ const ProductTextForm = (props) => {
                 onClick={onClickHandler}
                 value={enteredDescription}
                 onChange={descriptionChangedHandler} />
+
             {!updateMode &&
                 <Button className={classes.btn} type='submit'>Add</Button>
+            }
+            {!updateMode &&
+                <div>
+                    <input type='checkbox' id="keepData" onChange={checkboxHandler} />
+                    <label htmlFor='keepData'>Keep Data</label>
+                </div>
             }
             {updateMode &&
                 <Button className={classes.btn} state='cancle' onClick={onClickCancleHandler}>Cancle</Button>

@@ -1,0 +1,17 @@
+/* main {
+  padding: 0;
+  margin: 0;
+  margin-top: 4%;
+} */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 91.5vh;
+  background-color: rgb(225, 225, 225);
+}
+.main h1 {
+  font-size: 8rem;
+  color: rgba(175, 14, 14, 0.505);
+}

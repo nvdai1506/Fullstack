@@ -14,9 +14,9 @@ let shop = () => { }
 // Catalog
 shop.getCatalog = async (req, res, next) => {
     try {
-        
+
         const catalogs = await Catalog.find()
-        .populate({path:'ChildCatalogs',model:'ChildCatalog'});
+            .populate({ path: 'ChildCatalogs', model: 'ChildCatalog' });
         res.status(200).json({ catalogs: catalogs });
     } catch (error) {
         if (!error.statusCode) {
@@ -40,8 +40,28 @@ shop.getChildCatalog = async (req, res, next) => {
 
 shop.getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate({ path: 'childCatalog', select: 'title' });
         res.status(200).json({ products: products });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+
+shop.getProductByType = async (req, res, next) => {
+    const value = req.params.value;
+    const level = req.query.level;
+    console.log(value, level);
+    try {
+        let products = [];
+        if (Number(level) === 1) {
+            const parent = await Catalog.find({ value: value });
+            products = await Product.find({ parentCatalog: parent[0]._id })
+        } else {
+            const child = await ChildCatalog.find({ value: value });
+
+            products = await Product.find({ childCatalog: child[0]._id })
+        }
+        res.status(200).json({ product: products });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }

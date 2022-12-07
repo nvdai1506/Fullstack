@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.cart_list_container {
+  height: 65rem;
+  justify-self: center;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  margin-top: 4rem;
+  /* gap: 1rem; */
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+.no_cart_list_container {
+  border: none;
+  align-self: center;
+}
+.no_product {
+  font-size: 2.4rem;
+}
+.totalPrice {
+  text-align: center;
+  margin-top: 5rem;
+}
+.totalPrice_span {
+  display: block;
+  padding: 1rem 2rem;
+  font-size: 2.4rem;
+  font-weight: bold;
+  margin-top: 2rem;
+}
+.separate {
+  display: inline-block;
+  width: 50%;
+  text-align: center;
+}

@@ -7,6 +7,9 @@ const catalogSchema = new Schema({
         type: String,
         require: true
     },
+    value: {
+        type: String
+    },
     ChildCatalogs: [
         {
             type: Schema.Types.ObjectId,

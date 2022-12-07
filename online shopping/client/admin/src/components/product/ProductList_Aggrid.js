@@ -18,12 +18,12 @@ function ProductList_Aggrid(props) {
     const [columnDefs] = useState([
         // { field: '_id' },
         { field: 'title' },
-        // { field: 'imageUrl' },
+        { field: 'childCatalog.title', headerName: 'Type' },
         { field: 'material' },
         { field: 'size' },
         { field: 'price' },
         { field: 'description', },
-        { colId: 'action', cellRenderer: memo(DeleteBtn),floatingFilter:null, resizable: null, cellStyle: { 'textAlign': 'center' } }
+        { colId: 'action', cellRenderer: memo(DeleteBtn), floatingFilter: null, resizable: null, cellStyle: { 'textAlign': 'center' } }
     ]);
 
 
@@ -65,12 +65,13 @@ function ProductList_Aggrid(props) {
 
     const cellClickedListener = useCallback(event => {
         const colId = event.column.colId;
-        if(colId === 'action'){
+        if (colId === 'action') {
             return;
         }
+        console.log(event.data);
         productEditHandler({
             'parentCatalog': event.data.parentCatalog,
-            'childCatalog': event.data.childCatalog,
+            'childCatalog': event.data.childCatalog._id,
             'id': event.data._id,
             'image': `${process.env.REACT_APP_DOMAIN}/${event.data.imageUrl}`,
             'title': event.data.title,

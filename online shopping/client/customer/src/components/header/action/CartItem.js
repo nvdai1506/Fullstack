@@ -6,23 +6,23 @@ import classes from './CartItem.module.css';
 import CartContext from '../../../context/cart-context';
 
 function CartItem({ item }) {
-
   const navigate = useNavigate();
   const cartCtx = useContext(CartContext);
   const onClickHandler = event => {
     navigate(`/product/${item.id}`);
   }
   const onClearItemHandler = () => {
-    cartCtx.clearItem(item.id);
+    // console.log(item.size);
+    cartCtx.clearItem(item.id, item.size);
   }
   return (
-    <div className={`grid grid--small-gap ${classes.cart_item}`}
-    >
+    <div className={`grid grid--small-gap ${classes.cart_item}`}>
       <div className={classes.image} onClick={onClickHandler}>
-        <img crossOrigin='true' src={`${item.imageUrl}`} alt={item.title} />
+        <img crossOrigin='true' src={`${process.env.REACT_APP_DOMAIN}/${item.imageUrl}`} alt={item.title} />
       </div>
       <div className={classes.textbox} onClick={onClickHandler}>
         <h2 className={classes.title}>{item.title}</h2>
+        <span className={classes.size}>Size: {item.size}</span>
         <span className={classes.price}>{item.price.toLocaleString()}đ</span>
         <span className={classes.amount}>x{item.amount}</span>
       </div>

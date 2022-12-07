@@ -1,6 +1,6 @@
 const domain = process.env.REACT_APP_DOMAIN;
 let token = null;
-export const setToken = (value) =>{
+export const setToken = (value) => {
     token = value
 }
 
@@ -28,8 +28,8 @@ function request(params) {
                         accessToken: token,
                         refreshToken: refreshToken
                     }),
-                    headers:{
-                        'Content-Type':'application/json'
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).catch(res => ({
                     ...res.response,
@@ -51,11 +51,40 @@ function request(params) {
             } else {
                 return reject(res);
             }
-        }else{
+        } else {
             return reject(res);
-        } 
+        }
 
     })
+}
+function requestParamsFunc(endpoint, method, params) {
+    const url = `${domain}${endpoint}`
+    const body = JSON.stringify(params);
+    const headers = {
+        'x-access-token': token,
+        'Content-Type': 'application/json'
+    }
+
+    if (method === 'GET' || method === "DELETE") {
+        return {
+            url: url,
+            config:
+            {
+                method: method,
+                headers: headers,
+            }
+        }
+    } else {
+        return {
+            url: url,
+            config:
+            {
+                method: method,
+                body: body,
+                headers: headers,
+            }
+        }
+    }
 }
 
 Api.shop = {
@@ -66,7 +95,7 @@ Api.shop = {
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token':token,
+                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
@@ -80,11 +109,15 @@ Api.shop = {
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token':token,
+                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
         }
+        return request(requestParams);
+    },
+    getProductByType: function (parentName) {
+        const requestParams = requestParamsFunc(`/shop/${parentName}`, 'GET');
         return request(requestParams);
     },
 }
@@ -119,14 +152,43 @@ Api.user = {
         }
         return request(requestParams);
     },
-    getProfile: function () {
+    getInfo: function () {
         const requestParams = {
             url: `${domain}/user`,
             config:
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token':token,
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    getCart: function () {
+        const requestParams = {
+            url: `${domain}/user/cart`,
+            config:
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
+        return request(requestParams);
+    },
+    updateCart: function (params) {
+        const requestParams = {
+            url: `${domain}/user/cart`,
+            config:
+            {
+                method: 'PATCH',
+                body: JSON.stringify(params),
+                headers: {
+                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
@@ -140,14 +202,14 @@ Api.user = {
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token':token,
+                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
         }
         return request(requestParams);
     },
-    
+
 }
 
 export default Api;

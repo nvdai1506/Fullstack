@@ -6,11 +6,27 @@ import CartContext from '../../context/cart-context';
 
 function CartList() {
   const cartCtx = useContext(CartContext);
+  let classValue = classes.cart_list_container;
+  if (cartCtx.items.length === 0) {
+    classValue += ` ${classes.no_cart_list_container}`
+  }
 
   return (
-    <div>
-      {cartCtx.items.map(item => <CartItem key={item.id} id={item.id} title={item.title} image={item.imageUrl} price={item.price} amount={item.amount} />)}
-      {cartCtx.totalPrice}
+    <div className={classes.container}>
+      <div className={classValue}>
+        {cartCtx.items.length === 0 && <p className={classes.no_product}>Hiện tại bạn chưa có sản phẩm nào trong giỏ hàng.</p>}
+        {cartCtx.items.map(item => <CartItem key={`${item.id}${item.size}`} item={item} />)}
+
+      </div>
+      {cartCtx.totalPrice !== 0 &&
+        <div className={classes.totalPrice}>
+          <hr className={classes.separate} />
+          <span className={classes.totalPrice_span}>
+            {cartCtx.totalPrice.toLocaleString()} đ
+          </span>
+        </div>
+      }
+
     </div>
   )
 }

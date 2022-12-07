@@ -12,6 +12,9 @@ const ChildCatalogschema = new Schema({
         type: String,
         require: true
     },
+    value: {
+        type: String
+    },
     products: [{
         type: Schema.Types.ObjectId,
         ref: 'Product',

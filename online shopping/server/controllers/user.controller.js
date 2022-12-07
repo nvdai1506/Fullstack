@@ -18,7 +18,7 @@ user.getUser = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find user!', 422);
         }
 
-        res.status(200).json({ user: {email: user.email, phone:user.phone, points:user.points} });
+        res.status(200).json({ user: user });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -107,13 +107,29 @@ user.addToCart = async (req, res, next) => {
         await user.addToCart(product);
         const loadUser = await User.findById(userId).populate('cart.items.product');
         const newCart = loadUser.cart;
-        res.status(200).json({mess:"Product is added to cart.", cart: newCart});
+        res.status(200).json({ mess: "Product is added to cart.", cart: newCart });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
 
 };
-user.removeFromCart = async (req, res, next) => { 
+user.updateCart = async (req, res, next) => {
+    const userId = req.accessTokenPayload.userId;
+    const cart = req.body.cart;
+    console.log(cart);
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw errorHandler.throwErr('Could not find user!', 401);
+        }
+        const result = await user.updateCart(cart);
+        console.log(result);
+        res.status(200).json({ cart: result.cart });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+user.removeFromCart = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     const productId = req.body.productId;
     try {
@@ -126,8 +142,8 @@ user.removeFromCart = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find product!', 401);
         }
         await user.removeFromCart(product);
-        
-        res.status(200).json({mess:"Product is removed."});
+
+        res.status(200).json({ mess: "Product is removed." });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
