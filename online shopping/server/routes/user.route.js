@@ -23,18 +23,34 @@ router.post('/changepw', [
                 throw new Error('New Password must differ the old.');
             }
             return true;
+        }),
+    body('confirmNewPassword')
+        .trim()
+        .custom((value, { req }) => {
+            if (value !== req.body.newPassword) {
+                throw new Error('Passwords have to match!');
+            }
+            return true;
         })
 ], userController.changePassword);
 
 // update
 router.patch('/', [
-    body('newPhone')
+    body('name')
         .trim()
-        .isLength({ min: 10 })
-        .withMessage('Phone number has to be valid.'),
-    body('newPoints')
-        .isNumeric()
-        .withMessage('Points has to be number.')
+        .notEmpty()
+        .withMessage('Name has to be valid.'),
+
+    body('phone')
+        .trim()
+        .notEmpty()
+        .withMessage('Phone Number has to be valid.'),
+
+    body('address')
+        .trim()
+        .notEmpty()
+        .withMessage('Address has to be valid.'),
+
 ], userController.editUser);
 
 // cart

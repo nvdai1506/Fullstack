@@ -33,6 +33,7 @@ user.changePassword = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     const oldPassword = req.body.oldPassword;
     const newPassword = req.body.newPassword;
+    console.log(req.body);
 
     try {
         const user = await User.findById(userId);
@@ -47,7 +48,7 @@ user.changePassword = async (req, res, next) => {
         user.password = newPasswordHash;
         await user.save();
 
-        res.json({ mess: "Password is updated." });
+        res.status(200).json({ mess: "Password is updated." });
 
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -62,15 +63,16 @@ user.editUser = async (req, res, next) => {
     // const userId = req.params.userId;
     const userId = req.accessTokenPayload.userId;
 
-    const { newPhone, newPoints } = req.body;
+    const { name, phone, address } = req.body;
 
     try {
         const user = await User.findById(userId);
         if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }
-        user.phone = newPhone;
-        user.points += Number(newPoints);
+        user.name = name;
+        user.phone = phone;
+        user.address = address;
         const result = await user.save();
 
         res.json({ user: result });
@@ -116,14 +118,14 @@ user.addToCart = async (req, res, next) => {
 user.updateCart = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     const cart = req.body.cart;
-    console.log(cart);
+    // console.log(cart);
     try {
         const user = await User.findById(userId);
         if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }
         const result = await user.updateCart(cart);
-        console.log(result);
+        // console.log(result);
         res.status(200).json({ cart: result.cart });
     } catch (error) {
         next(errorHandler.defaultErr(error));

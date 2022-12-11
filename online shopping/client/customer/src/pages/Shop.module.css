@@ -1,0 +1,19 @@
+.shop {
+  padding-top: 2rem;
+}
+.title {
+  font-size: 3.2rem;
+  padding-left: 1rem;
+  margin: 2rem 0;
+}
+.pagination {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  margin: 2rem 0;
+}
+.pagination-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

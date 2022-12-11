@@ -56,7 +56,8 @@ Medium: 11px
   padding: 0;
   box-sizing: border-box;
 }
-*:focus {
+a:focus,
+input:focus {
   outline: none;
   box-shadow: none;
   color: #66d9e8;

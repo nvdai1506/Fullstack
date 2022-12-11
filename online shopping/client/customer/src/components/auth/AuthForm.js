@@ -1,23 +1,38 @@
-import React, { useRef, useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useRef, useState, useContext, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import classes from './AuthForm.module.css';
 import Api from '../../service/api';
 import AuthContext from '../../context/auth-context';
 import Loading from '../ui/Loading';
-import StatusMess from '../ui/StatusMess';
+import StatusContext from '../../context/status-context';
+import GG from '../../images/google_icon.png';
+import FB from '../../images/facebook_icon.png';
 
 function AuthForm({ loginMode }) {
+
   const navigate = useNavigate();
   const authCtx = useContext(AuthContext);
-
+  const statusCtx = useContext(StatusContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
+
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState(null);
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
 
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      navigate('/');
+    }
+  }, []);
+  const onClickToLink = event => {
+    console.log(location.pathname);
+    if (location.pathname === '/signup') {
+      setPreviousPath('/signup');
+    }
+  }
   const submitHandler = (event) => {
     event.preventDefault();
     const enteredEmail = emailInputRef.current.value;
@@ -35,13 +50,17 @@ function AuthForm({ loginMode }) {
         // console.log(data);
         authCtx.login(data);
         setIsLoading(false);
-        setError(null);
-        navigate('/');
+        if (previousPath) {
+          console.log(previousPath);
+          setPreviousPath(null);
+          navigate('/');
+        } else {
+          navigate(-1);
+        }
       })
         .catch(err => {
           err.json().then(error => {
-            const mess = error.message;
-            setError(mess);
+            statusCtx.setValue('error', error.message);
             setIsLoading(false);
           });
         });
@@ -55,15 +74,14 @@ function AuthForm({ loginMode }) {
       }).then(result => {
         return result.json();
       }).then(data => {
+        setPreviousPath('signup');
         setIsLoading(false);
-        setSuccess(true);
-        setError(null);
+        statusCtx.setValue('success', 'Đăng ký thành công.');
         navigate('/login');
       })
         .catch(err => {
           err.json().then(error => {
-            const mess = error.message;
-            setError(mess);
+            statusCtx.setValue('error', error.message);
             setIsLoading(false);
           });
         })
@@ -72,30 +90,40 @@ function AuthForm({ loginMode }) {
   }
   return (
     <div className={classes.main}>
-      <div className={classes.status}>
-        {success && <StatusMess state='success' >You have successfully registered an account</StatusMess>}
-        {!!error && <StatusMess state='error' >{error}</StatusMess>}
-      </div>
       <form className={classes.authform} onSubmit={submitHandler}>
         <h3>Login Here</h3>
-        <label htmlFor="username">Username</label>
-        <input ref={emailInputRef} type="text" placeholder="Email or Phone" id="username" />
-        <label htmlFor="password">Password</label>
-        <input ref={passwordInputRef} type="password" placeholder="Password" id="password" />
-        {!loginMode && <>
+        <div className={classes.form_input}>
+          <label htmlFor="username">Username</label>
+          <input ref={emailInputRef} type="text" placeholder="Email" id="username" />
+        </div>
+        <div className={classes.form_input}>
+          <label htmlFor="password">Password</label>
+          <input ref={passwordInputRef} type="password" placeholder="Password" id="password" />
+        </div>
+
+        {(!loginMode) && <div className={classes.form_input}>
           <label htmlFor="password">Confirm Password</label>
           <input ref={confirmPasswordInputRef} type="password" placeholder="Confirm Password" id="confirmPassword" />
-        </>}
+        </div>}
         <div className={classes.loading_div}>
-          {isLoading && <Loading className={classes.loading} />}
+          {isLoading && <Loading />}
         </div>
         <button type='submit'>{loginMode ? 'Log In' : 'Sign Up'}</button>
         <div className={classes.signup}>
-          <Link to={loginMode ? '/signup' : '/login'}>{loginMode ? 'Sign Up' : 'Log In'}</Link>
+          <Link to={loginMode ? '/signup' : '/login'} onClick={onClickToLink}>{loginMode ? 'Sign Up' : 'Log In'}</Link>
         </div>
         <div className={classes["social"]}>
-          <div className={classes["go"]}>Google</div>
-          <div className={classes["fb"]}>Facebook</div>
+          <div className={classes.social_item}>
+            <div className={classes.social_image}>
+              <img src={GG} alt='google icon' />
+            </div>
+            <span>Google</span>
+          </div>
+          <div className={classes.social_item}>
+            <div className={classes.social_image}>
+              <img src={FB} alt='facebook icon' />
+            </div>
+            <span>Facebook</span></div>
         </div>
       </form>
     </div>

@@ -136,7 +136,7 @@
 .services {
   margin: 4rem 0;
   justify-content: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.452);
+  /* border-top: 1px solid rgba(0, 0, 0, 0.452); */
 }
 .service {
   align-self: start;

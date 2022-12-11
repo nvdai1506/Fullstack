@@ -3,39 +3,43 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    title:{
-        type:String,
-        require:true
+    title: {
+        type: String,
+        require: true
     },
-    description:{
-        type:String,
-        require:true
+    description: {
+        type: String,
+        require: true
     },
-    imageUrl:{
-        type:String,
-        require:true
+    imageUrl: {
+        type: String,
+        require: true
     },
-    material:{
-        type:String,
-        require:true
+    material: {
+        type: String,
+        require: true
     },
-    size:{
-        type:String,
-        require:true
+    size: {
+        type: String,
+        require: true
     },
-    price:{
-        type:Number,
-        require:true
+    price: {
+        type: Number,
+        require: true
     },
-    childCatalog:{
-        type:Schema.Types.ObjectId,
-        require:true,
-        ref:'ChildCatalog'
+    childCatalog: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'ChildCatalog'
     },
-    parentCatalog:{
-        type:Schema.Types.ObjectId,
-        require:true,
-        ref:'Catalog'
+    parentCatalog: {
+        type: Schema.Types.ObjectId,
+        require: true,
+        ref: 'Catalog'
+    },
+    totalSoldProducts: {
+        type: Number,
+        default: 0
     },
     // salesFigures: [
     //     {

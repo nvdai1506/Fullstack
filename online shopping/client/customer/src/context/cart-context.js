@@ -140,6 +140,7 @@ export const CartContextProvider = (props) => {
     // console.log(cartState);
     if (cartState !== defaultCartState) {
       clear().then(() => {
+
         update({ cart: cartState }).then(() => {
           // console.log(cartState);
           const newFormatItems = cartState.items.map(item => {
@@ -157,11 +158,22 @@ export const CartContextProvider = (props) => {
           Api.user.updateCart({ cart: newCartFormat })
             .then(result => { return result.json(); })
             .then(data => {
-              // console.log(data);
+              // navigate('/error');
             })
             .catch(err => { })
         })
-      });
+      })
+    } else {
+      clear().then(() => {
+        Api.user.updateCart({ cart: {} })
+          .then(result => { return result.json(); })
+          .then(data => {
+            // console.log(data);
+          })
+          .catch(err => {
+            // navigate('/error');
+          })
+      })
     }
   }, [cartState]);
   const initCartHandler = (cart) => {

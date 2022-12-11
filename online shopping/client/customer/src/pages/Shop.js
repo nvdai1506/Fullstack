@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import Api from '../service/api';
 import ListProduct from '../components/product/ListProduct';
+import classes from './Shop.module.css';
+import Filter from '../components/filter/Filter';
+import Pagination from '../components/pagination/Pagination';
+const PageSize = 15;
+function Shop({ endpoint, title }) {
+  const [search] = useSearchParams();
+  const filterValue = search.get('filter') ? search.get('filter') : '1';
+  const pageValue = search.get('page') ? search.get('page') : '1';
 
-function Shop({ endpoint }) {
-  console.log(endpoint);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [currentPageData, setCurrentPageData] = useState([]);
   useEffect(() => {
+    console.log('get data');
     Api.shop.getProductByType(endpoint)
       .then(result => { return result.json() })
       .then(data => {
@@ -18,8 +27,46 @@ function Shop({ endpoint }) {
         navigate('/error');
       })
   }, [endpoint]);
+
+  useEffect(() => {
+    switch (filterValue) {
+      case '1':
+        setFilteredProducts(products);
+        break;
+      case '2':
+        setFilteredProducts([...products].sort((a, b) => ((b.totalSoldProducts ? b.totalSoldProducts : 0) - (a.totalSoldProducts ? a.totalSoldProducts : 0))));
+        break;
+      case '3':
+        setFilteredProducts([...products].sort((a, b) => (b.price - a.price)));
+        break;
+      case '4':
+        setFilteredProducts([...products].sort((a, b) => (a.price - b.price)));
+        break;
+    }
+
+  }, [products, filterValue]);
+
+  useEffect(() => {
+    const firstPageIndex = (pageValue - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    setCurrentPageData(filteredProducts.slice(firstPageIndex, lastPageIndex));
+  }, [pageValue, filteredProducts]);
+
   return (
-    <ListProduct listProduct={products} />
+    <div className={classes.shop}>
+      <Filter />
+      <hr />
+      <h1 className={classes.title}>{title}</h1>
+      <ListProduct listProduct={currentPageData} />
+      <div className={classes.pagination}>
+
+        <Pagination
+          currentPage={pageValue}
+          totalCount={filteredProducts.length}
+          pageSize={PageSize}
+        />
+      </div>
+    </div>
   )
 }
 

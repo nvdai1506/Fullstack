@@ -11,9 +11,17 @@ function OrderedList_ag(props) {
     const [columnDefs] = useState([
         { field: 'email' },
         { field: 'created' },
+        { field: 'updated' },
         { field: 'total' }
     ]);
 
+    function formatTime(timeString) {
+        const splitDate = timeString.split('T');
+        const date = splitDate[0];
+        const time = splitDate[1].split('.')[0];
+        const formatedTime = date + ' ' + time;
+        return formatedTime;
+    }
     const onGridReady = useCallback(() => {
         Api.admin.getOrders(1)
             .then(result => { return result.json() })
@@ -21,14 +29,13 @@ function OrderedList_ag(props) {
                 const orders = data.orders;
                 const newOrders = [];
                 for (const o of orders) {
-                    const splitDate = o.createdAt.split('T');
-                    const date = splitDate[0];
-                    const time = splitDate[1].split('.')[0];
-                    const formatTime = date + ' ' + time;
+                    const created = formatTime(o.createdAt);
+                    const updated = formatTime(o.updatedAt);
                     newOrders.push({
-                        email: o.email,
-                        created: formatTime,
-                        total: o.cart.subTotal,
+                        email: o.shippingInfo.email,
+                        created: created,
+                        updated: updated,
+                        total: o.cart.totalPrice,
                         items: o.cart.items,
                         _id: o._id
                     })
@@ -61,7 +68,7 @@ function OrderedList_ag(props) {
     }), []);
     const CellDoubleClickedHandler = useCallback(event => {
         viewHandler(event.data.items, event.data.total);
-    },[viewHandler]);
+    }, [viewHandler]);
 
     return (
         <div className={`ag-theme-alpine ${classes.main}`}>
@@ -72,7 +79,7 @@ function OrderedList_ag(props) {
                 animateRows={true}
                 defaultColDef={defaultColDef}
                 onGridReady={onGridReady}
-            onCellDoubleClicked={CellDoubleClickedHandler}
+                onCellDoubleClicked={CellDoubleClickedHandler}
             >
             </AgGridReact>
         </div>

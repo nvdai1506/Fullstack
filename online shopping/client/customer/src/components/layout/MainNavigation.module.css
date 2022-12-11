@@ -41,7 +41,7 @@
   transform: translateX(-49%);
   cursor: inherit;
 
-  z-index: 10;
+  z-index: 101;
   transition: all 0.3s;
 
   /* Hide navigation */

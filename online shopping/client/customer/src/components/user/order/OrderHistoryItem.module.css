@@ -1,0 +1,14 @@
+.image {
+  height: 15rem;
+  justify-self: center;
+}
+.title {
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+.size,
+.price,
+.amount,
+.total_item {
+  font-size: 1.2rem;
+}

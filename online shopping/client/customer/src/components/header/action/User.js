@@ -15,24 +15,27 @@ function User() {
     authCtx.logout();
     navigate('/login');
   }
+  const onClickUserIconHandler = () => {
+    navigate('/user/');
+  }
   return (
-    <div className={`action_item ${classes.user_container}`}>
-      <div className={classes.user}>
+    <div className={`action_item ${classes.user_container}`} >
+      <div className={classes.user} onClick={onClickUserIconHandler}>
         <AiOutlineUser className='icon' />
       </div>
       <div className={classes.hide_ul_container}>
         <ul className={classes.ul}>
           {isLoggedIn && <li>
-            <Link to='/profile'>Profile</Link>
+            <Link to='/user/profile'>Hồ sơ</Link>
           </li>}
           {isLoggedIn && <li>
-            <Link to='/order'>My Purchase</Link>
+            <Link to='/user/order-history'>Lịch sử mua hàng</Link>
           </li>}
           {isLoggedIn && <li onClick={logoutHandler}>
-            <Link >Logout</Link>
+            <Link >Thoát</Link>
           </li>}
           {!isLoggedIn && <li>
-            <Link to='/login'>Login</Link>
+            <Link to='/login'>Đăng Nhập</Link>
           </li>}
         </ul>
       </div>

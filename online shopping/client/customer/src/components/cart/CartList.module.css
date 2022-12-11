@@ -17,6 +17,7 @@
 .no_cart_list_container {
   border: none;
   align-self: center;
+  justify-content: center;
 }
 .no_product {
   font-size: 2.4rem;

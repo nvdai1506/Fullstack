@@ -4,33 +4,37 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
     {
-        email: {
-            type: String,
-            require: true
+        shippingInfo: {
+            name: {
+                type: String,
+                required: true
+            },
+            phone: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true
+            },
+            address: {
+                type: String,
+                required: true
+            },
+            note: {
+                type: String
+            },
         },
-        // cart: {
-        //     type: Object,
-        //     require: true
-        // },
-        cart:{
-            items:[{
-                product:{
-                    type: Schema.Types.ObjectId,
-                    ref:'Product'
-                },
-                quantity:{
-                    type:Number,
-                    default: 0
-                }
-            }],
-            subTotal:{
-                type:Number,
-                default: 0
-            }
-        },
-        shippingAddress: {
-            type: String,
-            require: true
+        cart: {
+            items: [],
+            totalPrice: {
+                type: Number,
+                require: true
+            },
+            totalAmount: {
+                type: Number,
+                require: true
+            },
         },
         user: {
             type: Schema.Types.ObjectId,

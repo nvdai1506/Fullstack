@@ -7,6 +7,15 @@ const userSchema = new Schema({
         type: String,
         default: ''
     },
+    name: {
+        type: String,
+        default: ''
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+
     email: {
         type: String,
         require: true
@@ -62,7 +71,6 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.updateCart = async function (cart) {
-    console.log('in user update');
     this.cart = cart;
     return this.save();
 }

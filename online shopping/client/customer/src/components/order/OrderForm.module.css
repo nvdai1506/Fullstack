@@ -46,6 +46,9 @@
   box-shadow: 0 1px 1px rgba(33, 37, 41, 0.1);
   transition: all 0.3s;
 }
+.form_input_not_valid {
+  border-color: red;
+}
 .form_input:focus {
   color: inherit;
   border-color: rgb(102, 217, 232);
@@ -112,4 +115,9 @@
   background-color: aliceblue;
   color: #212529;
   font-weight: bold;
+}
+.email_field {
+  pointer-events: none;
+  color: gray;
+  grid-column: span 2;
 }

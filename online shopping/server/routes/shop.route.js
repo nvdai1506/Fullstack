@@ -18,8 +18,6 @@ router.get('/product/:productId', shopController.getProductById);
 router.get('/products/:childCatalogId', shopController.getProductsByChildCatalogId);
 // order
 
-router.post('/order', [
-    body('email').trim().isEmail().not().isEmpty().withMessage('Email is not valid!')
-], shopController.postOrder);
+router.post('/order', shopController.postOrder);
 
 export default router;

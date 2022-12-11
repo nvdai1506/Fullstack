@@ -6,15 +6,15 @@ import CartItem from './CartItem';
 
 function OrderDetails(props) {
     console.log('details');
-    const {items,total} = props.view;
+    const { items, total } = props.view;
     const cartItems = (
         <ul className={classes['cart-items']}>
             {items.map((item) => (
                 <CartItem
-                    key={item.product._id}
-                    name={item.product.title}
-                    quantity={item.quantity}
-                    price={item.product.price}
+                    key={item.id}
+                    name={item.title}
+                    quantity={item.amount}
+                    price={item.price}
                 />
             ))}
         </ul>

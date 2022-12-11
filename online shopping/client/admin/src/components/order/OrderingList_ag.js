@@ -54,7 +54,7 @@ function OrderingList_ag(props) {
             .then(result => { return result.json() })
             .then(data => {
                 const orders = data.orders;
-                // console.log(orders);
+                console.log(orders);
                 const newOrders = [];
                 for (const o of orders) {
                     const splitDate = o.createdAt.split('T');
@@ -62,9 +62,9 @@ function OrderingList_ag(props) {
                     const time = (splitDate[1].split('.')[0])
                     const formatTime = date + ' ' + time;
                     newOrders.push({
-                        email: o.email,
+                        email: o.shippingInfo.email,
                         created: formatTime,
-                        total: o.cart.subTotal,
+                        total: o.cart.totalPrice,
                         items: o.cart.items,
                         _id: o._id
                     })

@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { GrStar } from 'react-icons/gr';
-import { CiDeliveryTruck } from 'react-icons/ci';
 import { BsTelephoneInbound, BsTruck, BsClock } from 'react-icons/bs';
 import classes from './ProductDetails.module.css';
-import Size from './Size';
 import SizeList from './SizeList';
 
 import Api from '../../service/api';
 import CartContext from '../../context/cart-context';
+import StatusContext from '../../context/status-context';
 function ProductDetails() {
+    const location = useLocation();
     const navigate = useNavigate();
     const { productId } = useParams();
     const [product, setProduct] = useState({});
 
     const cartCtx = useContext(CartContext);
+    const statusCtx = useContext(StatusContext);
     const [amount, setAmount] = useState(1);
     const [currentSize, setcurrentSize] = useState(null);
     useEffect(() => {
@@ -26,7 +27,7 @@ function ProductDetails() {
             .catch(err => {
                 navigate('/error')
             })
-    }, []);
+    }, [location.pathname]);
 
     const receiveCurrentSize = size => {
         setcurrentSize(size);
@@ -55,7 +56,7 @@ function ProductDetails() {
                 amount: Number(amount)
             });
         } else {
-            alert('Chọn size trước khi thêm vô giỏ hàng.')
+            statusCtx.setValue('info', 'Vui lòng chọn Size trước khi thêm vào giỏ hàng!')
         }
     }
     return (
@@ -73,7 +74,7 @@ function ProductDetails() {
                         <GrStar className={classes.star_icon} />
                         <GrStar className={classes.star_icon} />
                         <span className={classes.number_star}>(5)</span>
-                        <span className={classes.product_sold}>Đã bán: 999</span>
+                        <span className={classes.product_sold}>Đã bán: {product.totalSoldProducts}</span>
                     </div>
                     {product.price &&
 
@@ -138,8 +139,8 @@ function ProductDetails() {
                 <p className={classes.description}>{product.description}</p> */}
                 </div>
             </div>
-            <hr />
-            <h1 className={classes.title_detail}>Chi tiết Sản Phẩm</h1>
+            {/* <hr />
+            <h1 className={classes.title_detail}>Chi tiết Sản Phẩm</h1> */}
         </>
     )
 }

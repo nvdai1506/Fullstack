@@ -39,7 +39,7 @@ function request(params) {
                 if (refresh && refresh.status === 200) {
                     const data = await refresh.json();
                     token = data.newAccessToken;
-                    console.log('token: ', token);
+                    // console.log('token: ', token);
                     localStorage.setItem("x-access-token", token);
                     params.config.headers["x-access-token"] = token;
                     // params.headers.set["x-access-token"] = token;
@@ -95,7 +95,6 @@ Api.shop = {
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
@@ -109,7 +108,6 @@ Api.shop = {
             {
                 method: 'GET',
                 headers: {
-                    'x-access-token': token,
                     'Content-Type': 'application/json'
                 }
             }
@@ -118,6 +116,27 @@ Api.shop = {
     },
     getProductByType: function (parentName) {
         const requestParams = requestParamsFunc(`/shop/${parentName}`, 'GET');
+        return request(requestParams);
+    },
+    // postOrder: function (params) {
+    //     console.log(params);
+    //     const requestParams = requestParamsFunc(`/shop/Order`, 'POST', params);
+    //     return request(requestParams);
+    // },
+    postOrder: function (params) {
+        console.log(params);
+        const requestParams = {
+            url: `${domain}/shop/order`,
+            config:
+            {
+                method: 'POST',
+                body: JSON.stringify(params),
+                headers: {
+                    'x-access-token': token,
+                    'Content-Type': 'application/json'
+                }
+            }
+        }
         return request(requestParams);
     },
 }
@@ -152,18 +171,16 @@ Api.user = {
         }
         return request(requestParams);
     },
-    getInfo: function () {
-        const requestParams = {
-            url: `${domain}/user`,
-            config:
-            {
-                method: 'GET',
-                headers: {
-                    'x-access-token': token,
-                    'Content-Type': 'application/json'
-                }
-            }
-        }
+    getUser: function () {
+        const requestParams = requestParamsFunc(`/user`, 'GET');
+        return request(requestParams);
+    },
+    updateUser: function (params) {
+        const requestParams = requestParamsFunc(`/user`, 'PATCH', params);
+        return request(requestParams);
+    },
+    changePassword: function (params) {
+        const requestParams = requestParamsFunc(`/user/changepw`, 'POST', params);
         return request(requestParams);
     },
     getCart: function () {

@@ -381,7 +381,7 @@ admin.getOrderByStatus = async (req, res, next) => {
     const status = req.params.status; // 0 1 
 
     try {
-        const orders = await Order.find({ status: status }).populate({path: 'cart.items.product',select:['title','price']});
+        const orders = await Order.find({ status: status }).populate({ path: 'cart.items.product', select: ['title', 'price'] });
 
         res.status(200).json({ orders: orders });
     } catch (error) {
@@ -428,12 +428,27 @@ admin.updateOrderStatus = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find this order!', 422);
         }
         order.status = status;
-        const today = moment().format('L');
+        if (status === 1) {
+            for (const item of order.cart.items) {
+                const productId = item.id;
+                const amount = Number(item.amount);
+                try {
+                    const product = await Product.findById(productId);
+                    console.log(product);
+                    product.totalSoldProducts += Number(amount);
+                    await product.save();
+                } catch (error) {
+                    throw errorHandler.throwErr('Add salesFigures have error!', 422);
+                }
+            }
+        }
+        // add to sale figures
+        // const today = moment().format('L');
         // if (status === 1)//completed
         // {
         //     for (const item of order.cart.items) {
         //         const productId = item.product;
-        //         const quantity = Number(item.quantity);
+        //         const amount = Number(item.amount);
 
         //         try {
         //             const product = await Product.findById(productId);
@@ -445,14 +460,14 @@ admin.updateOrderStatus = async (req, res, next) => {
         //             const parentCatalogId = product.parentCatalog;
 
         //             const childCatalog = await ChildCatalog.findById(childCatalogId);
-        //             addDataToSalesFigures(childCatalog, quantity, price, today);
+        //             addDataToSalesFigures(childCatalog, amount, price, today);
         //             // await childCatalog.save();
 
         //             const parentCatalog = await Catalog.findById(parentCatalogId);
-        //             addDataToSalesFigures(parentCatalog, quantity, price, today);
+        //             addDataToSalesFigures(parentCatalog, amount, price, today);
         //             // await parentCatalog.save();
         //             // await product.save();
-        //             addDataToSalesFigures(product, quantity, price, today);
+        //             addDataToSalesFigures(product, amount, price, today);
         //         } catch (error) {
         //             throw errorHandler.throwErr('Add salesFigures have error!', 422);
         //         }
@@ -496,17 +511,19 @@ admin.getOverview = async (req, res, next) => {
             }
         }
 
-        const orders = await Order.find({status:1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+        const orders = await Order.find({ status: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
 
         for (const order of orders) {
             const items = order.cart.items;
             for (const item of items) {
-                const { product: productId, quantity } = item;
+                // const { product: productId, quantity } = item;
+                const productId = item.id;
+                const quantity = item.amount;
                 try {
                     // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
 
                     const product = await Product.findById(productId);
-                    
+
                     let id;
                     if (type === 'catalog') {
                         id = product.parentCatalog;
@@ -540,7 +557,7 @@ admin.getHistory = async (req, res, next) => {
     const year = moment().format('YYYY');
 
     for (let i = 1; i <= 12; i++) {
-        history.push({month: i, turnovers:0});
+        history.push({ month: i, turnovers: 0 });
         // history[i].month = i;
         let startDate;
         let endDate;
@@ -553,16 +570,16 @@ admin.getHistory = async (req, res, next) => {
         }
         // console.log(startDate, '-', endDate);
         try {
-            const orders = await Order.find({ status:1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
-            for(const order of orders){
-                history[i-1].turnovers+=order.cart.subTotal;
+            const orders = await Order.find({ status: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
+            for (const order of orders) {
+                history[i - 1].turnovers += order.cart.totalPrice;
             }
 
         } catch (error) {
             return next(errorHandler.throwErr('Something wrong with order!', 401));
         }
     }
-    res.status(200).json({history:history});
+    res.status(200).json({ history: history });
 
 }
 export default admin;

@@ -31,7 +31,7 @@ export const AuthContextProvider = (props) => {
   }, []);
 
   const loginHandler = (data) => {
-    console.log(data);
+    // console.log(data);
     setAccessToken(data.accessToken);
     setRefreshToken(data.refreshToken);
 
@@ -77,7 +77,7 @@ export const AuthContextProvider = (props) => {
               amount: item.amount
             }
           })
-          console.log('newFormatItems: ', newFormatItems);
+          // console.log('newFormatItems: ', newFormatItems);
           const newCartFormat = {
             items: newFormatItems,
             totalPrice: cart.totalPrice,

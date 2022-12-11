@@ -96,12 +96,14 @@ shop.postOrder = async (req, res, next) => {
     }
 
     const cart = req.body.cart;
-    const email = req.body.email;
+    const shippingInfo = req.body.shippingInfo;
+    const phone = shippingInfo.phone;
+
     try {
-        const order = new Order({ cart: cart, email: email });
+        const order = new Order({ cart: cart, shippingInfo: shippingInfo });
         const result = await order.save();
 
-        const user = await User.find({ email: email });
+        const user = await User.find({ phone: phone });
         if (user.length > 0) {
             result.user = user._id;
             // console.log(user);

@@ -1,0 +1,13 @@
+.filter {
+  width: 60%;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.btn:hover,
+.btn:active {
+  background-color: #66d9e8;
+}
+.btn_active {
+  background-color: #66d9e8;
+  color: black;
+}
