@@ -57,7 +57,7 @@ export const Pagination = (props) => {
       search: searchParams.toString()
     })
   }
-  console.log('newestCurrentPage: ', newestCurrentPage);
+  // console.log('newestCurrentPage: ', newestCurrentPage);
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (

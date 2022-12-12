@@ -91,7 +91,11 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .grid {
   display: grid;
   align-items: center;

@@ -9,6 +9,8 @@ import CartContext from '../../context/cart-context';
 import useInput from '../../hooks/use-input';
 import Api from '../../service/api';
 import StatusContext from '../../context/status-context';
+import Payments from './Payments';
+
 function OrderForm() {
   const navigate = useNavigate();
   const authCtx = useContext(AuthConText);
@@ -113,29 +115,7 @@ function OrderForm() {
           <input className={`${classes.form_input} ${classes.note}`} placeholder='Ghi chú thêm' required value={enteredNote} onChange={noteInputChangeHandler} />
         </form>
       </div>
-      <div className={`${classes.payments}`}>
-        <h1 className={`${classes.title} ${classes.title_bottom}`}>Hình thức thanh toán</h1>
-        <div className={classes.payment_option}>
-          <input className={classes.radio} type='radio' />
-          <TbTruckDelivery className={classes.delivery_icon} />
-          <span className={classes.delivery_text}>Thanh toán khi nhận hàng</span>
-        </div>
-        <div className={classes.payment_option}>
-          <input className={classes.radio} type='radio' />
-          <div className={classes.logo}>
-            <img src={logomomo} alt='Logo momo' />
-          </div>
-          <span className={classes.delivery_text}>Thanh toán MoMo</span>
-        </div>
-        <div className={classes.payment_option}>
-          <input className={classes.radio} type='radio' />
-          <div className={classes.logo}>
-            <img src={vnpay} alt='Logo vnpay' />
-          </div>
-          <span className={classes.delivery_text}>Thanh toán ATM/Internet banking</span>
-        </div>
-        <button className={classes.payment_btn} onClick={onSubmitOrderHandler}>Thanh Toán</button>
-      </div>
+      <Payments />
     </div>
   )
 }

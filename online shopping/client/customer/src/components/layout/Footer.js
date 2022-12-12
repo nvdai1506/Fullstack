@@ -16,7 +16,7 @@ function Footer() {
           </Link>
         </div>
         <p className={classes.copyright}>
-          Copyright &copy; <span class="year">2027</span> by NVD, Inc.
+          Copyright &copy; <span>2022</span> by NVD, Inc.
           All rights reserved.
         </p>
       </div>

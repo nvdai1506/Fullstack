@@ -5,10 +5,12 @@
   justify-items: center;
   background-color: #1a1a1a;
   padding-bottom: 8rem;
+  margin-top: 5rem;
   font-size: 1.6rem;
   gap: 2rem;
 }
 .logo_container {
+  margin-top: 4rem;
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
