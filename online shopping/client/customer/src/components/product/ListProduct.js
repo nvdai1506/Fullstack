@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import classes from './ListProduct.module.css';
 import ProductItem from './ProductItem';
 
-function ListProduct({ listProduct }) {
+function ListProduct({ listProduct, numCols }) {
     // console.log(listProduct);
     return (
-        <div className={`grid grid--5-cols grid--big-gap ${classes.list_product}`}>
+        <div className={`grid grid--${numCols}-cols grid--big-gap ${classes.list_product}`}>
             {listProduct.map(p => <ProductItem key={p._id} product={p} />)}
         </div>
     )

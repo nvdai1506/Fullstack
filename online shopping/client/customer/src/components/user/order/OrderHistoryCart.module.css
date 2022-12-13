@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 }
 /* .textbox {
   align-self: flex-end;
@@ -14,11 +15,15 @@
 } */
 .textbox {
   margin: 2rem 0;
-  padding: 0 15rem 0 12rem;
+  padding: 0 10%;
   font-size: 1.6rem;
   display: grid;
-  grid-template-columns: 0.3fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1rem;
+}
+.textbox_item {
+  display: flex;
+  justify-content: space-between;
 }
 .textbox label {
   font-weight: 700;
@@ -44,4 +49,17 @@
 }
 .status_canceled {
   color: orange;
+}
+.status_processing {
+  color: blue;
+}
+/* 900px */
+@media (max-width: 57em) {
+  .date,
+  .textbox_label {
+    font-size: 1.2rem;
+  }
+  .total {
+    font-size: 1.4rem;
+  }
 }

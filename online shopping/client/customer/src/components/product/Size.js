@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import CartContext from '../../context/cart-context';
 
 import classes from './Size.module.css';
-
+import StatusContext from '../../context/status-context';
 
 function Size({ size, product, mode, onClickFromProductDetail, activeElement }) {
   const cartCtx = useContext(CartContext);
+  const statusCtx = useContext(StatusContext);
 
   const [classValue, setClassValue] = useState(classes.size_label);
 
@@ -28,6 +29,7 @@ function Size({ size, product, mode, onClickFromProductDetail, activeElement }) 
         size: size,
         amount: 1
       });
+      statusCtx.setValue('success', 'Thêm sản phẩm vào giỏ hàng thành công.')
     }
   }
   return (

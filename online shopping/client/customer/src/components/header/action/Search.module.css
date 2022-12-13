@@ -69,3 +69,30 @@
   pointer-events: all;
   visibility: visible;
 }
+/* 1200 */
+@media (max-width: 75em) {
+  .products_container {
+    width: 80%;
+  }
+}
+/* 900 */
+@media (max-width: 57em) {
+  .products_container {
+    width: 100%;
+  }
+  .search_container input,
+  .close_icon {
+    font-size: 1.8rem;
+  }
+}
+/* 467 */
+@media (max-width: 29em) {
+  .search_container input,
+  .close_icon {
+    font-size: 1.2rem;
+  }
+  .search_container {
+    justify-content: space-between;
+    padding: 0 4rem;
+  }
+}

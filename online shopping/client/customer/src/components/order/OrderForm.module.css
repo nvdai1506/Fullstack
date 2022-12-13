@@ -38,6 +38,8 @@
   grid-column: 1/-1;
 }
 .form_input {
+  width: 100%;
+
   font-size: 1.6rem;
   padding: 1rem 2rem;
   border-radius: 15px;
@@ -120,4 +122,20 @@
   pointer-events: none;
   color: gray;
   grid-column: span 2;
+}
+/* 780 */
+@media (max-width: 48.75em) {
+  .title {
+    font-size: 2.4rem;
+  }
+}
+/* 600 */
+@media (max-width: 37.5em) {
+  .title {
+    grid-column: span 2;
+  }
+  .name,
+  .phone {
+    grid-column: span 2;
+  }
 }

@@ -28,7 +28,7 @@ function Home() {
         <h1 className={classes.title}>Áo</h1>
         <hr className={classes.seperate} />
 
-        <ListProduct listProduct={clothes.slice(0, 10)} />
+        <ListProduct listProduct={clothes.slice(0, 8)} numCols={4} />
         <Link to='/shop/ao' className={classes.more}>Xem thêm sản phẩm</Link>
 
       </div>
@@ -36,7 +36,7 @@ function Home() {
         <h1 className={classes.title}>Quần</h1>
         <hr className={classes.seperate} />
 
-        <ListProduct listProduct={pants.slice(0, 10)} />
+        <ListProduct listProduct={pants.slice(0, 8)} numCols={4} />
         <Link to='/shop/ao' className={classes.more}>Xem thêm sản phẩm</Link>
       </div>
     </div>

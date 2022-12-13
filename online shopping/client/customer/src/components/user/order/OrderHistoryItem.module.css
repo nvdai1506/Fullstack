@@ -12,3 +12,33 @@
 .total_item {
   font-size: 1.2rem;
 }
+/* 900px */
+@media (max-width: 57em) {
+  .title {
+    font-size: 1.6rem;
+    line-height: 1.2;
+  }
+}
+/* 687px */
+
+@media (max-width: 43em) {
+  .title {
+    font-size: 1.2rem;
+    line-height: 1.2;
+  }
+  .image {
+    height: 10rem;
+    padding-left: 0.5rem;
+  }
+}
+/* 320 */
+
+@media (max-width: 20em) {
+  .title {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .total_item {
+    font-size: 1rem;
+  }
+}

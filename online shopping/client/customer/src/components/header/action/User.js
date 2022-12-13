@@ -29,6 +29,9 @@ function User() {
             <Link to='/user/profile'>Hồ sơ</Link>
           </li>}
           {isLoggedIn && <li>
+            <Link to='/user/password'>Đổi mật khẩu</Link>
+          </li>}
+          {isLoggedIn && <li>
             <Link to='/user/order-history'>Lịch sử mua hàng</Link>
           </li>}
           {isLoggedIn && <li onClick={logoutHandler}>

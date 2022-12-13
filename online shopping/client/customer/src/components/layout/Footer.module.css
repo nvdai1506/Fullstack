@@ -6,7 +6,9 @@
   background-color: #1a1a1a;
   padding-bottom: 8rem;
   margin-top: 5rem;
+  padding: 0 4%;
   font-size: 1.6rem;
+
   gap: 2rem;
 }
 .logo_container {
@@ -27,8 +29,11 @@
   font-size: 1.4rem;
   line-height: 1.6;
   color: gray;
+  text-align: center;
 }
 .second_row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: start;
   justify-items: center;
 
@@ -89,4 +94,57 @@
 }
 .items {
   margin-top: auto;
+}
+.address {
+  color: #dee2e6;
+  margin-bottom: 8rem;
+  text-align: center;
+}
+/* 965 */
+@media (max-width: 61em) {
+  .footer {
+    font-size: 1.2rem;
+  }
+  .second_row {
+    width: 100%;
+    gap: 4rem;
+  }
+  .footer_title {
+    font-size: 2.4rem;
+  }
+  .social_icon {
+    font-size: 2rem;
+  }
+}
+/* 720 */
+@media (max-width: 45em) {
+  .footer_title {
+    font-size: 1.8rem;
+  }
+  .footer_link:link,
+  .footer_link:visited {
+    margin-bottom: 1rem;
+  }
+  .second_row {
+    width: 100%;
+    gap: 1rem;
+  }
+  .logo img {
+    width: 80%;
+  }
+  .copyright {
+    font-size: 1.2rem;
+  }
+}
+/* 600 */
+@media (max-width: 37.5em) {
+  .second_row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 4rem;
+  }
+  .address {
+    text-align: center;
+  }
 }

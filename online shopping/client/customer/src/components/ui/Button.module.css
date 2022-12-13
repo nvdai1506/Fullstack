@@ -10,3 +10,9 @@
 
   transition: all 0.3s;
 }
+@media (max-width: 57em) {
+  .btn {
+    padding: 1rem 1rem;
+    font-size: 1.6rem;
+  }
+}

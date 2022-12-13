@@ -26,15 +26,42 @@
   text-align: center;
   margin-top: 5rem;
 }
+.label_total {
+  font-size: 2.4rem;
+  font-weight: bold;
+}
 .totalPrice_span {
-  display: block;
+  display: inline-block;
   padding: 1rem 2rem;
   font-size: 2.4rem;
   font-weight: bold;
+  color: blue;
   margin-top: 2rem;
 }
 .separate {
   display: inline-block;
   width: 50%;
   text-align: center;
+}
+/* 1200 */
+@media (max-width: 75em) {
+  .cart_list_container {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  .container {
+    grid-row: 1/1;
+  }
+}
+/* 600 */
+@media (max-width: 37.5em) {
+  .cart_list_container {
+    border-right: none;
+    border-left: none;
+  }
+}
+/* 367 */
+@media (max-width: 23.1em) {
+  .totalPrice_span {
+    font-size: 1.6rem;
+  }
 }

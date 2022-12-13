@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import classes from './Order.module.css';
 
 import StatusMess from '../ui/StatusMess';
@@ -58,7 +58,7 @@ function Order() {
                             {orderedList.map(order => <OrderItem statusChangeHandler={statusChangeHandler} main='ordered' key={order._id} id={order._id} email={order.email} />)}
                         </tbody>
                     </table> */}
-                    <OrderedList_ag status={status} statusChangeHandler={statusChangeHandler} viewHandler={viewHandler}/>
+                    <OrderedList_ag status={status} statusChangeHandler={statusChangeHandler} viewHandler={viewHandler} />
                 </div>
             </div>
         </div>

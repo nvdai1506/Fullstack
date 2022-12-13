@@ -71,17 +71,16 @@ html {
 }
 
 body {
-  font-family: sans-serif;
+  font-family: "Inter", sans-serif;
   line-height: 1;
   font-weight: 400;
   color: #212529;
 
   /* Only works if there is nothing absolutely positioned in relation to body */
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 }
 
 .container {
-  /* 1140px */
   max-width: 100%;
   padding: 0 3.2rem;
   margin: 0 auto;
@@ -172,11 +171,69 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #343a40;
 }
-@media (max-width: 41rem) {
+/* below 1200px */
+@media (max-width: 75em) {
+  .grid--big-gap {
+    column-gap: 2rem;
+    row-gap: 2rem;
+  }
+  .li--big-text {
+    font-size: 3.2rem;
+    font-weight: 700;
+  }
   .grid--5-cols {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+/* 1000 */
+@media (max-width: 62.5em) {
+  /* Track */
+  body {
+    overflow-y: hidden; /* Hide vertical scrollbar */
+  }
+  .grid--5-cols {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+/* below 900px */
+@media (max-width: 57em) {
+  .grid--4-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* width */
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: none;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 1px #495057;
+  }
+}
+/* 722 */
+@media (max-width: 45.125em) {
+  .grid--5-cols {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+/* 600 */
+@media (max-width: 37.5em) {
+  html {
+    font-size: 56.25;
+  }
+}
+/* 320 */
+@media (max-width: 20rem) {
+  html {
+    font-size: 50;
+  }
+  .grid--4-cols {
     grid-template-columns: repeat(1, 1fr);
   }
-  .grid--3-cols {
+  .grid--5-cols {
     grid-template-columns: repeat(1, 1fr);
   }
 }

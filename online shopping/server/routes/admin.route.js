@@ -15,7 +15,7 @@ router.post('/account', [
         .not()
         .isEmpty()
         .withMessage('Parent is not empty!'),
-        
+
     body('password')
         .trim()
         .isLength({ min: 6 })
@@ -29,7 +29,8 @@ router.post('/catalog', [
 ], adminController.addCatalog);
 
 router.patch('/catalog/:id', [
-    body('name').trim().not().isEmpty().withMessage('Name is not empty!')
+    body('name').trim().not().isEmpty().withMessage('Name is not empty!'),
+    body('value').trim().not().isEmpty().withMessage('Value is not empty!')
 ], adminController.updateCatalog);
 
 router.delete('/catalog/:id', adminController.deleteCatalog);
@@ -42,8 +43,9 @@ router.post('/childCatalog', [
 ], adminController.addChildCatalog);
 
 router.patch('/childCatatlog/:childId', [
-    body('parent').trim().not().isEmpty().withMessage('parent is not empty!'),
-    body('title').trim().not().isEmpty().withMessage('title is not empty!')
+    body('parent').trim().not().isEmpty().withMessage('Parent is not empty!'),
+    body('title').trim().not().isEmpty().withMessage('Title is not empty!'),
+    body('value').trim().not().isEmpty().withMessage('Value is not empty!'),
 ],
     adminController.updateChildCatalog);
 

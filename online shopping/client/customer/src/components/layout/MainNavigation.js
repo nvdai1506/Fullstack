@@ -24,7 +24,7 @@ function MainNavigation() {
                     <div className={classes.menu_hide}>
                         <div className={classes.menu_hide_container}>
 
-                            <nav className={`grid grid--4-cols grid--big-gap ${classes.nav}`}>
+                            <nav className={`grid grid--big-gap ${classes.nav}`}>
                                 <Ul parent={{ link: '/shop/ao', text: 'Áo' }}
                                     childList={
                                         [

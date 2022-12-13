@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import classes from './OrderForm.module.css';
-import { TbTruckDelivery } from 'react-icons/tb';
-import logomomo from '../../images/logo-momo.jpg';
-import vnpay from '../../images/vnpay.png';
 import AuthConText from '../../context/auth-context';
 import CartContext from '../../context/cart-context';
 import useInput from '../../hooks/use-input';
@@ -101,10 +98,10 @@ function OrderForm() {
           }
         </div>
         <form className={`grid grid--2-cols ${classes.form}`}>
-          <input className={`${(nameInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input}`}
+          <input className={`${(nameInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.name}`}
             placeholder='Họ tên' required value={enteredName} onChange={nameInputChangeHandler} />
 
-          <input className={`${(phoneInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input}`}
+          <input className={`${(phoneInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.phone}`}
             placeholder='Số Điện Thoại' required value={enteredPhone} onChange={phoneInputChangeHandler} />
 
           <input className={`${classes.form_input} ${classes.email_field}`} required value={enteredEmail} readOnly />
@@ -115,7 +112,7 @@ function OrderForm() {
           <input className={`${classes.form_input} ${classes.note}`} placeholder='Ghi chú thêm' required value={enteredNote} onChange={noteInputChangeHandler} />
         </form>
       </div>
-      <Payments />
+      <Payments onSubmitOrderHandler={onSubmitOrderHandler} />
     </div>
   )
 }

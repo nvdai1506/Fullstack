@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Api from '../service/api';
 import ListProduct from '../components/product/ListProduct';
 import classes from './Shop.module.css';
 import Filter from '../components/filter/Filter';
 import Pagination from '../components/pagination/Pagination';
+import FilterSelection from '../components/filter/FilterSelection';
+
 const PageSize = 15;
 function Shop({ endpoint, title }) {
   const [search] = useSearchParams();
@@ -42,6 +44,9 @@ function Shop({ endpoint, title }) {
       case '4':
         setFilteredProducts([...products].sort((a, b) => (a.price - b.price)));
         break;
+      default:
+        setFilteredProducts(products);
+        break;
     }
 
   }, [products, filterValue]);
@@ -55,9 +60,10 @@ function Shop({ endpoint, title }) {
   return (
     <div className={classes.shop}>
       <Filter />
+      <FilterSelection />
       <hr />
       <h1 className={classes.title}>{title}</h1>
-      <ListProduct listProduct={currentPageData} />
+      <ListProduct listProduct={currentPageData} numCols={5} />
       <div className={classes.pagination}>
 
         <Pagination

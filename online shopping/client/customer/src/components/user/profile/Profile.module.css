@@ -69,3 +69,32 @@
   pointer-events: none;
   color: gray;
 }
+/* 474 */
+@media (max-width: 30em) {
+  .title {
+    font-size: 2.4rem;
+  }
+  /* label[for="phone"] {
+    visibility: hidden;
+    position: relative;
+  }
+  label[for="phone"]:after {
+    visibility: visible;
+    position: absolute;
+    top: 30%;
+    left: 0;
+    content: "SĐT ";
+  } */
+  .btn {
+    font-size: 1.4rem;
+  }
+  .form_info {
+    grid-template-columns: 1fr;
+  }
+  .form_info_label {
+    margin-left: 1rem;
+  }
+  .confirmNewPassword {
+    grid-column: span 2;
+  }
+}

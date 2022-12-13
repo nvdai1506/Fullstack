@@ -105,6 +105,7 @@ admin.updateCatalog = async (req, res, next) => {
 
     const id = req.params.id;
     const newName = req.body.name;
+    const newValue = req.body.value;
     // console.log(id, newName);
     try {
         const catalog = await Catalog.findById(id);
@@ -112,6 +113,7 @@ admin.updateCatalog = async (req, res, next) => {
             throw next(errorHandler('Could not find Catalog', 422));
         }
         catalog.name = newName;
+        catalog.value = newValue;
         await catalog.save();
 
         res.status(200).json({ mess: "Catalog is updated." });
@@ -202,6 +204,8 @@ admin.updateChildCatalog = async (req, res, next) => {
     const childId = req.params.childId;
     const parentId = req.body.parent;
     const newTitle = req.body.title;
+    const newValue = req.body.value;
+
     try {
         const catalog = await Catalog.findById(parentId);
         if (!catalog) {
@@ -225,6 +229,8 @@ admin.updateChildCatalog = async (req, res, next) => {
         }
         child.parent = parentId;
         child.title = newTitle;
+        child.value = newValue;
+
         await child.save();
         res.status(200).json({ mess: "Data is updated.", id: child._id });
     } catch (error) {

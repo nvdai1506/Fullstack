@@ -15,8 +15,8 @@ function CatalogList(props) {
             {catalogCtx.error && <ErrorMess state='error'>Could not load Catalogs</ErrorMess>}
             {props.catalogs.map((catalog) => (
                 <Card key={catalog._id}>
-                    <CatalogItem key={`${catalog._id}_catalog`} id={catalog._id} name={catalog.name} />
-                    {catalog.ChildCatalogs.map(child=>(<ChildItem key={`${child._id}_children`} parent={catalog._id} id={child._id} title={child.title} />))}
+                    <CatalogItem key={`${catalog._id}_catalog`} id={catalog._id} name={catalog.name} value={catalog.value} />
+                    {catalog.ChildCatalogs.map(child => (<ChildItem key={`${child._id}_children`} parent={catalog._id} id={child._id} title={child.title} value={child.value} />))}
                 </Card>
 
             ))}

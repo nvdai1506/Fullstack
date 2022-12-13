@@ -32,3 +32,20 @@
   color: #212529;
   font-size: 1.8rem;
 }
+/* 767px */
+@media (max-width: 48em) {
+  .menu_item {
+    text-align: center;
+  }
+  .menu_item a:link,
+  .menu_item a:visited {
+    padding: 1rem 1rem;
+    font-size: 1.6rem;
+  }
+}
+/* 651 */
+@media (max-width: 40.7em) {
+  .menu {
+    display: none;
+  }
+}

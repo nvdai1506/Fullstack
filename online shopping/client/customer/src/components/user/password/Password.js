@@ -79,7 +79,7 @@ function Password() {
         <input id='newPassword' type='password' value={enteredNewPassword} onChange={newPasswordInputChangeHandler}
           className={`${(newPasswordInputHasError && clickForm) ? `${classes.form_info_input_not_valid} ${classes.form_info_input}` : classes.form_info_input}`} />
 
-        <label htmlFor='confirmNewPassword' className={classes.form_info_label}>Nhập lại mật khẩu mới</label>
+        <label htmlFor='confirmNewPassword' className={classes.form_info_label + ' ' + classes.confirmNewPassword}>Nhập lại mật khẩu mới</label>
         <input id='confirmNewPassword' type='password' value={enteredConfirmNewPassword} onChange={confirmNewPasswordInputChangeHandler}
           className={`${(confirmNewPasswordInputHasError && clickForm) ? `${classes.form_info_input_not_valid} ${classes.form_info_input}` : classes.form_info_input}`} />
 

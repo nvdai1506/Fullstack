@@ -5,7 +5,7 @@ import CartList from '../components/cart/CartList';
 import OrderForm from '../components/order/OrderForm';
 function Cart() {
   return (
-    <div className='container'>
+    <div className={'container ' + classes.cart} >
       <div className={`grid grid--2-cols ${classes.cart_container}`}>
         <OrderForm />
         <CartList />

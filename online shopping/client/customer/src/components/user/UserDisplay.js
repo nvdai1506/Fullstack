@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 
+import classes from './UserDisplay.module.css';
 import Profile from './profile/Profile';
 import Password from './password/Password';
 import OrderHistory from './order/OrderHistory';
@@ -35,9 +36,9 @@ function UserDisplay() {
 
 
   return (
-    <>
+    <div className={classes.display_container}>
       {componentToRender}
-    </>
+    </div>
   )
 }
 

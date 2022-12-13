@@ -3,11 +3,11 @@
 }
 .hide_ul_container {
   max-height: 40rem;
-  width: 17rem;
+  width: 20rem;
 
   position: absolute;
   top: 100%;
-  left: 0;
+  right: -250%;
   padding: 2rem 0;
   z-index: 111;
   /* Hide navigation */
@@ -44,4 +44,22 @@
   color: black;
   padding: 1rem 2rem;
   font-size: 1.6rem;
+}
+/* 1300 */
+@media (max-width: 81.25em) {
+  .hide_ul_container {
+    right: 0;
+  }
+}
+/* 600 */
+@media (max-width: 37.5em) {
+  .hide_ul_container {
+    right: -700%;
+  }
+}
+/* 474 */
+@media (max-width: 30em) {
+  .ul a {
+    font-size: 1.2rem;
+  }
 }

@@ -19,5 +19,18 @@
 .nav_column__parentItem {
   margin-bottom: 2rem;
 }
-.nav_column__childItem {
+
+/* 920 */
+@media (max-width: 57.5em) {
+  .nav_column__parentItem {
+    font-size: 1.8rem;
+  }
+  .nav_column__childItem {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 37.5em) {
+  .nav_column__parentItem {
+    margin-bottom: 1rem;
+  }
 }

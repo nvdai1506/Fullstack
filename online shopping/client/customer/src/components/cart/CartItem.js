@@ -35,25 +35,30 @@ function CartItem({ item }) {
   }
   return (
     <div className={classes.cart_item_container}>
-      <div className={`grid grid--4-cols ${classes.cart_item}`}>
+      <div className={`grid ${classes.cart_item}`}>
         <div className={classes.image}>
           <img crossOrigin='true' src={`${process.env.REACT_APP_DOMAIN}/${imageUrl}`} alt={title} />
         </div>
         <div className={classes.textbox}>
-          <h1 className={classes.title} onClick={onClickTitleHandler}>{title}</h1>
-          <p className={classes.size}>{size}</p>
-          <p className={classes.price}>Price: <strong>{price.toLocaleString()} đ</strong></p>
-          <p className={classes.amount}>&times;<strong>{amount}</strong></p>
+          <div className={classes.first_row}>
+            <h1 className={classes.title} onClick={onClickTitleHandler}>{title}</h1>
+            <p className={classes.size}>{size}</p>
+            <p className={classes.price}>Price: <strong>{price.toLocaleString()} đ</strong></p>
+            <p className={classes.amount}>&times;<strong>{amount}</strong></p>
+          </div>
           <div className={classes.amount_action}>
             <span className={classes.minus} onClick={removeItemHandler}>-</span>
             <input className={classes.amount_input} type='number' min='1' value={currentAmount} onChange={onAmountChangeHandler} />
             <span className={classes.plus} onClick={addItemHandler}>+</span>
           </div>
+
+        </div>
+        <div className={classes.total_item}>
+          {(price * amount).toLocaleString()} đ
           <div className={classes.close}>
             <AiOutlineClose className={classes.icon_close} onClick={onClearItemHandler} />
           </div>
         </div>
-        <div className={classes.total_item}>{(price * amount).toLocaleString()} đ</div>
       </div>
     </div>
   )

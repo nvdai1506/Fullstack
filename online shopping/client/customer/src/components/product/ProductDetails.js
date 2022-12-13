@@ -55,13 +55,15 @@ function ProductDetails() {
                 size: currentSize,
                 amount: Number(amount)
             });
+            statusCtx.setValue('success', 'Thêm sản phẩm vào giỏ hàng thành công.')
+
         } else {
             statusCtx.setValue('info', 'Vui lòng chọn Size trước khi thêm vào giỏ hàng!')
         }
     }
     return (
         <>
-            <div className={`grid grid--3-cols ${classes.product_detail_container}`}>
+            <div className={`${classes.product_detail_container}`}>
                 <div className={classes.image}>
                     <img crossOrigin='true' src={`${process.env.REACT_APP_DOMAIN}/${product.imageUrl}`} alt={product.title} />
                 </div>

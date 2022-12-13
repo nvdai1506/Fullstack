@@ -20,7 +20,8 @@ function CartList() {
       </div>
       {cartCtx.totalPrice !== 0 &&
         <div className={classes.totalPrice}>
-          <hr className={classes.separate} />
+          <hr className={classes.separate} /><br />
+          <label className={classes.label_total}>Tổng tiền:</label>
           <span className={classes.totalPrice_span}>
             {cartCtx.totalPrice.toLocaleString()} đ
           </span>

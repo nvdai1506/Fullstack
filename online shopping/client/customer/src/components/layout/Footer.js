@@ -15,12 +15,13 @@ function Footer() {
             <img src={NVD_logo} alt='NVD logo' />
           </Link>
         </div>
+
         <p className={classes.copyright}>
           Copyright &copy; <span>2022</span> by NVD, Inc.
           All rights reserved.
         </p>
       </div>
-      <div className={'grid grid--4-cols ' + classes.second_row}>
+      <div className={classes.second_row}>
         <div className={'grid ' + classes.contact_container}>
           <h1 className={classes.footer_title}>Liên hệ</h1>
           <div className={classes.social}>
@@ -44,9 +45,7 @@ function Footer() {
             </ul>
           </div>
           <address className={'grid ' + classes.contacts}>
-            <p className={classes.address}>
-              1103/34/13 Nguyễn Duy Trinh, <br />Phường Long Trường, Quận 9, <br />TP. Thủ Đức, TP HCM.
-            </p>
+
             <p>
               <Link className={classes.footer_link} href="tel:028-000-1111">028-000-1111 </Link>
               <br />
@@ -71,7 +70,7 @@ function Footer() {
         </div>
         <div className={classes.company}>
           <div className={classes.title_container}>
-            <h1 className={classes.footer_title}>Công ty NVD</h1>
+            <h1 className={classes.footer_title}>Công ty</h1>
           </div>
           <div className={classes.items}>
             <Link className={classes.footer_link}>Câu chuyện về Nvd</Link>
@@ -98,6 +97,9 @@ function Footer() {
           </div>
         </div>
       </div>
+      <address className={classes.address}>
+        Địa chỉ: <em>1103/34/13 nguyễn duy trinh, phường Long Trường, quận 9, TP HCM.</em>
+      </address>
     </footer >
   );
 

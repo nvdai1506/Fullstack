@@ -86,3 +86,15 @@
 .cart_list {
   height: 100%;
 }
+/* 1000px */
+@media (max-width: 62.5em) {
+  .amount {
+    /* width: 1rem;
+    height: 1rem; */
+    padding: 0.8rem;
+    right: 3%;
+  }
+  .hidden_cart_container {
+    display: none;
+  }
+}

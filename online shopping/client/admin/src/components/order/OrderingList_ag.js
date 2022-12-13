@@ -6,14 +6,15 @@ import Api from '../../service/api';
 
 function OrderingList_ag(props) {
     const { status, statusChangeHandler, viewHandler } = props;
-
     const buttonField = {
-        field: '', cellRenderer: memo((p) => {
+        colId: 'action',
+        floatingFilter: null, resizable: null,
+        cellRenderer: memo((p) => {
             const onMarkDone = () => {
                 Api.admin.updateOrder({ status: 1 }, p.data._id)
                     .then(result => {
                         if (result.status === 200) {
-                            statusChangeHandler(false);
+                            onGridReady();
                         }
                     })
                     .catch(err => {
@@ -86,7 +87,6 @@ function OrderingList_ag(props) {
     }, [statusChangeHandler])
 
     useEffect(() => {
-        // console.log(status);
         onGridReady();
 
     }, [status, onGridReady])
@@ -99,6 +99,10 @@ function OrderingList_ag(props) {
     }), []);
 
     const CellDoubleClickedHandler = useCallback(event => {
+        const colId = event.column.colId;
+        if (colId === 'action') {
+            return;
+        }
         viewHandler(event.data.items, event.data.total);
     }, [viewHandler]);
 

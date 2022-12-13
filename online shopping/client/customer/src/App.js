@@ -3,7 +3,7 @@ import React, { useContext, useEffect, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 
-// import Layout from './components/layout/Layout';
+import Layout from './components/layout/Layout';
 // import Auth from "./pages/Auth";
 // import User from "./pages/user/User";
 // import Home from './pages/Home';
@@ -18,7 +18,6 @@ import { useIndexedDB } from 'react-indexed-db';
 import Error from "./pages/Error";
 
 import Loading from "./components/ui/Loading";
-const Layout = React.lazy(() => import('./components/layout/Layout'));
 const Auth = React.lazy(() => import('./pages/Auth'));
 const User = React.lazy(() => import('./pages/user/User'));
 const Home = React.lazy(() => import('./pages/Home'));

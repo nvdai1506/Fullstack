@@ -11,13 +11,21 @@ import useInput from '../../hooks/use-input';
 function CatalogForm(props) {
     const catalogCtx = useContext(CatalogContext);
     const { editValue } = catalogCtx;
-    const { 
-        value:enteredName, 
+    const {
+        value: enteredName,
         valueChangeHandler: nameInputChangeHandler,
         setValue: setEnteredName,
         hasError: nameInputHasError,
         reset: resetNameInput
     } = useInput(value => value.trim() !== '');
+    const {
+        value: enteredValue,
+        valueChangeHandler: valueInputChangeHandler,
+        setValue: setEnteredValue,
+        hasError: valueInputHasError,
+        reset: resetValueInput
+    } = useInput(value => value.trim() !== '');
+
 
     const updateMode = Object.keys(catalogCtx.editValue).length !== 0;
 
@@ -27,22 +35,25 @@ function CatalogForm(props) {
     const onCancelHandler = () => {
         catalogCtx.editHandler({});
         resetNameInput();
+        resetValueInput();
     };
-    
+
     useEffect(() => {
         if (updateMode) {
             setEnteredName(editValue.name);
+            setEnteredValue(editValue.value);
         }
-    }, [updateMode, editValue, setEnteredName])
+    }, [updateMode, editValue])
 
     const submitHandler = (event) => {
         event.preventDefault();
-        if(nameInputHasError){
-            console.log('err');
+        if (nameInputHasError) {
             return catalogCtx.statusHandler({ error: "Name must not be empty!" });
+        } else if (valueInputHasError) {
+            return catalogCtx.statusHandler({ error: "Value must not be empty!" });
         }
         if (!updateMode) {
-            Api.admin.addCatalog({ name: enteredName })
+            Api.admin.addCatalog({ name: enteredName, value: enteredValue })
                 .then(result => {
                     if (result.status === 201) {
                         catalogCtx.statusHandler({ success: "You have successfully added catalog." });
@@ -52,7 +63,7 @@ function CatalogForm(props) {
                     catalogCtx.statusHandler({ error: "Could not add Catalog!" });
                 });
         } else {
-            Api.admin.updateCatalog({ name: enteredName }, editValue.id)
+            Api.admin.updateCatalog({ name: enteredName, value: enteredValue }, editValue.id)
                 .then(result => {
                     catalogCtx.statusHandler({ success: "You have successfully updated catalog." });
                     catalogCtx.editHandler({});
@@ -62,24 +73,38 @@ function CatalogForm(props) {
                 });
         }
         setEnteredName('');
+        setEnteredValue('');
     }
     return (
         <div className={classes.main}>
             <label className={classes.title}>Catalog</label>
             <form className={classes.form} onSubmit={submitHandler}>
-                <Input title='Name'
-                    onClick={onClickHandler}
-                    value={enteredName}
-                    onChange={nameInputChangeHandler} />
-                {!updateMode &&
-                    <Button className={classes.btn} type='submit'>Add</Button>
-                }
-                {updateMode &&
-                    <Button className={classes.btn} state='cancle' onClick={onCancelHandler}>Cancel</Button>
-                }
-                {updateMode &&
-                    <Button className={classes.btn} type='submit'>Update</Button>
-                }
+                <div className={classes.input_container}>
+                    <Input title='Name'
+                        onClick={onClickHandler}
+                        value={enteredName}
+                        onChange={nameInputChangeHandler} />
+                    <Input title='Value'
+                        onClick={onClickHandler}
+                        value={enteredValue}
+                        onChange={valueInputChangeHandler} />
+                </div>
+
+                <div className={classes.btn_container}>
+                    {!updateMode &&
+                        <Button className={classes.btn} type='submit'>Add</Button>
+                    }
+
+                    {updateMode &&
+                        <Button className={classes.btn} state='cancle' onClick={onCancelHandler}>Cancel</Button>
+
+                    }
+                    {updateMode &&
+                        <Button className={classes.btn} type='submit'>Update</Button>
+
+                    }
+                </div>
+
             </form>
         </div>
 
