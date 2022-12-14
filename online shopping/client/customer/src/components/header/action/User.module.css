@@ -21,6 +21,11 @@
   pointer-events: all;
   visibility: visible;
 }
+.enable_hide_ul_container {
+  opacity: 1;
+  pointer-events: all;
+  visibility: visible;
+}
 .ul {
   background-color: #fff;
   display: flex;
@@ -38,7 +43,8 @@
   background-color: #66d9e8;
   border-radius: 20px;
 }
-.ul a {
+.ul a:link,
+.ul a:visited {
   display: block;
   text-decoration: none;
   color: black;
@@ -50,11 +56,16 @@
   .hide_ul_container {
     right: 0;
   }
+  .disable_hide_ul_container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
 }
 /* 600 */
 @media (max-width: 37.5em) {
   .hide_ul_container {
-    right: -700%;
+    right: 0%;
   }
 }
 /* 474 */

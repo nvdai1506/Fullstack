@@ -1,9 +1,10 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import classes from './SearchItem.module.css';
-function SearchItem({ id, imageUrl, title, price }) {
+function SearchItem({ id, imageUrl, title, price, onCloseSearch }) {
   const navigate = useNavigate();
   const onClickTitleHandler = () => {
+    onCloseSearch();
     navigate(`/product/${id}`);
   }
   return (

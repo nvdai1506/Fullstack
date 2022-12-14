@@ -66,7 +66,13 @@ function Search() {
           />
           <div className={productClass}>
             {
-              filteredProducts.slice(0, 5).map(product => { return <SearchItem key={`${product._id}`} imageUrl={product.imageUrl} id={product._id} title={product.title} price={product.price} /> })
+              filteredProducts.slice(0, 5).map(product => {
+                return <SearchItem
+                  key={`${product._id}`} imageUrl={product.imageUrl} id={product._id}
+                  title={product.title} price={product.price}
+                  onCloseSearch={onCloseSearch}
+                />
+              })
             }
           </div>
         </form>

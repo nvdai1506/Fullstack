@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 import classes from './User.module.css';
@@ -7,6 +7,7 @@ import AuthContext from '../../../context/auth-context';
 
 function User() {
   const navigate = useNavigate();
+  const [hide_ul_classes, setHide_ul_classes] = useState(classes.hide_ul_container);
 
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
@@ -16,22 +17,27 @@ function User() {
     navigate('/login');
   }
   const onClickUserIconHandler = () => {
-    navigate('/user/');
+    // navigate('/user/');
+    setHide_ul_classes(`${classes.hide_ul_container} ${classes.enable_hide_ul_container}`);
+  }
+  const onClickItem = () => {
+    setHide_ul_classes(`${classes.hide_ul_container} ${classes.disable_hide_ul_container}`);
+
   }
   return (
-    <div className={`action_item ${classes.user_container}`} >
-      <div className={classes.user} onClick={onClickUserIconHandler}>
+    <div className={` ${classes.user_container}`} >
+      <div className={'action_item ' + classes.user} onClick={onClickUserIconHandler}>
         <AiOutlineUser className='icon' />
       </div>
-      <div className={classes.hide_ul_container}>
+      <div className={hide_ul_classes}>
         <ul className={classes.ul}>
-          {isLoggedIn && <li>
+          {isLoggedIn && <li onClick={onClickItem}>
             <Link to='/user/profile'>Hồ sơ</Link>
           </li>}
-          {isLoggedIn && <li>
+          {isLoggedIn && <li onClick={onClickItem}>
             <Link to='/user/password'>Đổi mật khẩu</Link>
           </li>}
-          {isLoggedIn && <li>
+          {isLoggedIn && <li onClick={onClickItem}>
             <Link to='/user/order-history'>Lịch sử mua hàng</Link>
           </li>}
           {isLoggedIn && <li onClick={logoutHandler}>
