@@ -10,6 +10,7 @@ function Cart() {
   const { totalAmount } = cartCtx;
   const [bump, setBump] = useState(false);
   const amountClass = `${classes.amount} ${bump ? classes.bump : ''}`;
+  const [hidden_cart_container, setHidden_cart_container] = useState(classes.hidden_cart_container);
 
   useEffect(() => {
     if (totalAmount === 0) {
@@ -26,6 +27,7 @@ function Cart() {
   }, [totalAmount]);
   const onCartClicked = () => {
     navigate('/cart');
+    setHidden_cart_container(`${classes.hidden_cart_container} ${classes.disable_hidden_cart_container}`);
   }
   return (
     <div className={classes.cart_container}>
@@ -33,7 +35,7 @@ function Cart() {
         <HiOutlineShoppingBag className='icon' />
       </div>
       <span className={amountClass}>{totalAmount}</span>
-      <div className={classes.hidden_cart_container}>
+      <div className={hidden_cart_container}>
         <div className={classes.hidden_cart}>
           {cartCtx.items.length === 0 && <span>Hiện chưa có sản phẩm nào</span>}
           {cartCtx.items.length !== 0 &&

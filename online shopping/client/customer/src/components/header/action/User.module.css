@@ -56,6 +56,9 @@
   .hide_ul_container {
     right: 0;
   }
+}
+/* 1200 */
+@media (max-width: 75em) {
   .disable_hide_ul_container {
     opacity: 0 !important;
     pointer-events: none !important;

@@ -104,7 +104,7 @@ function OrderForm() {
           <input className={`${(phoneInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.phone}`}
             placeholder='Số Điện Thoại' required value={enteredPhone} onChange={phoneInputChangeHandler} />
 
-          <input className={`${classes.form_input} ${classes.email_field}`} required value={enteredEmail} readOnly />
+          <input className={`${classes.form_input} ${classes.email_field}`} placeholder='Email' required value={enteredEmail} readOnly />
 
           <input className={`${(addressInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.address}`}
             placeholder='Địa chỉ' required value={enteredAddress} onChange={addressInputChangeHandler} />

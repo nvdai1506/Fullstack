@@ -86,6 +86,15 @@
 .cart_list {
   height: 100%;
 }
+
+/* 1200 */
+@media (max-width: 75em) {
+  .disable_hidden_cart_container {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
 /* 1000px */
 @media (max-width: 62.5em) {
   .amount {
