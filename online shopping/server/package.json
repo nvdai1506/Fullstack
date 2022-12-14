@@ -25,5 +25,21 @@
     "nodemon": "^2.0.20",
     "randomstring": "^1.2.3",
     "uuid": "^9.0.0"
-  }
+  },
+  "development": {
+    "corsOriginWhitelist": [
+      "http://localhost:3000"
+    ]
+  },
+  "headers": [
+    {
+      "source": "*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
 }
