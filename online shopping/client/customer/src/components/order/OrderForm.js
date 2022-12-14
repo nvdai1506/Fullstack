@@ -15,7 +15,7 @@ function OrderForm() {
   const cartCtx = useContext(CartContext);
   const statusCtx = useContext(StatusContext);
   const [clickForm, setClickForm] = useState(false);
-  const [enteredEmail, setEnteredEmail] = useState('');
+  // const [enteredEmail, setEnteredEmail] = useState('');
 
   const {
     value: enteredName,
@@ -30,14 +30,23 @@ function OrderForm() {
     hasError: phoneInputHasError
   } = useInput(value => value.trim() !== '');
   const {
+    value: enteredEmail,
+    valueChangeHandler: emailInputChangeHandler,
+    setValue: setEnteredEmail,
+    hasError: emailInputHasError
+  } = useInput(value => value.trim() !== '');
+
+  const {
     value: enteredAddress,
     valueChangeHandler: addressInputChangeHandler,
     setValue: setEnteredAddress,
     hasError: addressInputHasError
   } = useInput(value => value.trim() !== '');
+
   const {
     value: enteredNote,
     valueChangeHandler: noteInputChangeHandler,
+
   } = useInput(() => { });
 
   useEffect(() => {
@@ -103,9 +112,13 @@ function OrderForm() {
 
           <input className={`${(phoneInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.phone}`}
             placeholder='Số Điện Thoại' required value={enteredPhone} onChange={phoneInputChangeHandler} />
-
-          <input className={`${classes.form_input} ${classes.email_field}`} placeholder='Email' required value={enteredEmail} readOnly />
-
+          {authCtx.isLoggedIn &&
+            <input className={`${classes.form_input} ${classes.email_field}`} placeholder='Email' required value={enteredEmail} readOnly />
+          }
+          {!authCtx.isLoggedIn &&
+            <input className={`${(emailInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.email}`}
+              placeholder='Email' required value={enteredEmail} onChange={emailInputChangeHandler} />
+          }
           <input className={`${(addressInputHasError && clickForm) ? `${classes.form_input_not_valid} ${classes.form_input}` : classes.form_input} ${classes.address}`}
             placeholder='Địa chỉ' required value={enteredAddress} onChange={addressInputChangeHandler} />
 

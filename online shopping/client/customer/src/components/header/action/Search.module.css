@@ -57,6 +57,7 @@
   justify-content: start;
   align-items: center;
   gap: 1rem;
+  padding-bottom: 1rem;
 
   opacity: 0;
   pointer-events: none;
@@ -94,5 +95,8 @@
   .search_container {
     justify-content: space-between;
     padding: 0 4rem;
+  }
+  .products_container {
+    width: 140%;
   }
 }

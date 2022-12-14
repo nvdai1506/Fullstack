@@ -19,7 +19,7 @@ function Shop({ endpoint, title }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPageData, setCurrentPageData] = useState([]);
   useEffect(() => {
-    console.log('get data');
+    // console.log('get data');
     Api.shop.getProductByType(endpoint)
       .then(result => { return result.json() })
       .then(data => {

@@ -118,6 +118,9 @@
   color: #212529;
   font-weight: bold;
 }
+.email {
+  grid-column: 1/-1;
+}
 .email_field {
   pointer-events: none;
   color: gray;

@@ -25,3 +25,9 @@
   font-size: 1.2rem;
   color: rgb(186, 0, 0);
 }
+/* 467 */
+@media (max-width: 29em) {
+  .title {
+    font-size: 1.2rem;
+  }
+}

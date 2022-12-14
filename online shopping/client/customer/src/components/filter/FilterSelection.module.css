@@ -114,7 +114,6 @@ summary.radios:before {
   background-color: #fff;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.1);
 }
-
 .list_item label {
   font-size: 1.6rem;
   display: flex;
@@ -122,6 +121,7 @@ summary.radios:before {
   justify-content: space-between;
 }
 .list_item {
+  list-style: none;
   padding: 1rem 2rem;
   border-radius: 15px;
   transition: all 0.3s;

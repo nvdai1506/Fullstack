@@ -18,7 +18,7 @@ export const Pagination = (props) => {
 
   const [newestCurrentPage, setNewestCurrentPage] = useState(currentPage);
   useEffect(() => {
-    console.log('currentpage in pagination: ', currentPage);
+    // console.log('currentpage in pagination: ', currentPage);
     setNewestCurrentPage(currentPage);
   }, [currentPage]);
 
