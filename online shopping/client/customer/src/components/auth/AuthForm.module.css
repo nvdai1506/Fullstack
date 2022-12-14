@@ -1,8 +1,9 @@
 .main {
-  height: 90vh;
+  height: 85rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  /* background-color: #66d9e8; */
 }
 .authform {
   background-color: rgba(0, 0, 0, 0.9);
@@ -87,7 +88,7 @@
   background: red;
   width: 15rem;
   border-radius: 3px;
-  padding: 0.5rem 1rem 1rem 0.5rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
   background-color: rgba(255, 255, 255, 0.27);
   color: #eaf0fb;
   text-align: center;
@@ -112,4 +113,58 @@
 }
 .form_input {
   width: 100%;
+}
+/* below 1200px */
+@media (max-width: 75em) {
+  .main {
+    height: 80rem;
+  }
+}
+/* 1000 */
+@media (max-width: 62.5em) {
+  .main {
+    height: 75rem;
+  }
+}
+
+/* 600 */
+@media (max-width: 37.5em) {
+  .main {
+    height: 70rem;
+  }
+}
+/* 500 */
+@media (max-width: 31.25em) {
+  .authform {
+    width: 90%;
+  }
+}
+/* 400 */
+@media (max-width: 25em) {
+  .authform {
+    padding: 2rem 2rem;
+  }
+  .authform input {
+    height: 4rem;
+  }
+  .authform button {
+    padding: 1rem 0;
+  }
+  .social {
+    width: 100%;
+    flex-direction: column;
+  }
+  .social_item {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 0.8fr 1fr;
+    gap: 1rem;
+  }
+  .social_image {
+    display: inline-block;
+    justify-self: end;
+  }
+  .social_item span {
+    justify-self: start;
+  }
 }

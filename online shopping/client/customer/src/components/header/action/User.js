@@ -14,6 +14,7 @@ function User() {
 
   const logoutHandler = () => {
     authCtx.logout();
+    setHide_ul_classes(`${classes.hide_ul_container} ${classes.disable_hide_ul_container}`);
     navigate('/login');
   }
   const onClickUserIconHandler = () => {
@@ -43,7 +44,7 @@ function User() {
           {isLoggedIn && <li onClick={logoutHandler}>
             <Link >Thoát</Link>
           </li>}
-          {!isLoggedIn && <li>
+          {!isLoggedIn && <li onClick={onClickItem}>
             <Link to='/login'>Đăng Nhập</Link>
           </li>}
         </ul>

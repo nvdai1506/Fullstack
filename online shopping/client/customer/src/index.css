@@ -226,7 +226,7 @@ body {
   }
 }
 /* 320 */
-@media (max-width: 20rem) {
+@media (max-width: 20em) {
   html {
     font-size: 50;
   }
