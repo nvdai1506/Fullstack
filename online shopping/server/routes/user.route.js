@@ -41,15 +41,15 @@ router.patch('/', [
         .notEmpty()
         .withMessage('Name has to be valid.'),
 
-    body('phone')
-        .trim()
-        .notEmpty()
-        .withMessage('Phone Number has to be valid.'),
+    // body('phone')
+    //     .trim()
+    //     .notEmpty()
+    //     .withMessage('Phone Number has to be valid.'),
 
-    body('address')
-        .trim()
-        .notEmpty()
-        .withMessage('Address has to be valid.'),
+    // body('address')
+    //     .trim()
+    //     .notEmpty()
+    //     .withMessage('Address has to be valid.'),
 
 ], userController.editUser);
 

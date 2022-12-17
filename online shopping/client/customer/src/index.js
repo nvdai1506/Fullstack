@@ -8,6 +8,7 @@ import { AuthContextProvider } from './context/auth-context';
 import { CartContextProvider } from './context/cart-context';
 import { StatusContextProvider } from './context/status-context';
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StatusContextProvider>
@@ -15,7 +16,9 @@ root.render(
       <AuthContextProvider>
         <BrowserRouter>
           <React.StrictMode>
+
             <App />
+
           </React.StrictMode>
         </BrowserRouter>
       </AuthContextProvider>

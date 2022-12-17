@@ -17,7 +17,7 @@ import CartContext from "./context/cart-context";
 import { useIndexedDB } from 'react-indexed-db';
 import Error from "./pages/Error";
 
-import Loading from "./components/ui/Loading";
+import LoadingBackdrop from "./components/loading/LoadingBackdrop";
 const Auth = React.lazy(() => import('./pages/Auth'));
 const User = React.lazy(() => import('./pages/user/User'));
 const Home = React.lazy(() => import('./pages/Home'));
@@ -25,6 +25,7 @@ const NotFound = React.lazy(() => import('./pages/NotFound'));
 const Cart = React.lazy(() => import('./pages/Cart'));
 const ProductDetails = React.lazy(() => import('./components/product/ProductDetails'));
 const Shop = React.lazy(() => import('./pages/Shop'));
+const CreatePassword = React.lazy(() => import('./components/user/password/CreatePassword'));
 
 
 
@@ -43,9 +44,7 @@ function App() {
   return (
     <Layout>
       <Suspense fallback={
-        <div className='centered'>
-          <Loading />
-        </div>
+        <LoadingBackdrop />
       }>
         <Routes>
           <Route path="/">
@@ -68,6 +67,7 @@ function App() {
           </Route>
           <Route path='/signup' element={<Auth loginMode={false} />} />
           <Route path='/login' element={<Auth loginMode={true} />} />
+          <Route path='/create-password' element={<CreatePassword />} />
           <Route path='/cart' element={<Cart />} />
           <Route element={<ProtectedRoute />} >
             <Route path='/user'>

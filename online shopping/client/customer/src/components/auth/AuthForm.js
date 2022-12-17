@@ -1,5 +1,10 @@
 import React, { useRef, useState, useContext, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from 'react-google-login';
+import { loadGapiInsideDOM } from "gapi-script";
+
+
+
 import classes from './AuthForm.module.css';
 import Api from '../../service/api';
 import AuthContext from '../../context/auth-context';
@@ -18,9 +23,16 @@ function AuthForm({ loginMode }) {
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState(null);
 
+  let searchParams = new URLSearchParams(location.search);
+
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
+  useEffect(() => {
+    (async () => {
+      await loadGapiInsideDOM();
+    })();
+  });
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
@@ -88,6 +100,37 @@ function AuthForm({ loginMode }) {
 
     }
   }
+  const { signIn } = useGoogleLogin({
+    clientId: '294663668712-s4ae7le7q6jmjqn2bmtlilpabvk06drl.apps.googleusercontent.com',
+    onSuccess: (response) => {
+      // console.log(response);
+      const email = response.profileObj.email;
+      Api.user.google_login({ email: email })
+        .then(result => {
+          return result.json();
+        })
+        .then(data => {
+          authCtx.login(data);
+          navigate('/');
+        })
+        .catch(error => {
+          console.log(error);
+          if (error.status === 401) {
+            searchParams.set('type', 'google')
+            searchParams.set('email', email);
+            searchParams.set('name', response.profileObj.name);
+            navigate({
+              pathname: '/create-password',
+              search: searchParams.toString()
+            })
+          } else {
+            navigate('/error');
+          }
+        })
+
+    }
+  });
+
   return (
     <div className={classes.main}>
       <form className={classes.authform} onSubmit={submitHandler}>
@@ -112,8 +155,8 @@ function AuthForm({ loginMode }) {
         <div className={classes.signup}>
           <Link to={loginMode ? '/signup' : '/login'} onClick={onClickToLink}>{loginMode ? 'Sign Up' : 'Log In'}</Link>
         </div>
-        <div className={classes["social"]}>
-          <div className={classes.social_item}>
+        <div className={classes["social"]} >
+          <div className={classes.social_item} onClick={signIn}>
             <div className={classes.social_image}>
               <img src={GG} alt='google icon' />
             </div>
@@ -125,8 +168,8 @@ function AuthForm({ loginMode }) {
             </div>
             <span>Facebook</span></div>
         </div>
-      </form>
-    </div>
+      </form >
+    </div >
 
   );
 }

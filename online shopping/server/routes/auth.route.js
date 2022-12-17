@@ -16,6 +16,13 @@ router.post('/login', [
         .isLength({ min: 6 })
         .withMessage('Password has to be valid.')
 ], authController.login);
+// login as google account
+router.post('/google-login', [
+    body('email')
+        .isEmail()
+        .withMessage('Please enter a valid email.')
+        .normalizeEmail(),
+], authController.google_login);
 
 router.post('/signup', [
     body('email')

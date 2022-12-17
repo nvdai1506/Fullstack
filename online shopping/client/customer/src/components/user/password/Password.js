@@ -11,6 +11,8 @@ function Password() {
 
   const statusCtx = useContext(StatusContext);
   const navigate = useNavigate();
+
+
   const [clickForm, setClickForm] = useState(false);
 
   const {
@@ -71,6 +73,7 @@ function Password() {
     <div className={classes.profile}>
       <h1 className={classes.title}>Đổi Mật Khẩu</h1>
       <form className={`grid grid--3-cols ${classes.form_info}`} onSubmit={onSubmitHandler}>
+
         <label htmlFor='oldPassword' className={classes.form_info_label}>Mật khẩu cũ</label>
         <input id='oldPassword' type='password' value={enteredOldPassword} onChange={oldPasswordInputChangeHandler}
           className={`${(oldPasswordInputHasError && clickForm) ? `${classes.form_info_input_not_valid} ${classes.form_info_input}` : classes.form_info_input}`} />

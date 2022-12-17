@@ -156,6 +156,10 @@ Api.user = {
         }
         return request(requestParams);
     },
+    google_login: function (params) {
+        const requestParams = requestParamsFunc(`/google-login`, 'POST', params);
+        return request(requestParams);
+    },
     signup: function (params) {
         // console.log(params);
         const requestParams = {

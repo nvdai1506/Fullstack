@@ -74,7 +74,43 @@ auth.login = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+auth.google_login = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    const { email } = req.body;
 
+    try {
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            throw errorHandler.throwErr('User is not exist!', 401);
+        }
+        const payload = {
+            userId: user._id,
+            role: user.role
+        }
+        const opts = {
+            expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN // seconds
+        }
+        const accessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY, opts);
+        const refreshToken = randomstring.generate(80);
+
+        user.rfToken = refreshToken;
+        await user.save();
+        res.json({
+            authenticated: true,
+            userId: user._id,
+            accessToken,
+            refreshToken,
+            role: user.role
+        })
+
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 auth.refresh = async (req, res, next) => {
     const { accessToken, refreshToken } = req.body;
 
