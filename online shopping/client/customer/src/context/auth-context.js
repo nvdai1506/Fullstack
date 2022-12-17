@@ -45,7 +45,7 @@ export const AuthContextProvider = (props) => {
       })
       .then(data => {
         const cart = data.cart;
-        // console.log(cart);
+        console.log(cart);
         if (cart.totalPrice === 0) {
           const newFormatItems = cartCtx.items.map(item => {
             return {

@@ -156,8 +156,12 @@ export const CartContextProvider = (props) => {
             totalAmount: cartState.totalAmount
           };
           Api.user.updateCart({ cart: newCartFormat })
-            .then(result => { return result.json(); })
+            .then(result => {
+              // console.log(result);
+              return result.json();
+            })
             .then(data => {
+              // console.log('data');
               // navigate('/error');
             })
             .catch(err => { })

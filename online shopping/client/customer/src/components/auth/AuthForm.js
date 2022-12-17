@@ -2,6 +2,8 @@ import React, { useRef, useState, useContext, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from 'react-google-login';
 import { loadGapiInsideDOM } from "gapi-script";
+import FacebookLogin from '@greatsumini/react-facebook-login';
+// import { FacebookLoginClient } from '@greatsumini/react-facebook-login';
 
 
 
@@ -11,7 +13,7 @@ import AuthContext from '../../context/auth-context';
 import Loading from '../ui/Loading';
 import StatusContext from '../../context/status-context';
 import GG from '../../images/google_icon.png';
-import FB from '../../images/facebook_icon.png';
+import FB_Icon from '../../images/facebook_icon.png';
 
 function AuthForm({ loginMode }) {
 
@@ -28,12 +30,20 @@ function AuthForm({ loginMode }) {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
+
+  // google
   useEffect(() => {
     (async () => {
       await loadGapiInsideDOM();
     })();
-  });
+  }, []);
+  // facebook
+  // const appId = process.env.REACT_APP_Facebook_APP_ID;
+  // useEffect(() => {
+  //   FacebookLoginClient.init({ appId: '488211450087339' });
+  // }, []);
 
+  // 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
       navigate('/');
@@ -100,37 +110,50 @@ function AuthForm({ loginMode }) {
 
     }
   }
-  const { signIn } = useGoogleLogin({
-    clientId: '294663668712-s4ae7le7q6jmjqn2bmtlilpabvk06drl.apps.googleusercontent.com',
+  const externalLogin = (email, name) => {
+    Api.user.google_login({ email: email })
+      .then(result => {
+        return result.json();
+      })
+      .then(data => {
+        authCtx.login(data);
+        navigate('/');
+      })
+      .catch(error => {
+        console.log(error);
+        if (error.status === 401) {
+          searchParams.set('email', email);
+          searchParams.set('name', name);
+          navigate({
+            pathname: '/create-password',
+            search: searchParams.toString()
+          })
+        } else {
+          navigate('/error');
+        }
+      })
+  }
+  const { signIn: googleLogin } = useGoogleLogin({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
     onSuccess: (response) => {
       // console.log(response);
       const email = response.profileObj.email;
-      Api.user.google_login({ email: email })
-        .then(result => {
-          return result.json();
-        })
-        .then(data => {
-          authCtx.login(data);
-          navigate('/');
-        })
-        .catch(error => {
-          console.log(error);
-          if (error.status === 401) {
-            searchParams.set('type', 'google')
-            searchParams.set('email', email);
-            searchParams.set('name', response.profileObj.name);
-            navigate({
-              pathname: '/create-password',
-              search: searchParams.toString()
-            })
-          } else {
-            navigate('/error');
-          }
-        })
-
+      const name = response.profileObj.name;
+      externalLogin(email, name);
     }
   });
 
+  // const facebookLogin = () => {
+  //   FacebookLoginClient.login(console.log, {
+  //     scope: 'public_profile, email',
+  //   });
+  // };
+  const facebookLogin = (response) => {
+    // console.log(response);
+    const email = response.email;
+    const name = response.name;
+    externalLogin(email, name);
+  }
   return (
     <div className={classes.main}>
       <form className={classes.authform} onSubmit={submitHandler}>
@@ -156,17 +179,37 @@ function AuthForm({ loginMode }) {
           <Link to={loginMode ? '/signup' : '/login'} onClick={onClickToLink}>{loginMode ? 'Sign Up' : 'Log In'}</Link>
         </div>
         <div className={classes["social"]} >
-          <div className={classes.social_item} onClick={signIn}>
+          <div className={classes.social_item} onClick={googleLogin}>
             <div className={classes.social_image}>
               <img src={GG} alt='google icon' />
             </div>
             <span>Google</span>
           </div>
-          <div className={classes.social_item}>
+          {/* <div className={classes.social_item} onClick={facebookLogin}>
             <div className={classes.social_image}>
-              <img src={FB} alt='facebook icon' />
+              <img src={FB_Icon} alt='facebook icon' />
             </div>
-            <span>Facebook</span></div>
+            <span>Facebook</span>
+          </div> */}
+          <FacebookLogin
+            appId="488211450087339"
+            onSuccess={(response) => {
+              console.log('Login success: ', response);
+            }}
+            onFail={(error) => {
+              console.log('Login Failed!', error);
+            }}
+            onProfileSuccess={facebookLogin}
+            render={({ onClick }) => (
+              <div className={classes.social_item} onClick={onClick}>
+                <div className={classes.social_image}>
+                  <img src={FB_Icon} alt='facebook icon' />
+                </div>
+                <span>Facebook</span>
+              </div>
+            )}
+          />
+
         </div>
       </form >
     </div >
