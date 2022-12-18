@@ -17,6 +17,12 @@ const catalogSchema = new Schema({
             default: []
         }
     ],
+    featuredProducts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        default: [],
+    }
+    ],
     // salesFigures: [
     //     {
     //         numProducts: {
@@ -27,8 +33,8 @@ const catalogSchema = new Schema({
     //             type: Number,
     //             default: 0
     //         },
-    //         date:{
-    //             type:String
+    //         date: {
+    //             type: String
     //         }
     //     }
     // ]

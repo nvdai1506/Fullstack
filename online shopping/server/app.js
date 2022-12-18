@@ -18,6 +18,7 @@ import ShopRouter from './routes/shop.route.js';
 
 
 import Auth from './middlewares/auth.mdw.js';
+import { addPropertyToModel, deletePropertyfromModel } from './utils/helper.js';
 
 const app = express();
 
@@ -87,7 +88,7 @@ app.use('/admin', Auth, AdminRouter);
 app.use('/user', Auth, UserRouter);
 
 app.use((error, req, res, next) => {
-  console.log(error);
+  console.log(error.message);
   const status = error.statusCode || 500;
   const message = error.message;
   const data = error.data;
@@ -100,6 +101,8 @@ app.get('/hello', (req, res, next) => {
 const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGODB_URI).then(result => {
+  // addPropertyToModel('sale', 0, 'Product');
+  // deletePropertyfromModel('salesFigures', 'Catalog');
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);
   });

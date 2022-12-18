@@ -113,7 +113,8 @@ auth.google_login = async (req, res, next) => {
 }
 auth.refresh = async (req, res, next) => {
     const { accessToken, refreshToken } = req.body;
-
+    // console.log(accessToken);
+    // console.log(refreshToken);
     try {
         const opts = {
             ignoreExpiration: true
@@ -121,19 +122,24 @@ auth.refresh = async (req, res, next) => {
         // decode to get userID
         const { userId } = jwt.verify(accessToken, process.env.ACCESSTOKEN_SECRET_KEY, opts);
         const user = await User.findById(userId);
+        console.log(user);
         if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }
         if (user.rfToken.toString() !== refreshToken.toString()) {
+            // console.log(user.rfToken.toString());
+            // console.log(refreshToken.toString());
             throw errorHandler.throwErr('RefreshToken is revoked.', 401);
         }
         const payload = {
             userId: user._id,
             role: user.role
         }
+
         const newOpts = {
-            expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN// seconds
+            expiresIn: process.env.ACCESSTOKEN_EXPIRES_IN
         }
+
         const newAccessToken = jwt.sign(payload, process.env.ACCESSTOKEN_SECRET_KEY, newOpts);
 
         res.status(200).json({ newAccessToken: newAccessToken });

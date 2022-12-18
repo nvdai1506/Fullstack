@@ -36,8 +36,8 @@ shop.getChildCatalog = async (req, res, next) => {
     }
 }
 
-// product
 
+// <<<<<<<<<<<<product>>>>>>>>>>>>>>>
 shop.getProducts = async (req, res, next) => {
     try {
         const products = await Product.find().populate({ path: 'childCatalog', select: 'title' });
@@ -88,6 +88,8 @@ shop.getProductsByChildCatalogId = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+
+
 //Order
 shop.postOrder = async (req, res, next) => {
     const errors = validationResult(req);

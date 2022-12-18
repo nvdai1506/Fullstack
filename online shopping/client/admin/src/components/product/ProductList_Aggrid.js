@@ -4,7 +4,9 @@ import { AgGridReact } from 'ag-grid-react';
 import classes from './ProductList_Aggrid.module.css';
 import ProductContext from '../../context/product-context';
 
-import DeleteBtn from './DeleteBtn.js';
+import DeleteBtn from './actions/DeleteBtn.js';
+import FeaturedProduct from './actions/FeaturedProduct';
+import Sale from './actions/Sale';
 
 function ProductList_Aggrid(props) {
     const products = props.products;
@@ -16,14 +18,29 @@ function ProductList_Aggrid(props) {
     const gridRef = useRef();
     const [rowData, setRowData] = useState([]);
     const [columnDefs] = useState([
-        // { field: '_id' },
+        { field: '_id', headerName: '#' },
         { field: 'title' },
         { field: 'childCatalog.title', headerName: 'Type' },
+        { field: 'totalSoldProducts', headerName: 'Total Of Sales' },
         { field: 'material' },
         { field: 'size' },
         { field: 'price' },
         { field: 'description', },
-        { colId: 'action', cellRenderer: memo(DeleteBtn), floatingFilter: null, resizable: null, cellStyle: { 'textAlign': 'center' } }
+        {
+            colId: 'delete', minWidth: 150, cellRenderer: memo(DeleteBtn),
+            floatingFilter: null, cellStyle: { 'textAlign': 'center' }
+        },
+        {
+            field: 'featuredProduct', colId: 'featuredProduct', headerName: 'Featured'
+            , cellRenderer: memo(FeaturedProduct),
+            floatingFilter: null, filter: null
+        },
+        {
+            field: 'sale', colId: 'sale', headerName: 'Sale(%)',
+            cellRenderer: memo(Sale),
+            onCellValueChanged: ({ newValue }) => { console.log(newValue) },
+            cellStyle: { 'border': 'none' }
+        },
     ]);
 
 
@@ -41,8 +58,9 @@ function ProductList_Aggrid(props) {
                 {
                     defaultMinWidth: 50,
                     columnLimits: [
-                        { key: 'description', minWidth: 600 },
-                        { key: 'title', minWidth: 250 },
+                        { key: '_id', minWidth: 100 },
+                        { key: 'title', minWidth: 200 },
+                        { key: 'description', minWidth: 300 },
                     ],
                 }
             );
@@ -65,7 +83,7 @@ function ProductList_Aggrid(props) {
 
     const cellClickedListener = useCallback(event => {
         const colId = event.column.colId;
-        if (colId === 'action') {
+        if (colId === 'delete' || colId === 'featuredProduct' || colId === 'sale') {
             return;
         }
         console.log(event.data);

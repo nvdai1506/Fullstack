@@ -61,7 +61,35 @@ function request(params) {
 
     })
 }
+function requestParamsFunc(endpoint, method, params) {
+    const url = `${domain}${endpoint}`
+    const body = JSON.stringify(params);
+    const headers = {
+        'x-access-token': token,
+        'Content-Type': 'application/json'
+    }
 
+    if (method === 'GET' || method === "DELETE") {
+        return {
+            url: url,
+            config:
+            {
+                method: method,
+                headers: headers,
+            }
+        }
+    } else {
+        return {
+            url: url,
+            config:
+            {
+                method: method,
+                body: body,
+                headers: headers,
+            }
+        }
+    }
+}
 Api.admin = {
     login: function (params) {
         // console.log(params);
@@ -212,7 +240,7 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    // product
+    // <<<<<<<<<<<<product>>>>>>>>>>>>>>>
     addProduct: function (params) {
         const requestParams = {
             url: `${domain}/admin/product`,
@@ -257,7 +285,21 @@ Api.admin = {
         }
         return request(requestParams);
     },
-    // order
+    // featured product
+    addFeaturedProduct: function (params) {
+        const requestParams = requestParamsFunc('/admin/featured-product', 'POST', params);
+        return request(requestParams);
+    },
+    deletetFeaturedProduct: function (id) {
+        const requestParams = requestParamsFunc(`/admin/featured-product/${id}`, 'DELETE');
+        return request(requestParams);
+    },
+    // on sale
+    onSale: function (id, params) {
+        const requestParams = requestParamsFunc(`/admin/sale-product/${id}`, 'PATCH', params);
+        return request(requestParams);
+    },
+    // <<<<<<<<<<<<order>>>>>>>>>>>>>>>
     getOrders: function (status) {
         const requestParams = {
             url: `${domain}/admin/order/${status}`,

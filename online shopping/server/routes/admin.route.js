@@ -22,8 +22,8 @@ router.post('/account', [
         .withMessage('Password has to be valid.')
 ], adminController.addManagementAccount);
 router.delete('/account/:userId', adminController.deleteManagementAccount);
-// catalog
 
+// <<<<<<<<<<<<catalog>>>>>>>>>>>>>>>
 router.post('/catalog', [
     body('name').trim().not().isEmpty().withMessage('Name is not empty!')
 ], adminController.addCatalog);
@@ -35,7 +35,8 @@ router.patch('/catalog/:id', [
 
 router.delete('/catalog/:id', adminController.deleteCatalog);
 
-// childCatalog
+
+// <<<<<<<<<<<<childCatalog>>>>>>>>>>>>>>>
 
 router.post('/childCatalog', [
     body('parent').trim().not().isEmpty().withMessage('Parent is not empty!'),
@@ -51,7 +52,7 @@ router.patch('/childCatatlog/:childId', [
 
 router.delete('/childCatalog/:childId', adminController.deleteChildCatalog);
 
-// product
+// <<<<<<<<<<<<product>>>>>>>>>>>>>>>
 
 // router.get('/products', adminController.getProducts);
 // router.get('/product/:productId', adminController.getProductById);
@@ -75,8 +76,17 @@ router.patch('/product/:productId', [
 
 router.delete('/product/:productId', adminController.deleteProduct);
 
-// order
+// add featured product
+router.post('/featured-product', [
+    body('productId').trim().not().isEmpty().withMessage('productId is not empty!')
+], adminController.addFeaturedProduct);
+router.delete('/featured-product/:productId', adminController.deleteFeaturedProduct);
+// add sale to product
+router.patch('/sale-product/:productId', [
+    body('percent').trim().not().isEmpty().withMessage('Percent must not empty!')
+], adminController.onSale);
 
+// <<<<<<<<<<<<order>>>>>>>>>>>>>>>
 router.get('/order/:status', adminController.getOrderByStatus);
 
 

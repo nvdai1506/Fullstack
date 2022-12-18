@@ -259,7 +259,7 @@ admin.deleteChildCatalog = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
-// product
+// <<<<<<<<<<<<product>>>>>>>>>>>>>>>
 
 admin.addProduct = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0) {
@@ -298,6 +298,7 @@ admin.addProduct = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+
 admin.updateProduct = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
@@ -372,6 +373,90 @@ admin.deleteProduct = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+// <<<<<<<<<<<<featured product>>>>>>>>>>>>>>>
+admin.addFeaturedProduct = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    const productId = req.body.productId;
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw errorHandler.throwErr('Could not find Product!', 422);
+        }
+        const parentCatalogId = product.parentCatalog;
+        const parentCatalog = await Catalog.findById(parentCatalogId);
+        if (!parentCatalog) {
+            throw errorHandler.throwErr('Could not find Catalog!', 422);
+        }
+        if (parentCatalog.featuredProducts.length > 8) {
+            throw errorHandler.throwErr(`Featured products of "${parentCatalog.name}" exceeds the limit of 8 !`, 403);
+        }
+        product.featuredProduct = 1;
+        await product.save();
+        parentCatalog.featuredProducts.push(productId);
+        const result = await parentCatalog.save();
+        res.status(200).json({ featuredProducts: result.featuredProducts });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+admin.deleteFeaturedProduct = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const productId = req.params.productId;
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw errorHandler.throwErr('Could not find product!', 422);
+        }
+        const parentCatalogId = product.parentCatalog;
+        product.featuredProduct = 0;
+        await product.save();
+        const parentCatalog = await Catalog.findById(parentCatalogId);
+        if (parentCatalog) {
+            parentCatalog.featuredProducts.pull(productId);
+            const result = await parentCatalog.save();
+            res.status(200).json({ featuredProducts: result.featuredProducts });
+        } else {
+            res.status(404).json({ mess: "Not found Catalog!" });
+        }
+
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+
+// on sale
+admin.onSale = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    const productId = req.params.productId;
+    const percent = req.body.percent;
+
+    try {
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw errorHandler.throwErr('Could not find Product!', 422);
+        }
+        product.sale = Number(percent);
+        const result = await product.save();
+        res.status(200).json({ product: result });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+
 
 // order
 

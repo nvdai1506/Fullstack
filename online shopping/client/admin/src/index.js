@@ -7,19 +7,22 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AuthContextProvider } from './context/auth-context';
+import { StatusContextProvider } from './context/status-context';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <AuthContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </AuthContextProvider>
-  </React.StrictMode>
+  <StatusContextProvider>
+    <React.StrictMode>
+      <AuthContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AuthContextProvider>
+    </React.StrictMode>
+  </StatusContextProvider>
 );
 
 reportWebVitals();

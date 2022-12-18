@@ -37,6 +37,7 @@ const ChildCatalogschema = new Schema({
     // ]
 });
 
+
 const model = mongoose.model('ChildCatalog', ChildCatalogschema);
 
 export default model;

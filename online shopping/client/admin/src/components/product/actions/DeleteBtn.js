@@ -1,9 +1,9 @@
 
-import React,{useContext} from 'react'
-import Button from '../ui/Button'
-import Api from '../../service/api';
+import React, { useContext } from 'react'
+import Button from '../../ui/Button'
+import Api from '../../../service/api';
 
-import ProductContext from '../../context/product-context';
+import ProductContext from '../../../context/product-context';
 
 const DeleteBtn = (props) => {
     const productCtx = useContext(ProductContext);
@@ -21,7 +21,7 @@ const DeleteBtn = (props) => {
                 productCtx.productStatusHandler({ error: "Could not delete Product!" })
             });
     };
-    
+
     return <Button onClick={onDelete} state='delete'>Delete</Button>
 }
 

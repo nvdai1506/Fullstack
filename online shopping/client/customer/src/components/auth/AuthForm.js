@@ -150,6 +150,7 @@ function AuthForm({ loginMode }) {
   // };
   const facebookLogin = (response) => {
     // console.log(response);
+    // when success, use the email address and name to sign up my services
     const email = response.email;
     const name = response.name;
     externalLogin(email, name);
@@ -174,9 +175,9 @@ function AuthForm({ loginMode }) {
         <div className={classes.loading_div}>
           {isLoading && <Loading />}
         </div>
-        <button type='submit'>{loginMode ? 'Log In' : 'Sign Up'}</button>
+        <button type='submit'>{loginMode ? 'Đăng nhập' : 'Đăng Ký'}</button>
         <div className={classes.signup}>
-          <Link to={loginMode ? '/signup' : '/login'} onClick={onClickToLink}>{loginMode ? 'Sign Up' : 'Log In'}</Link>
+          <Link to={loginMode ? '/signup' : '/login'} onClick={onClickToLink}>{loginMode ? 'Đăng ký' : 'Đăng nhập'}</Link>
         </div>
         <div className={classes["social"]} >
           <div className={classes.social_item} onClick={googleLogin}>

@@ -156,6 +156,7 @@ Api.user = {
         }
         return request(requestParams);
     },
+    // this my own back end
     google_login: function (params) {
         const requestParams = requestParamsFunc(`/google-login`, 'POST', params);
         return request(requestParams);

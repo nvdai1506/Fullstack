@@ -27,6 +27,14 @@ const productSchema = new Schema({
         type: Number,
         require: true
     },
+    sale: {
+        type: Number,
+        default: 0
+    },
+    featuredProduct: {
+        type: Number,
+        default: 0
+    },
     childCatalog: {
         type: Schema.Types.ObjectId,
         require: true,
