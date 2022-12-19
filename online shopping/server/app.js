@@ -101,7 +101,7 @@ app.get('/hello', (req, res, next) => {
 const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGODB_URI).then(result => {
-  // addPropertyToModel('sale', 0, 'Product');
+  // addPropertyToModel('size', `S M L XL`, 'Product');
   // deletePropertyfromModel('salesFigures', 'Catalog');
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);

@@ -20,6 +20,7 @@ function ProductList_Aggrid(props) {
     const [columnDefs] = useState([
         { field: '_id', headerName: '#' },
         { field: 'title' },
+        { field: 'parentCatalog.name', headerName: 'Catalog' },
         { field: 'childCatalog.title', headerName: 'Type' },
         { field: 'totalSoldProducts', headerName: 'Total Of Sales' },
         { field: 'material' },
@@ -59,7 +60,8 @@ function ProductList_Aggrid(props) {
                     defaultMinWidth: 50,
                     columnLimits: [
                         { key: '_id', minWidth: 100 },
-                        { key: 'title', minWidth: 200 },
+                        { key: 'title', minWidth: 150 },
+                        { key: 'parentCatalog.name', minWidth: 100 },
                         { key: 'description', minWidth: 300 },
                     ],
                 }

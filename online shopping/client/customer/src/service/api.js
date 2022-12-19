@@ -88,6 +88,7 @@ function requestParamsFunc(endpoint, method, params) {
 }
 
 Api.shop = {
+    // product
     getProducts: function () {
         const requestParams = {
             url: `${domain}/shop/products`,
@@ -116,6 +117,11 @@ Api.shop = {
     },
     getProductByType: function (parentName) {
         const requestParams = requestParamsFunc(`/shop/${parentName}`, 'GET');
+        return request(requestParams);
+    },
+    // featured product
+    getFeaturedProducts: function (catalogValue) {
+        const requestParams = requestParamsFunc(`/shop/featured-products/${catalogValue}`, "GET");
         return request(requestParams);
     },
     // postOrder: function (params) {

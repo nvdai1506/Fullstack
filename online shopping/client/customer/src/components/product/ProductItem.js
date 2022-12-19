@@ -8,7 +8,7 @@ function ProductItem({ product }) {
     const onClickTextBoxHandler = () => {
         navigate(`/product/${product._id}`);
     }
-
+    const salePrice = product.price - product.price * product.sale / 100;
     return (
         <div className={classes.product_item}>
             <div className={classes.img_box}>
@@ -28,7 +28,7 @@ function ProductItem({ product }) {
                     <span className={classes.number_evaluation}>(333)</span>
 
                 </div>
-                {product.title.toLowerCase().includes('áo sơ mi') &&
+                {product.sale !== 0 &&
 
                     <div className={classes.sale}>
                         <span className={classes.sale_box}>Sale</span>
@@ -37,7 +37,17 @@ function ProductItem({ product }) {
             </div>
             <div className={classes.textbox} onClick={onClickTextBoxHandler}>
                 <h2 className={classes.title}>{product.title}</h2>
-                <span className={classes.price}>{product.price.toLocaleString()}đ</span>
+                <div className={classes.price_box}>
+                    {product.sale === 0 &&
+                        <ins className={classes.normalPrice}>{product.price.toLocaleString()}đ</ins>
+                    }
+                    {product.sale !== 0 && <>
+                        <ins className={classes.salePrice}>{salePrice.toLocaleString()}đ</ins>
+                        <del className={classes.price}>{product.price.toLocaleString()}đ</del>
+                        <span className={classes.percent}>-{product.sale}%</span>
+                    </>
+                    }
+                </div>
             </div>
 
         </div>

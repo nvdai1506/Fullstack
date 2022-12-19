@@ -40,7 +40,7 @@ shop.getChildCatalog = async (req, res, next) => {
 // <<<<<<<<<<<<product>>>>>>>>>>>>>>>
 shop.getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find().populate({ path: 'childCatalog', select: 'title' });
+        const products = await Product.find().populate({ path: 'childCatalog', select: 'title' }).populate({ path: 'parentCatalog', select: 'name' });
         res.status(200).json({ products: products });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -89,6 +89,16 @@ shop.getProductsByChildCatalogId = async (req, res, next) => {
     }
 }
 
+// featured product
+shop.getFeaturedProducts = async (req, res, next) => {
+    const CatalogValue = req.params.CatalogValue;
+    try {
+        const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' });
+        res.status(200).json({ products: catalog });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 
 //Order
 shop.postOrder = async (req, res, next) => {

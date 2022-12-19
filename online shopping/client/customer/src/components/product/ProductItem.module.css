@@ -23,7 +23,9 @@
 }
 .price {
   font-size: 1.6rem;
+  color: gray;
 }
+
 .size_container {
   display: flex;
   align-items: center;
@@ -80,19 +82,56 @@
   border-radius: 5px;
   font-size: 0.8rem;
 }
+.price_box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.percent,
+.salePrice {
+  color: red;
+  font-size: 1.6rem;
+}
+.salePrice,
+.normalPrice {
+  text-decoration: none;
+}
+.normalPrice {
+  font-size: 1.6rem;
+}
 /* 630 */
 @media (max-width: 40rem) {
   .title {
     font-size: 1.6rem;
+  }
+  .title,
+  .price,
+  .percent,
+  .salePrice,
+  .normalPrice,
+  .start_number,
+  .start_icon,
+  .number_evaluation {
+    font-size: 1.4rem;
+  }
+  .price_box {
+    gap: 0.5rem;
   }
 }
 /* 400 */
 @media (max-width: 25rem) {
   .title,
   .price,
+  .percent,
+  .salePrice,
+  .normalPrice,
   .start_number,
   .start_icon,
   .number_evaluation {
     font-size: 1.2rem;
+  }
+  .price_box {
+    gap: 0.2rem;
   }
 }

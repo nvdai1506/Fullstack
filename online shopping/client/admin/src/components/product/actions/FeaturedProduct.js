@@ -24,6 +24,7 @@ function FeaturedProduct(props) {
           } else {
             statusCtx.setValue('error', 'Fail to add this product to Featured Products.');
           }
+          setCheck(false);
         })
     } else {
       Api.admin.deletetFeaturedProduct(props.data._id)
@@ -35,6 +36,8 @@ function FeaturedProduct(props) {
         .catch(error => {
           console.log(error);
           statusCtx.setValue('error', 'Fail to delete this product to Featured Products.');
+          setCheck(false);
+
         })
     }
 

@@ -393,7 +393,7 @@ admin.addFeaturedProduct = async (req, res, next) => {
         if (!parentCatalog) {
             throw errorHandler.throwErr('Could not find Catalog!', 422);
         }
-        if (parentCatalog.featuredProducts.length > 8) {
+        if (parentCatalog.featuredProducts.length >= 8) {
             throw errorHandler.throwErr(`Featured products of "${parentCatalog.name}" exceeds the limit of 8 !`, 403);
         }
         product.featuredProduct = 1;

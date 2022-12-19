@@ -17,7 +17,7 @@ router.get('/:value', shopController.getProductByType);
 router.get('/product/:productId', shopController.getProductById);
 router.get('/products/:childCatalogId', shopController.getProductsByChildCatalogId);
 // featured product
-
+router.get('/featured-products/:CatalogValue', shopController.getFeaturedProducts);
 
 // order
 

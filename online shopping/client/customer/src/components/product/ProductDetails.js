@@ -130,11 +130,9 @@ function ProductDetails() {
                     <div className={classes.description}>
                         <h3 className={classes.hightligh}>Đặc điểm nổi bật </h3>
                         <ul className={classes.hightligh_list}>
-                            <li>Chất liệu: 80% Cotton - 20% Recycle Polyester</li>
-                            <li>Là sản phẩm của sự hợp tác giữa Coolmate và Disney - đơn vị sở hữu bản quyền Marvel. Chiếc áo thun có thành phần là sợi tái chế tại Việt Nam, hướng tới sự bền vững trong ngành may mặc.</li>
-                            <li>Mềm mại, bền dai, không bai, nhão, xù lông và không gây khó chịu khi mặc</li>
-                            <li>Chất liệu co giãn 4 chiều đem lại sự thoải mái suốt ngày dài</li>
-                            <li>Đây là sản phẩm thời trang đi theo hướng bền vững, thân thiện hơn với môi trường</li>
+                            {product.description && product.description.split('-').map(item => {
+                                return (item !== '' ? <li key={product._id + Math.random()}>{item}</li> : '');
+                            })}
                         </ul>
                     </div>
                     {/* <p className={classes.material}>{product.material}</p>
