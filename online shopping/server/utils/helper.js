@@ -1,7 +1,42 @@
 import Catalog from '../models/catalog.model.js';
 import Product from '../models/product.model.js';
+import Rate from '../models/rate.model.js';
 
-export const addPropertyToModel = async (key, value, modelName) => {
+const helper = () => { };
+helper.resetRate = async () => {
+  try {
+    const rates = await Rate.find();
+    for (const r of rates) {
+      r.rate = [];
+      r.total = 0;
+      r.average = 0;
+      r.save();
+      // console.log(typeof (element));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+helper.addRateToProduct = async () => {
+  try {
+    const products = await Product.find();
+    for (const p of products) {
+      if (!p.rate) {
+        const rate = new Rate({ rate: [] });
+        const rate_result = await rate.save();
+
+        p['rate'] = rate_result._id;
+        p.save();
+      }
+      // console.log(typeof (element));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+helper.addPropertyToModel = async (key, value, modelName) => {
   let Model;
   if (modelName === 'Catalog') {
     Model = Catalog;
@@ -20,7 +55,7 @@ export const addPropertyToModel = async (key, value, modelName) => {
   }
 }
 
-export const deletePropertyfromModel = async (key, modelName) => {
+helper.deletePropertyfromModel = async (key, modelName) => {
   let Model;
   if (modelName === 'Catalog') {
     Model = Catalog;
@@ -37,3 +72,4 @@ export const deletePropertyfromModel = async (key, modelName) => {
     console.log(error);
   }
 }
+export default helper;

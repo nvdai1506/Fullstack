@@ -4,7 +4,10 @@ import classes from './ProductItem.module.css';
 import Size from './Size';
 import { GrStar } from 'react-icons/gr';
 function ProductItem({ product }) {
+    const { rate } = product;
+    const { total, average } = rate;
     const navigate = useNavigate();
+
     const onClickTextBoxHandler = () => {
         navigate(`/product/${product._id}`);
     }
@@ -20,14 +23,15 @@ function ProductItem({ product }) {
                         return <Size key={size} size={size} product={product} />;
                     })}
                 </div>
-                <div className={classes.evaluation}>
-                    <span className={classes.start_number}>
-                        4.9
-                    </span>
-                    <GrStar className={classes.start_icon} />
-                    <span className={classes.number_evaluation}>(333)</span>
-
-                </div>
+                {total !== 0 &&
+                    <div className={classes.evaluation}>
+                        <span className={classes.start_number}>
+                            {average.toFixed(1)}
+                        </span>
+                        <GrStar className={classes.start_icon} />
+                        <span className={classes.number_evaluation}>({total})</span>
+                    </div>
+                }
                 {product.sale !== 0 &&
 
                     <div className={classes.sale}>

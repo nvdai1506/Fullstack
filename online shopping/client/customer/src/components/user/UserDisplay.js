@@ -5,6 +5,7 @@ import classes from './UserDisplay.module.css';
 import Profile from './profile/Profile';
 import Password from './password/Password';
 import OrderHistory from './order/OrderHistory';
+import { OrderHistoryContextProvider } from '../../context/order-history-context';
 
 function UserDisplay() {
   const location = useLocation();
@@ -25,7 +26,11 @@ function UserDisplay() {
         setComponentToRender(<Password />);
         break;
       case '/user/order-history':
-        setComponentToRender(<OrderHistory />);
+        setComponentToRender(
+          <OrderHistoryContextProvider>
+            <OrderHistory />
+          </OrderHistoryContextProvider>
+        );
         break;
       default:
         navigate('/error');

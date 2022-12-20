@@ -49,6 +49,10 @@ const productSchema = new Schema({
         type: Number,
         default: 0
     },
+    rate: {
+        type: Schema.Types.ObjectId,
+        ref: 'Rate'
+    }
     // salesFigures: [
     //     {
     //         numProducts: {

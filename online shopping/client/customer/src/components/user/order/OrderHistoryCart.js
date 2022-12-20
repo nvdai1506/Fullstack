@@ -4,12 +4,12 @@ import classes from './OrderHistoryCart.module.css';
 import OrderHistoryItem from './OrderHistoryItem';
 
 function OrderHistoryCart({ order }) {
-  const { cart, createdAt, updatedAt, status } = order;
+  const { cart, createdAt, updatedAt, status, _id } = order;
   const { items, totalPrice } = cart;
 
   return (
     <div className={classes.order_history_cart}>
-      {items.map(item => { return <OrderHistoryItem key={order._id + item.id + item.size} item={item} /> })}
+      {items.map(item => { return <OrderHistoryItem key={order._id + item.id + item.size} item={item} orderId={_id} order_status={status} /> })}
       <div className={classes.hr}>
         <hr />
       </div>

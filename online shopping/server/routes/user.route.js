@@ -52,7 +52,19 @@ router.patch('/', [
     //     .withMessage('Address has to be valid.'),
 
 ], userController.editUser);
-
+// evaluate product
+router.post('/evaluate-product', [
+    body('star')
+        .trim()
+        .notEmpty()
+        .withMessage('Star has to be a number.'),
+    body('productId')
+        .trim()
+        .notEmpty()
+        .withMessage('productId must not empty.'),
+], userController.rating)
+router.get('/evaluate-product/:rateId', userController.getRateByUser);
+router.patch('/evaluate-product/:rateId', userController.updateRate);
 // cart
 router.get('/cart', userController.getCart);
 router.post('/cart', userController.addToCart);

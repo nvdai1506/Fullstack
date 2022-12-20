@@ -18,7 +18,7 @@ import ShopRouter from './routes/shop.route.js';
 
 
 import Auth from './middlewares/auth.mdw.js';
-import { addPropertyToModel, deletePropertyfromModel } from './utils/helper.js';
+import helper from './utils/helper.js';
 
 const app = express();
 
@@ -101,8 +101,7 @@ app.get('/hello', (req, res, next) => {
 const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGODB_URI).then(result => {
-  // addPropertyToModel('size', `S M L XL`, 'Product');
-  // deletePropertyfromModel('salesFigures', 'Catalog');
+  // helper.resetRate();
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);
   });

@@ -5,6 +5,7 @@ import ChildCatalog from '../models/childCatalog.model.js';
 import Product from '../models/product.model.js';
 import Order from '../models/order.model.js';
 import User from '../models/user.model.js';
+import Rate from '../models/rate.model.js';
 
 
 import errorHandler from '../utils/errorHandler.js';
@@ -55,11 +56,12 @@ shop.getProductByType = async (req, res, next) => {
         let products = [];
         if (Number(level) === 1) {
             const parent = await Catalog.find({ value: value });
-            products = await Product.find({ parentCatalog: parent[0]._id })
+            products = await Product.find({ parentCatalog: parent[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
+            // console.log(products[0]);
         } else {
             const child = await ChildCatalog.find({ value: value });
 
-            products = await Product.find({ childCatalog: child[0]._id })
+            products = await Product.find({ childCatalog: child[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
         }
         res.status(200).json({ product: products });
     } catch (error) {
@@ -69,7 +71,7 @@ shop.getProductByType = async (req, res, next) => {
 shop.getProductById = async (req, res, next) => {
     const productId = req.params.productId;
     try {
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate({ path: 'rate', select: ['total', 'average'] });
         if (!product) {
             throw errorHandler.throwErr('Could not find product!', 422);
         }
@@ -93,13 +95,31 @@ shop.getProductsByChildCatalogId = async (req, res, next) => {
 shop.getFeaturedProducts = async (req, res, next) => {
     const CatalogValue = req.params.CatalogValue;
     try {
-        const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' });
+        const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' })
+            .populate({
+                path: 'featuredProducts',
+                populate: {
+                    path: 'rate',
+                    model: 'Rate',
+                    select: ['total', 'average'],
+                },
+            });
+        // console.log(catalog);
         res.status(200).json({ products: catalog });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
 }
-
+// get Rate
+shop.getRate = async (req, res, next) => {
+    const rateId = req.params.rateId;
+    try {
+        const rate = await Rate.findById(rateId).populate({ path: 'rate.user', select: 'name' });
+        res.status(200).json({ rate: rate });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 //Order
 shop.postOrder = async (req, res, next) => {
     const errors = validationResult(req);

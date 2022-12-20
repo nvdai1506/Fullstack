@@ -9,6 +9,7 @@ import ChildCatalog from '../models/childCatalog.model.js';
 import Product from '../models/product.model.js';
 import Order from '../models/order.model.js';
 import User from '../models/user.model.js';
+import Rate from '../models/rate.model.js';
 
 
 import errorHandler from '../utils/errorHandler.js';
@@ -280,6 +281,8 @@ admin.addProduct = async (req, res, next) => {
         if (!childCatalog) {
             throw errorHandler.throwErr('Could not find child Catalog!', 422);
         }
+        const rate = new Rate({ rate: [] });
+        const rate_result = await rate.save();
         const product = new Product({
             title: req.body.title,
             description: req.body.description,
@@ -288,7 +291,8 @@ admin.addProduct = async (req, res, next) => {
             size: req.body.size,
             price: req.body.price,
             childCatalog: req.body.childCatalog,
-            parentCatalog: req.body.parentCatalog
+            parentCatalog: req.body.parentCatalog,
+            rate: rate_result._id
         });
         const productResult = await product.save();
         childCatalog.products.push(product._id);

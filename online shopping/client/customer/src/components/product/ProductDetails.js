@@ -1,34 +1,55 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { GrStar } from 'react-icons/gr';
+import { IoStar, IoStarHalf, IoStarOutline } from 'react-icons/io5';
 import { BsTelephoneInbound, BsTruck, BsClock } from 'react-icons/bs';
+
 import classes from './ProductDetails.module.css';
 import SizeList from './SizeList';
 
 import Api from '../../service/api';
 import CartContext from '../../context/cart-context';
 import StatusContext from '../../context/status-context';
+import RateDetails from './rate/RateDetails';
+import LoaddingBackdrop from '../loading/LoadingBackdrop';
 function ProductDetails() {
     const location = useLocation();
     const navigate = useNavigate();
     const { productId } = useParams();
-    const [product, setProduct] = useState({});
-
     const cartCtx = useContext(CartContext);
     const statusCtx = useContext(StatusContext);
+    const [loading, setLoading] = useState(true);
+    const [product, setProduct] = useState({});
+    const [rateData, setRateData] = useState({});
+    const [average, setAverage] = useState(0);
+    const [total, setTotal] = useState(0);
     const [amount, setAmount] = useState(1);
     const [currentSize, setcurrentSize] = useState(null);
+    const salePrice = product.price - product.price * product.sale / 100;
+
     useEffect(() => {
-        Api.shop.getProduct(productId)
-            .then(result => { return result.json() })
-            .then(data => {
+        const fetchData = async () => {
+            try {
+                const result = await Api.shop.getProduct(productId);
+                const data = await result.json();
                 setProduct(data.product);
-            })
-            .catch(err => {
+                setAverage(data.product.rate.average);
+                setTotal(data.product.rate.total);
+                const rateId = data.product.rate._id;
+                const rate_result = await Api.shop.getRate(rateId);
+                const rate_data = await rate_result.json();
+                setRateData(rate_data);
+                setLoading(false);
+            } catch (error) {
                 navigate('/error')
-            })
+            }
+        }
+        fetchData();
+        window.scrollTo(0, 0);
     }, [location.pathname]);
 
+    if (loading) {
+        return <LoaddingBackdrop />
+    }
     const receiveCurrentSize = size => {
         setcurrentSize(size);
     }
@@ -44,8 +65,6 @@ function ProductDetails() {
         setAmount(amount + 1);
     }
     const onClickAddToCart = () => {
-        // console.log(currentSize);
-        // console.log(amount);
         if (currentSize) {
             cartCtx.addItem({
                 id: product._id,
@@ -61,6 +80,30 @@ function ProductDetails() {
             statusCtx.setValue('info', 'Vui lòng chọn Size trước khi thêm vào giỏ hàng!')
         }
     }
+
+    const first_star = (average < 0.3) ? <IoStarOutline className={classes.star_icon} />
+        : average < 0.7 ? <IoStarHalf className={classes.star_icon} />
+            : <IoStar className={classes.star_icon} />
+    const second_star = (
+        (average < 1.3) ? <IoStarOutline className={classes.star_icon} />
+            : average < 1.7 ? <IoStarHalf className={classes.star_icon} />
+                : <IoStar className={classes.star_icon} />
+    );
+    const third_star = (
+        (average < 2.3) ? <IoStarOutline className={classes.star_icon} />
+            : average < 2.7 ? <IoStarHalf className={classes.star_icon} />
+                : <IoStar className={classes.star_icon} />
+    );
+    const fourth_star = (
+        (average < 3.3) ? <IoStarOutline className={classes.star_icon} />
+            : average < 3.7 ? <IoStarHalf className={classes.star_icon} />
+                : <IoStar className={classes.star_icon} />
+    );
+    const fifth_star = (
+        (average < 4.3) ? <IoStarOutline className={classes.star_icon} />
+            : average < 4.7 ? <IoStarHalf className={classes.star_icon} />
+                : <IoStar className={classes.star_icon} />
+    );
     return (
         <>
             <div className={`${classes.product_detail_container}`}>
@@ -70,27 +113,33 @@ function ProductDetails() {
                 <div className={classes.info}>
                     <h1 className={classes.title}>{product.title}</h1>
                     <div className={classes.evaluation}>
-                        <GrStar className={classes.star_icon} />
-                        <GrStar className={classes.star_icon} />
-                        <GrStar className={classes.star_icon} />
-                        <GrStar className={classes.star_icon} />
-                        <GrStar className={classes.star_icon} />
-                        <span className={classes.number_star}>(5)</span>
+
+                        {first_star}
+                        {second_star}
+                        {third_star}
+                        {fourth_star}
+                        {fifth_star}
+
+                        <span className={classes.number_star}>({total})</span>
                         <span className={classes.product_sold}>Đã bán: {product.totalSoldProducts}</span>
                     </div>
-                    {product.price &&
-
-                        <span className={classes.price}>{product.price.toLocaleString()}đ</span>
-                    }
-                    {product.size &&
-                        <>
-                            <label className={classes.size_label}>Chọn Kích thước: </label>
-                            <div className={classes.size}>
-                                <SizeList sizes={product.size} receiveCurrentSize={receiveCurrentSize} />
-
-                            </div>
+                    <div className={classes.price_box}>
+                        {product.sale === 0 &&
+                            <ins className={classes.normalPrice}>{product.price.toLocaleString()}đ</ins>
+                        }
+                        {product.sale !== 0 && <>
+                            <ins className={classes.salePrice}>{salePrice.toLocaleString()}đ</ins>
+                            <del className={classes.price}>{product.price.toLocaleString()}đ</del>
+                            <span className={classes.percent}>-{product.sale}%</span>
                         </>
-                    }
+                        }
+                    </div>
+                    <>
+                        <label className={classes.size_label}>Chọn Kích thước: </label>
+                        <div className={classes.size}>
+                            <SizeList sizes={product.size} receiveCurrentSize={receiveCurrentSize} />
+                        </div>
+                    </>
                     <div className={`grid grid--3-cols ${classes.actions}`}>
                         <div className={classes.amount_action}>
                             <span className={classes.minus} onClick={onMinus}>-</span>
@@ -135,12 +184,12 @@ function ProductDetails() {
                             })}
                         </ul>
                     </div>
-                    {/* <p className={classes.material}>{product.material}</p>
-                <p className={classes.description}>{product.description}</p> */}
+
                 </div>
             </div>
-            {/* <hr />
-            <h1 className={classes.title_detail}>Chi tiết Sản Phẩm</h1> */}
+            <hr />
+            <RateDetails rateData={rateData.rate} />
+
         </>
     )
 }

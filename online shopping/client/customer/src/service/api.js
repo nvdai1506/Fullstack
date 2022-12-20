@@ -145,6 +145,10 @@ Api.shop = {
         }
         return request(requestParams);
     },
+    getRate: function (id) {
+        const requestParams = requestParamsFunc(`/shop/rate/${id}`, 'GET');
+        return request(requestParams);
+    },
 }
 Api.user = {
     login: function (params) {
@@ -237,7 +241,20 @@ Api.user = {
         }
         return request(requestParams);
     },
-
+    // rate
+    getRate: function (rateId, orderId) {
+        const requestParams = requestParamsFunc(`/user/evaluate-product/${rateId}?orderId=${orderId}`, 'GET');
+        return request(requestParams);
+    },
+    updateRate: function (rateId, params) {
+        const requestParams = requestParamsFunc(`/user/evaluate-product/${rateId}`, 'PATCH', params);
+        return request(requestParams);
+    },
+    rate: function (params) {
+        // star, productId, comment
+        const requestParams = requestParamsFunc(`/user/evaluate-product`, 'POST', params);
+        return request(requestParams);
+    }
 }
 
 export default Api;

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import User from '../models/user.model.js';
 import Product from '../models/product.model.js';
 import Order from '../models/order.model.js';
+import Rate from '../models/rate.model.js';
 
 import errorHandler from '../utils/errorHandler.js';
 
@@ -77,6 +78,127 @@ user.editUser = async (req, res, next) => {
 
         res.json({ user: result });
 
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+};
+// evaluate product
+user.rating = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    const userId = req.accessTokenPayload.userId;
+
+    const { star, productId, comment, orderId } = req.body;
+
+    try {
+        if (Number(star) === 0) {
+            throw errorHandler.throwErr('Star min is 1!', 403);
+        }
+        const user = await User.findById(userId);
+        if (!user) {
+            throw errorHandler.throwErr('Could not find user!', 401);
+        }
+        const product = await Product.findById(productId);
+        if (!product) {
+            throw errorHandler.throwErr('Could not find Product!', 401);
+        }
+        const rateId = product.rate;
+        console.log('rateId: ', rateId);
+        const rate = await Rate.findById(rateId);
+        if (!rate) {
+            throw errorHandler.throwErr('Could not find Rate!', 401);
+        }
+
+
+        const rates = rate.rate;
+        const userIndex = rates.findIndex(r => {
+            // console.log('r:', r.user.toString());
+            // console.log('u:', userId.toString());
+            return r.user.toString() === userId.toString()
+        });
+        // console.log(userIndex);
+        if (userIndex >= 0 && orderId.toString() === rates[userIndex].order.toString()) {
+            throw errorHandler.throwErr('You already have evaluated this product!', 403);
+        } else {
+            rate.rate.push({
+                user: userId,
+                star: star,
+                comment: comment,
+                order: orderId
+            });
+            rate.total += 1;
+            // console.log('rate.total: ', rate.total);
+            // console.log('rate.average: ', rate.average);
+            // console.log('star: ', star);
+            rate.average = (rate.average * (rate.total - 1) + Number(star)) / (rate.total);
+            // console.log('after-rate.average: ', rate.average);
+
+            // console.log(rate.average);
+            const result = await rate.save();
+            const order = await Order.findById(orderId);
+            if (order.status === 1) {
+                const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString());
+                // console.log(order.cart.items[indexOfProduct]);
+                order.cart.items[indexOfProduct] = { ...order.cart.items[indexOfProduct], rate: rateId };
+                const order_result = await order.save();
+                console.log(order_result._id);
+                // console.log(order_result.cart.items[indexOfProduct]);
+                res.status(200).json({ rateId: result._id });
+            } else {
+                throw errorHandler.throwErr('This order is not completed!', 403);
+            }
+        }
+
+
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+};
+user.getRateByUser = async (req, res, next) => {
+    const userId = req.accessTokenPayload.userId;
+    const rateId = req.params.rateId;
+    const orderId = req.query.orderId;
+    try {
+        const rate = await Rate.findById(rateId);
+        if (!rate) {
+            throw errorHandler.throwErr('Could not find rate!', 204);
+        }
+
+        const rateByUser = rate.rate.filter(r => { return (r.user.toString() === userId.toString() && r.order.toString() === orderId.toString()) });
+        res.status(200).json({ rate: rateByUser[0] });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+};
+user.updateRate = async (req, res, next) => {
+    const userId = req.accessTokenPayload.userId;
+    const rateId = req.params.rateId;
+    const { star, comment, orderId } = req.body;
+    try {
+        const rate = await Rate.findById(rateId);
+        if (!rate) {
+            throw errorHandler.throwErr('Could not find rate!', 204);
+        }
+        const userIndex = rate.rate.findIndex(r => { return (r.user.toString() === userId.toString() && r.order.toString() === orderId.toString()) });
+        if (rate.total === 1) {
+            rate.average = Number(star);
+        } else {
+            const preAvg = (rate.average * rate.total - rate.rate[userIndex].star) / (rate.total - 1);
+            rate.average = (preAvg * (rate.total - 1) + Number(star)) / (rate.total);
+        }
+
+        const newRate = {
+            user: rate.rate[userIndex].user,
+            order: rate.rate[userIndex].order,
+            star,
+            comment
+        }
+
+        rate.rate[userIndex] = newRate;
+        const result = await rate.save();
+        res.status(200).json({ newRate: result.rate[userIndex] });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }

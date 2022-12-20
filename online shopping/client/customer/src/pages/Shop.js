@@ -28,9 +28,12 @@ function Shop({ endpoint, title }) {
       .catch(err => {
         navigate('/error');
       })
+
+    window.scrollTo(0, 0);
   }, [endpoint]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     switch (filterValue) {
       case '1':
         setFilteredProducts(products);
@@ -52,6 +55,7 @@ function Shop({ endpoint, title }) {
   }, [products, filterValue]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const firstPageIndex = (pageValue - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     setCurrentPageData(filteredProducts.slice(firstPageIndex, lastPageIndex));

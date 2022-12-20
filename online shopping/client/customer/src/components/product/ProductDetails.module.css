@@ -32,8 +32,16 @@
   margin-bottom: 2rem;
 }
 .star_icon {
-  font-size: 1.5rem;
-  color: #ff8d00;
+  font-size: 2rem;
+  stroke: #e67f00;
+  stroke-width: 2px;
+  /* fill: #fff; */
+  color: #e67f00;
+  cursor: pointer;
+  pointer-events: none;
+}
+.star_icon_fill {
+  fill: #e67f00;
 }
 .number_star,
 .product_sold {
@@ -46,6 +54,25 @@
 .price {
   font-size: 1.8rem;
   display: block;
+}
+
+.price_box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+.percent,
+.salePrice {
+  color: red;
+  font-size: 1.6rem;
+}
+.salePrice,
+.normalPrice {
+  text-decoration: none;
+}
+.normalPrice {
+  font-size: 1.6rem;
 }
 .size_label {
   display: block;
