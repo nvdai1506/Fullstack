@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { IoStar } from 'react-icons/io5';
 import classes from './RateDetails.module.css';
 import RateItem from './RateItem';
+const defaultNumberOfItemToLoad = 2;
 function RateDetails({ rateData }) {
   // console.log(rateData);
   const [data, setData] = useState(rateData.rate);
   const [filteredRates, setFilteredRates] = useState(rateData.rate);
   const [starValue, setStarValue] = useState(0);
+  const [currentItems, setCurrentItems] = useState(defaultNumberOfItemToLoad);
 
   const onClickStarHandler = event => {
     const star = event.target.value;
@@ -18,6 +20,14 @@ function RateDetails({ rateData }) {
         return r.star.toString() === star.toString();
       });
       setFilteredRates(tmpArr);
+    }
+  }
+  const onClickMoreHandler = () => {
+    if (currentItems >= filteredRates.length) {
+      setCurrentItems(defaultNumberOfItemToLoad);
+    } else {
+
+      setCurrentItems(currentItems + defaultNumberOfItemToLoad);
     }
   }
   return (
@@ -43,7 +53,10 @@ function RateDetails({ rateData }) {
       <hr />
       <div className={classes.rate_details_comments}>
         {filteredRates.length === 0 && <p className={classes.no_rate}>Không có đánh giá nào {starValue} sao...</p>}
-        {filteredRates.length !== 0 && filteredRates.map(r => { return <RateItem key={r._id} rate={r} /> })}
+        {filteredRates.length !== 0 && filteredRates.slice(0, currentItems).map(r => { return <RateItem key={r._id} rate={r} /> })}
+      </div>
+      <div className={classes.btn_container}>
+        <button className={classes.btn + ' ' + classes.more_btn} onClick={onClickMoreHandler}>{currentItems < filteredRates.length ? 'Xem thêm' : 'Thu gọn'}</button>
       </div>
     </div>
   )

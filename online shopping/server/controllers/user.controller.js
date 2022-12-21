@@ -113,14 +113,21 @@ user.rating = async (req, res, next) => {
 
 
         const rates = rate.rate;
-        const userIndex = rates.findIndex(r => {
-            // console.log('r:', r.user.toString());
-            // console.log('u:', userId.toString());
-            return r.user.toString() === userId.toString()
-        });
-        // console.log(userIndex);
-        if (userIndex >= 0 && orderId.toString() === rates[userIndex].order.toString()) {
-            throw errorHandler.throwErr('You already have evaluated this product!', 403);
+        const existedUser = rates.filter(r => { return r.user.toString() === userId.toString() && r.order.toString() === orderId.toString() })
+        console.log('existedUser: ', existedUser);
+
+        if (existedUser.length > 0) {
+            console.log('existedUser');
+            const order = await Order.findById(orderId);
+            if (order.status === 1) {
+                const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString() && item.rate === undefined);
+
+                order.cart.items[indexOfProduct] = { ...order.cart.items[indexOfProduct], rate: rateId };
+                await order.save();
+                res.status(208).json({ mess: 'You already have rated this product.' });
+            } else {
+                throw errorHandler.throwErr('This order is not completed!', 403);
+            }
         } else {
             rate.rate.push({
                 user: userId,
@@ -129,14 +136,9 @@ user.rating = async (req, res, next) => {
                 order: orderId
             });
             rate.total += 1;
-            // console.log('rate.total: ', rate.total);
-            // console.log('rate.average: ', rate.average);
-            // console.log('star: ', star);
             rate.average = (rate.average * (rate.total - 1) + Number(star)) / (rate.total);
-            // console.log('after-rate.average: ', rate.average);
-
-            // console.log(rate.average);
             const result = await rate.save();
+
             const order = await Order.findById(orderId);
             if (order.status === 1) {
                 const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString());

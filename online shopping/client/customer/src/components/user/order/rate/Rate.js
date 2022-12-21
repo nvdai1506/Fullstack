@@ -58,9 +58,19 @@ function Rate(props) {
         comment: comment,
         orderId: orderId
       })
-        .then(result => { return result.json() })
+        .then(result => {
+          if (result.status === 208) {
+            return result.status;
+          } else {
+            return result.json()
+          }
+        })
         .then(data => {
-          statusCtx.setValue('success', 'Đánh giá thành công.');
+          if (data === 208) {
+            statusCtx.setValue('success', 'Sản phẩm này đã được đánh giá.');
+          } else {
+            statusCtx.setValue('success', 'Đánh giá thành công.');
+          }
           orderCtx.toggle();
         })
         .catch(err => {

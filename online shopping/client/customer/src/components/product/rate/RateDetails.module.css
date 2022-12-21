@@ -68,6 +68,16 @@
   justify-self: center;
   padding: 4rem;
 }
+.btn_container {
+  padding: 0 5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
+}
+.more_btn {
+  padding: 1rem 2rem;
+}
 /* 900 */
 @media (max-width: 56.25em) {
   .rate_details_comments {
