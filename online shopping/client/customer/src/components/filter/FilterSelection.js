@@ -1,14 +1,23 @@
-import React from 'react'
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import classes from './FilterSelection.module.css';
 
 function FilterSelection() {
   const navigate = useNavigate();
   const location = useLocation();
   let searchParams = new URLSearchParams(location.search);
+  const [search] = useSearchParams();
+  const filterValueFromUrl = search.get('filter') ? search.get('filter') : '1';
+  const [listClass, setListClass] = useState(classes.list);
+  const [filterValue, setFilterValue] = useState(filterValueFromUrl);
+
   const onClickItemHandler = event => {
+    setListClass(classes.list + ' ' + classes.list_disable);
+    const details = document.getElementById('filter-selection-nvd');
+    details.removeAttribute('open');
     const label = event.target;
     const value = label.getAttribute('for');
+    setFilterValue(value);
     searchParams.set('filter', value);
     searchParams.set('page', 1);
     navigate({
@@ -16,18 +25,20 @@ function FilterSelection() {
       search: searchParams.toString()
     })
   }
+  const enableClass = (event) => {
+    setListClass(classes.list + ' ' + classes.list_enable);
+  }
   return (
     <div className={classes.filter_select_container}>
       <h1>Sản Phẩm</h1>
-      <details className={classes["custom-select"]}>
-        <summary className={classes.radios}>
-          <input className={classes.radios_input} type="radio" name="item" id="1" title="Mới nhất" defaultChecked />
-          <input className={classes.radios_input} type="radio" name="item" id="2" title="Bán chạy" />
-          <input className={classes.radios_input} type="radio" name="item" id="3" title={`Cao đến thấp`} />
-          <input className={classes.radios_input} type="radio" name="item" id="4" title="Thấp đến cao" />
-
+      <details className={classes["custom-select"]} id='filter-selection-nvd'>
+        <summary className={classes.summary} onClick={enableClass}>
+          {filterValue === '1' ? 'Mới nhất' :
+            filterValue === '2' ? 'Bán chạy' :
+              filterValue === '3' ? 'Cao tới thấp' :
+                filterValue === '4' ? 'Thấp đến cao' : 'Mới nhất'}
         </summary>
-        <ul className={classes.list}>
+        <ul className={listClass}>
           <li className={classes.list_item} onClick={onClickItemHandler}>
             <label htmlFor="1">
               Mới nhất

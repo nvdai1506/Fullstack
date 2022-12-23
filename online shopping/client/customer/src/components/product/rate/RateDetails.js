@@ -56,7 +56,12 @@ function RateDetails({ rateData }) {
         {filteredRates.length !== 0 && filteredRates.slice(0, currentItems).map(r => { return <RateItem key={r._id} rate={r} /> })}
       </div>
       <div className={classes.btn_container}>
-        <button className={classes.btn + ' ' + classes.more_btn} onClick={onClickMoreHandler}>{currentItems < filteredRates.length ? 'Xem thêm' : 'Thu gọn'}</button>
+        {filteredRates.length > defaultNumberOfItemToLoad &&
+          <button className={classes.btn + ' ' + classes.more_btn} onClick={onClickMoreHandler}>
+            {currentItems < filteredRates.length ? 'Xem thêm' : 'Thu gọn'}
+          </button>
+        }
+
       </div>
     </div>
   )
