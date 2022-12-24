@@ -249,12 +249,18 @@ hr {
   .image {
     justify-content: center;
   }
-}
-/* 400 */
-@media (max-width: 56.25em) {
   .image img {
-    height: 50rem;
+    height: 100%;
   }
+}
+/* 800 */
+/* @media (max-width: 50em) {
+  .image img {
+    height: 100%;
+  }
+} */
+/* 400 */
+@media (max-width: 25em) {
   .title {
     font-size: 1.8rem;
   }
