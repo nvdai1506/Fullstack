@@ -105,7 +105,7 @@ function OrderForm() {
           const order_id = data.order._id;
           Api.shop.postPayment({
             amount: cartCtx.totalPrice,
-            bankCode: 'NCB',
+            bankCode: '',
             orderDescription: `Thanh toan don hang _${order_id}`,
             orderType: 'billpayment',
             language: 'vn',
