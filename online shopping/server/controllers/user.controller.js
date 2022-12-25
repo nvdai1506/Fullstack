@@ -119,7 +119,7 @@ user.rating = async (req, res, next) => {
         if (existedUser.length > 0) {
             console.log('existedUser');
             const order = await Order.findById(orderId);
-            if (order.status === 1) {
+            if (order.status === 1 && order.shippingStatus === 1) {
                 const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString() && item.rate === undefined);
 
                 order.cart.items[indexOfProduct] = { ...order.cart.items[indexOfProduct], rate: rateId };
@@ -140,7 +140,7 @@ user.rating = async (req, res, next) => {
             const result = await rate.save();
 
             const order = await Order.findById(orderId);
-            if (order.status === 1) {
+            if (order.status === 1 && order.shippingStatus === 1) {
                 const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString());
                 // console.log(order.cart.items[indexOfProduct]);
                 order.cart.items[indexOfProduct] = { ...order.cart.items[indexOfProduct], rate: rateId };

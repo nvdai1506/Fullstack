@@ -15,6 +15,7 @@ import AdminRouter from './routes/admin.route.js';
 import AuthRouter from './routes/auth.route.js';
 import UserRouter from './routes/user.route.js';
 import ShopRouter from './routes/shop.route.js';
+import PaymentRouter from './routes/payment.route.js';
 
 
 import Auth from './middlewares/auth.mdw.js';
@@ -84,6 +85,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/', AuthRouter);
 app.use('/shop', ShopRouter);
+app.use('/payment', PaymentRouter);
 app.use('/admin', Auth, AdminRouter);
 app.use('/user', Auth, UserRouter);
 
@@ -102,6 +104,7 @@ const PORT = process.env.PORT || 8080;
 
 mongoose.connect(process.env.MONGODB_URI).then(result => {
   // helper.resetRate();
+  // helper.addPaymentMethodToShippingInfo();
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);
   });

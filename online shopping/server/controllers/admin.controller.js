@@ -476,7 +476,7 @@ admin.getOrderByStatus = async (req, res, next) => {
     const status = req.params.status; // 0 1 
 
     try {
-        const orders = await Order.find({ status: status }).populate({ path: 'cart.items.product', select: ['title', 'price'] });
+        const orders = await Order.find({ shippingStatus: status, }).populate({ path: 'cart.items.product', select: ['title', 'price'] });
 
         res.status(200).json({ orders: orders });
     } catch (error) {
@@ -523,6 +523,7 @@ admin.updateOrderStatus = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find this order!', 422);
         }
         order.status = status;
+        order.shippingStatus = status;
         if (status === 1) {
             for (const item of order.cart.items) {
                 const productId = item.id;
@@ -606,7 +607,7 @@ admin.getOverview = async (req, res, next) => {
             }
         }
 
-        const orders = await Order.find({ status: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+        const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
 
         for (const order of orders) {
             const items = order.cart.items;
@@ -665,7 +666,7 @@ admin.getHistory = async (req, res, next) => {
         }
         // console.log(startDate, '-', endDate);
         try {
-            const orders = await Order.find({ status: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
+            const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
             for (const order of orders) {
                 history[i - 1].turnovers += order.cart.totalPrice;
             }

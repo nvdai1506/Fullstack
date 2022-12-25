@@ -21,6 +21,11 @@ const orderSchema = new Schema(
                 type: String,
                 required: true
             },
+            paymentMethod: {
+                // 1: cod  2:momo  3:vnpay
+                type: Number,
+                required: true
+            },
             note: {
                 type: String
             },
@@ -40,8 +45,12 @@ const orderSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
-        status: {
-            type: Number, //0: ordering  1:ordered
+        status: {//payment status
+            type: Number, //0: ordering  1:ordered 2:cancel
+            default: 0
+        },
+        shippingStatus: {
+            type: Number, //0: shipping  1:delivered 2:cancel
             default: 0
         }
     },

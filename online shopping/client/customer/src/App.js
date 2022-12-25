@@ -18,6 +18,8 @@ import { useIndexedDB } from 'react-indexed-db';
 import Error from "./pages/Error";
 
 import LoadingBackdrop from "./components/loading/LoadingBackdrop";
+import PaymentSucces from "./components/order/PaymentSucces";
+
 const Auth = React.lazy(() => import('./pages/Auth'));
 const User = React.lazy(() => import('./pages/user/User'));
 const Home = React.lazy(() => import('./pages/Home'));
@@ -69,6 +71,7 @@ function App() {
           <Route path='/login' element={<Auth loginMode={true} />} />
           <Route path='/create-password' element={<CreatePassword />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/order' element={<PaymentSucces />} />
           <Route element={<ProtectedRoute />} >
             <Route path='/user'>
               <Route index element={<User />} />

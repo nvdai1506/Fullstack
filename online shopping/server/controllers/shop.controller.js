@@ -149,5 +149,28 @@ shop.postOrder = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+shop.updateOrder = async (req, res, next) => {
+    const orderId = req.params.orderId;
+    const status = req.body.status;
+    const shippingStatus = req.body.shippingStatus;
+    const secretKey = req.body.secretKey;
+
+    try {
+        const order = await Order.findById(orderId);
+        if (!order) {
+            throw errorHandler.throwErr('Could not find this order!', 422);
+        }
+        order.status = status;
+        order.shippingStatus = shippingStatus;
+        if (secretKey.toString() !== process.env.ACCESSTOKEN_SECRET_KEY) {
+            await order.save();
+            return next(errorHandler.throwErr('Invalid secret key', 203));
+        }
+        const updatedOrder = await order.save();
+        res.status(200).json({ mess: 'Order is updated.', updatedOrder: updatedOrder });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 
 export default shop;

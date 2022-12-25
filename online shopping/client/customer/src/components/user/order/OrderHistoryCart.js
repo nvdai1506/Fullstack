@@ -4,12 +4,12 @@ import classes from './OrderHistoryCart.module.css';
 import OrderHistoryItem from './OrderHistoryItem';
 
 function OrderHistoryCart({ order }) {
-  const { cart, createdAt, updatedAt, status, _id } = order;
+  const { cart, createdAt, updatedAt, status, shippingStatus, _id } = order;
   const { items, totalPrice } = cart;
 
   return (
     <div className={classes.order_history_cart}>
-      {items.map(item => { return <OrderHistoryItem key={order._id + item.id + item.size} item={item} orderId={_id} order_status={status} /> })}
+      {items.map(item => { return <OrderHistoryItem key={order._id + item.id + item.size} item={item} orderId={_id} order_status={status} shippingStatus={shippingStatus} /> })}
       <div className={classes.hr}>
         <hr />
       </div>
@@ -22,8 +22,8 @@ function OrderHistoryCart({ order }) {
 
           <label className={classes.textbox_label}>Ngày Giao hàng: </label>
           <p className={classes.date}>
-            <span className={status === 1 ? classes.status_sucess : (status === 2 ? classes.status_canceled : classes.status_processing)}>
-              {(status === 1 && status !== 2) ? '(Thành Công) ' : (status === 2 ? '(Đã Huỷ) ' : 'Đang xử lý ')}
+            <span className={status === 1 && shippingStatus === 1 ? classes.status_sucess : (status === 2 ? classes.status_canceled : classes.status_processing)}>
+              {(status === 1 && shippingStatus === 1 && status !== 2) ? '(Thành Công) ' : (status === 2 ? '(Đã Huỷ) ' : 'Đang xử lý ')}
             </span>
             {createdAt !== updatedAt ? updatedAt.split('T')[0] : ''}
           </p>

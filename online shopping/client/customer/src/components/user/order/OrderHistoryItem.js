@@ -4,7 +4,7 @@ import classes from '../../cart/CartItem.module.css';
 import order_classes from './OrderHistoryItem.module.css';
 import Rate from './rate/Rate';
 
-function OrderHistoryItem({ item, orderId, order_status }) {
+function OrderHistoryItem({ item, orderId, order_status, shippingStatus }) {
   const navigate = useNavigate();
   const { id, title, imageUrl, size, price, amount, rate } = item;
 
@@ -34,10 +34,10 @@ function OrderHistoryItem({ item, orderId, order_status }) {
         <div className={classes.total_item + ` ${order_classes.total_item}`} >{(price * amount).toLocaleString()} đ</div>
       </div>
       <div className={order_classes.actions}>
-        {order_status === 1 &&
+        {order_status === 1 && shippingStatus === 1 &&
           <button className={order_classes.btn} onClick={onClickRateHandler}>{rate !== undefined ? 'Xem đánh giá' : 'Đánh Giá'}</button>
         }
-        {order_status !== 0 &&
+        {order_status !== 0 && shippingStatus !== 0 &&
           <button className={order_classes.btn} onClick={onClickTitleHandler}>Mua lại</button>
         }
 

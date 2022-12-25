@@ -14,8 +14,9 @@ function OrderForm() {
   const { isLoggedIn } = authCtx;
   const cartCtx = useContext(CartContext);
   const statusCtx = useContext(StatusContext);
+
   const [clickForm, setClickForm] = useState(false);
-  // const [enteredEmail, setEnteredEmail] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('1');
 
   const {
     value: enteredName,
@@ -64,6 +65,9 @@ function OrderForm() {
         })
     }
   }, []);
+  const onReceiveCheckValue = value => {
+    setPaymentMethod(value);
+  }
   const onSubmitOrderHandler = event => {
     event.preventDefault();
     if (nameInputHasError || phoneInputHasError || addressInputHasError) {
@@ -77,21 +81,65 @@ function OrderForm() {
       email: enteredEmail,
       address: enteredAddress,
       note: enteredNote,
+      paymentMethod: Number(paymentMethod)
     };
     const cart = {
       items: cartCtx.items,
       totalPrice: cartCtx.totalPrice,
       totalAmount: cartCtx.totalAmount
     }
-    Api.shop.postOrder({ shippingInfo: shippingInfo, cart: cart })
-      .then(result => { return result.json() })
-      .then(data => {
-        statusCtx.setValue('success', 'Bạn đã đặt hàng thành công.');
-        cartCtx.clearCart();
-      })
-      .catch(err => {
-        navigate('/error');
-      })
+    if (paymentMethod === '1') {
+      Api.shop.postOrder({ shippingInfo: shippingInfo, cart: cart })
+        .then(result => { return result.json() })
+        .then(data => {
+          statusCtx.setValue('success', 'Bạn đã đặt hàng thành công.');
+          cartCtx.clearCart();
+        })
+        .catch(err => {
+          navigate('/error');
+        })
+    } else if (paymentMethod === '3') {
+      Api.shop.postOrder({ shippingInfo: shippingInfo, cart: cart })
+        .then(result => { return result.json() })
+        .then(data => {
+          const order_id = data.order._id;
+          Api.shop.postPayment({
+            amount: cartCtx.totalPrice,
+            bankCode: 'NCB',
+            orderDescription: `Thanh toan don hang _${order_id}`,
+            orderType: 'billpayment',
+            language: 'vn',
+          })
+            .then(result => { return result.json() })
+            .then(data => {
+              // console.log(data.vnpUrl);
+              window.location.href = data.vnpUrl;
+            })
+            .catch(error => {
+              console.log(error);
+            })
+        })
+        .catch(err => {
+          navigate('/error');
+        })
+
+
+      // Api.shop.postPayment({
+      //   amount: cartCtx.totalPrice,
+      //   bankCode: 'NCB',
+      //   orderDescription: `Thanh toan don hang _sasas`,
+      //   orderType: 'billpayment',
+      //   language: 'vn',
+      // })
+      //   .then(result => { return result.json() })
+      //   .then(data => {
+      //     console.log(data.vnpUrl);
+      //     // window.location.href = data.vnpUrl;
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //   })
+    }
   }
 
   return (
@@ -125,7 +173,7 @@ function OrderForm() {
           <input className={`${classes.form_input} ${classes.note}`} placeholder='Ghi chú thêm' required value={enteredNote} onChange={noteInputChangeHandler} />
         </form>
       </div>
-      <Payments onSubmitOrderHandler={onSubmitOrderHandler} />
+      <Payments onSubmitOrderHandler={onSubmitOrderHandler} onReceiveCheckValue={onReceiveCheckValue} />
     </div>
   )
 }

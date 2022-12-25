@@ -129,8 +129,8 @@ Api.shop = {
     //     const requestParams = requestParamsFunc(`/shop/Order`, 'POST', params);
     //     return request(requestParams);
     // },
+    // order
     postOrder: function (params) {
-        console.log(params);
         const requestParams = {
             url: `${domain}/shop/order`,
             config:
@@ -145,8 +145,19 @@ Api.shop = {
         }
         return request(requestParams);
     },
+    udpateOrder: function (orderId, params) {
+        const requestParams = requestParamsFunc(`/shop/Order/${orderId}`, 'PATCH', params);
+        return request(requestParams);
+    },
+    // rate
     getRate: function (id) {
         const requestParams = requestParamsFunc(`/shop/rate/${id}`, 'GET');
+        return request(requestParams);
+    },
+    // payment
+    // product
+    postPayment: function (params) {
+        const requestParams = requestParamsFunc(`/payment/create_payment_url`, 'POST', params);
         return request(requestParams);
     },
 }

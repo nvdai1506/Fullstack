@@ -24,5 +24,6 @@ router.get('/rate/:rateId', shopController.getRate);
 // order
 
 router.post('/order', shopController.postOrder);
+router.patch('/order/:orderId', shopController.updateOrder);
 
 export default router;

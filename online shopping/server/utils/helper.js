@@ -1,8 +1,24 @@
 import Catalog from '../models/catalog.model.js';
 import Product from '../models/product.model.js';
 import Rate from '../models/rate.model.js';
+import Order from '../models/order.model.js';
 
 const helper = () => { };
+
+helper.addPaymentMethodToShippingInfo = async () => {
+  try {
+    const arrays = await Order.find();
+    for (const element of arrays) {
+      element.shippingInfo['paymentMethod'] = 1;
+      element.save();
+      // console.log(typeof (element));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 helper.resetRate = async () => {
   try {
     const rates = await Rate.find();
@@ -36,13 +52,7 @@ helper.addRateToProduct = async () => {
   }
 }
 
-helper.addPropertyToModel = async (key, value, modelName) => {
-  let Model;
-  if (modelName === 'Catalog') {
-    Model = Catalog;
-  } else if (modelName === 'Product') {
-    Model = Product;
-  }
+helper.addPropertyToModel = async (key, value, Model) => {
   try {
     const arrays = await Model.find();
     for (const element of arrays) {

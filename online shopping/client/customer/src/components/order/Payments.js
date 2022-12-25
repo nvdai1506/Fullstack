@@ -5,11 +5,13 @@ import classes from './Payments.module.css';
 import logomomo from '../../images/logo-momo.jpg';
 import vnpay from '../../images/vnpay.png';
 
-function Payments({ onSubmitOrderHandler }) {
+function Payments({ onSubmitOrderHandler, onReceiveCheckValue }) {
   const [check, setCheck] = useState('1');
 
   const onClickRadioHandler = event => {
-    setCheck(event.target.getAttribute('value'));
+    const value = event.target.getAttribute('value');
+    setCheck(value);
+    onReceiveCheckValue(value);
   }
   return (
     <div className={`${classes.payments}`}>
