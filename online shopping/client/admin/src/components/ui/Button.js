@@ -5,13 +5,13 @@ import classes from './Button.module.css';
 function Button(props) {
     const state = props.state;
     let classname;
-    if(state ==='cancle'){
-        classname = classes.cancle;
-    }else if (state ==='delete'){
+    if (state === 'cancel') {
+        classname = classes.cancel;
+    } else if (state === 'delete') {
         classname = classes.delete;
     }
     return (
-        <button 
+        <button
             type={props.type || 'button'}
             className={`${classes.btn} ${classname} ${props.className} `}
             onClick={props.onClick}

@@ -34,7 +34,7 @@ function OrderingList_ag(props) {
             }
             return (
                 <div className={classes.btn}>
-                    <Button state='cancle' onClick={onCancel}>Cancel</Button>
+                    <Button state='cancel' onClick={onCancel}>Cancel</Button>
                     <Button onClick={onMarkDone}>Done</Button>
                 </div>
             );
@@ -55,7 +55,7 @@ function OrderingList_ag(props) {
             .then(result => { return result.json() })
             .then(data => {
                 const orders = data.orders;
-                console.log(orders);
+                // console.log(orders);
                 const newOrders = [];
                 for (const o of orders) {
                     const splitDate = o.createdAt.split('T');

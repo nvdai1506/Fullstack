@@ -12,6 +12,7 @@ import { StatusContextProvider } from './context/status-context';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <StatusContextProvider>

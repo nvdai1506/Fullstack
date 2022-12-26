@@ -361,6 +361,19 @@ Api.admin = {
         }
         return request(requestParams);
     },
+    // voucher
+    addVoucher: function (params) {
+        const requestParams = requestParamsFunc('/admin/voucher', 'POST', params);
+        return request(requestParams);
+    },
+    getVouchers: function () {
+        const requestParams = requestParamsFunc('/admin/voucher', 'GET');
+        return request(requestParams);
+    },
+    deleteVoucher: function (voucherId) {
+        const requestParams = requestParamsFunc(`/admin/voucher/${voucherId}`, 'DELETE');
+        return request(requestParams);
+    },
 }
 
 Api.shop = {

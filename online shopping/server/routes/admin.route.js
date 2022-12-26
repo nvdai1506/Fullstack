@@ -92,4 +92,15 @@ router.patch('/order/:orderId', adminController.updateOrderStatus);
 // overview
 router.post('/overview', adminController.getOverview);
 router.get('/history', adminController.getHistory);
+
+// voucher
+router.post('/voucher', [
+    body('captcha').trim().not().isEmpty().withMessage('Captch must be not empty!'),
+    body('fromDate').trim().not().isEmpty().withMessage('From Date must be not empty!'),
+    body('toDate').trim().not().isEmpty().withMessage('To Date must be not empty!'),
+], adminController.postVoucher);
+router.get('/voucher', adminController.getVouchers);
+router.delete('/voucher/:voucherId', adminController.deleteVoucher);
+
+
 export default router;

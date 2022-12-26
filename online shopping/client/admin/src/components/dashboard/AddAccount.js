@@ -48,7 +48,7 @@ function AddAccount(props) {
                 setStatus({ error: 'Can not create user!' });
             });
     }
-    const onCloseHandler = ()=>{
+    const onCloseHandler = () => {
         navigate(-1);
     }
 
@@ -142,7 +142,7 @@ function AddAccount(props) {
                     </AgGridReact>
                 </div>
             </div>
-            <Button className={classes.closebtn} state='cancle' onClick={onCloseHandler}>Close</Button>
+            <Button className={classes.closebtn} state='cancel' onClick={onCloseHandler}>Close</Button>
         </Modal>
     )
 }

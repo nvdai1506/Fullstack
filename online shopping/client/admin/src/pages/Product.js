@@ -10,14 +10,18 @@ import ProductForm from '../components/product/ProductForm';
 import Search from '../components/ui/Search';
 
 import ProductList_Aggrid from '../components/product/ProductList_Aggrid';
+import Voucher from '../components/voucher/Voucher';
+import { useNavigate } from 'react-router-dom';
 
 
 function Product() {
+  const navigate = useNavigate();
   const productCtx = useContext(ProductContext);
   const { productStatus, productStatusHandler, } = productCtx;
   const [listProducts, setListProducts] = useState([]);
   const [selectValues, setSelectValues] = useState();
   const [enteredSearch, setentEredSearch] = useState('');
+  const [voucherIsOpen, setVoucherIsOpen] = useState(true);
   const searchHandler = event => {
     setentEredSearch(event.target.value);
   };
@@ -59,6 +63,14 @@ function Product() {
     listProductsFiltered = listProducts.filter(product => product.title.toLowerCase().includes(enteredSearch.toLowerCase()));
   }
 
+  const onClickVoucherHandler = () => {
+    setVoucherIsOpen(true);
+    // navigate('/voucher');
+
+  }
+  const onCloseVoucherHandler = () => {
+    setVoucherIsOpen(false);
+  }
   return (
     <div className={classes.main}>
       <div className={classes.status}>
@@ -73,6 +85,12 @@ function Product() {
       <div className={classes.search}>
         <Search onChange={searchHandler} />
       </div>
+      <hr />
+      <div className={classes.btns}>
+        <button className={classes.voucher_btn} onClick={onClickVoucherHandler}>Voucher</button>
+      </div>
+      {voucherIsOpen && <Voucher onCloseVoucherHandler={onCloseVoucherHandler} />}
+      <hr />
       <div className={classes.list}>
         {/* <ProductList products={listProductsFiltered} /> */}
         {/* {(listProductsFiltered.length!==0) && <ProductList_Aggrid products={listProductsFiltered} />} */}

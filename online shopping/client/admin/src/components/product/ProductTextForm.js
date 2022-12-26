@@ -219,7 +219,7 @@ const ProductTextForm = (props) => {
                 </div>
             }
             {updateMode &&
-                <Button className={classes.btn} state='cancle' onClick={onClickCancleHandler}>Cancle</Button>
+                <Button className={classes.btn} state='cancel' onClick={onClickCancleHandler}>Cancle</Button>
             }
             {updateMode &&
                 <Button className={classes.btn} type='submit'>Update</Button>

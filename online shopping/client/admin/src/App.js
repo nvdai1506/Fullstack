@@ -11,7 +11,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { CatalogContextLayout } from './context/catalog-context';
 import { ProductContextLayout } from './context/product-context';
-import Test from "./pages/Test";
+// import Test from "./pages/Test";
 
 // import Login from './pages/Login';
 // import Catalog from './pages/Catalog';
@@ -24,6 +24,7 @@ const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Catalog = React.lazy(() => import('./pages/Catalog'));
 const Product = React.lazy(() => import('./pages/Product'));
 const Order = React.lazy(() => import('./pages/Order'));
+// const Voucher = React.lazy(() => import('./components/voucher/Voucher'));
 
 
 function App() {
@@ -32,14 +33,14 @@ function App() {
   return (
     <Layout>
       <Suspense fallback={
-          <div className='centered'>
-            <Loading />
-          </div>
-        }>
+        <div className='centered'>
+          <Loading />
+        </div>
+      }>
         <Routes>
           <Route path='/login' element={<Login />} />
+          {/* <Route path='/voucher' element={<Voucher />} /> */}
           <Route element={<ProtectedRoute isAuthentication={isLoggedIn} redirect='/login' />}>
-            <Route path="/test" element={<Test />} />
             <Route path="/">
               <Route index element={<Dashboard />}></Route>
               <Route path="dashboard" element={<Dashboard />} />
@@ -56,6 +57,8 @@ function App() {
             <Route path='/order'>
               <Route index element={<Order />} />
             </Route>
+            {/* <Route path="/voucher" element={<Voucher />} /> */}
+
           </Route>
         </Routes>
       </Suspense>

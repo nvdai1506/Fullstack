@@ -96,7 +96,7 @@ function CatalogForm(props) {
                     }
 
                     {updateMode &&
-                        <Button className={classes.btn} state='cancle' onClick={onCancelHandler}>Cancel</Button>
+                        <Button className={classes.btn} state='cancel' onClick={onCancelHandler}>Cancel</Button>
 
                     }
                     {updateMode &&

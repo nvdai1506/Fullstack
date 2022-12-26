@@ -10,6 +10,7 @@ import Product from '../models/product.model.js';
 import Order from '../models/order.model.js';
 import User from '../models/user.model.js';
 import Rate from '../models/rate.model.js';
+import Voucher from '../models/voucher.model.js';
 
 
 import errorHandler from '../utils/errorHandler.js';
@@ -677,5 +678,53 @@ admin.getHistory = async (req, res, next) => {
     }
     res.status(200).json({ history: history });
 
+}
+// voucher
+admin.postVoucher = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
+    const { captcha, percent, vnd, fromDate, toDate } = req.body;
+    console.log(fromDate);
+    try {
+        const voucher = new Voucher({
+            captcha,
+            percent,
+            vnd,
+            fromDate,
+            toDate,
+        });
+        const result = await voucher.save();
+        res.status(201).json({ voucher: result });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+admin.getVouchers = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    try {
+        const vouchers = await Voucher.find();
+        res.status(200).json({ vouchers: vouchers });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
+admin.deleteVoucher = async (req, res, next) => {
+    if (req.accessTokenPayload.role === 0) {
+        return next(errorHandler.throwErr('Do not have permission!', 401));
+    }
+    const voucherId = req.params.voucherId;
+    try {
+        await Voucher.findByIdAndDelete(voucherId);
+        res.status(200).json({ mess: 'Voucher is deleted.' });
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
 }
 export default admin;
