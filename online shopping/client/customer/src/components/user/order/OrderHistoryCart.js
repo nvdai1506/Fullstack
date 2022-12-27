@@ -15,24 +15,24 @@ function OrderHistoryCart({ order }) {
       </div>
       <div className={classes.textbox}>
         <div className={classes.textbox_item}>
-          <label>Tạm tính</label>
-          <span>{totalPrice.toLocaleString()} đ</span>
+          <label className={classes.textbox_label}>Tạm tính</label>
+          <span className={classes.textbox_span}>{totalPrice.toLocaleString()} đ</span>
         </div>
         <div className={classes.textbox_item}>
-          <label>Giảm giá</label>
+          <label className={classes.textbox_label}>Giảm giá</label>
           {percent !== 0 &&
-            <span>- {percent}%</span>
+            <span className={classes.textbox_span}>- {percent}%</span>
           }
           {vnd !== 0 &&
-            <span>- {vnd.toLocaleString()}đ</span>
+            <span className={classes.textbox_span}>- {vnd.toLocaleString()}đ</span>
           }
           {vnd === 0 && percent === 0 &&
-            <span>0</span>
+            <span className={classes.textbox_span}>0</span>
           }
         </div>
         <div className={classes.textbox_item}>
-          <label>Phí vận chuyển</label>
-          <span>Miễn phí</span>
+          <label className={classes.textbox_label}>Phí vận chuyển</label>
+          <span className={classes.textbox_span}>Miễn phí</span>
         </div>
         <hr />
         <div className={classes.textbox_item}>
@@ -46,7 +46,10 @@ function OrderHistoryCart({ order }) {
             <span className={status === 1 && shippingStatus === 1 ? classes.status_sucess : (status === 2 ? classes.status_canceled : classes.status_processing)}>
               {(status === 1 && shippingStatus === 1 && status !== 2) ? '(Thành Công) ' : (status === 2 ? '(Đã Huỷ) ' : 'Đang xử lý ')}
             </span>
-            {createdAt !== updatedAt && shippingStatus !== 0 ? updatedAt.split('T')[0] : ''}
+            <span className={classes.shippingDate}>
+              {createdAt !== updatedAt && shippingStatus !== 0 ? updatedAt.split('T')[0] : ''}
+
+            </span>
           </p>
         </div>
 

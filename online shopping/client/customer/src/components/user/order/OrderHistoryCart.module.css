@@ -28,6 +28,9 @@
 .textbox label {
   font-weight: 700;
 }
+.textbox_span {
+  font-style: italic;
+}
 .hr {
   width: 100%;
   display: flex;
@@ -56,7 +59,8 @@
 /* 900px */
 @media (max-width: 57em) {
   .date,
-  .textbox_label {
+  .textbox_label,
+  .textbox_span {
     font-size: 1.2rem;
   }
   .total {
@@ -68,5 +72,9 @@
   .date span {
     display: block;
     margin-bottom: 0.2rem;
+  }
+  .shippingDate {
+    display: flex !important;
+    justify-content: flex-end;
   }
 }
