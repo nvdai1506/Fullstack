@@ -1,6 +1,3 @@
-render
-railway.app
-cyclic.sh
 
 -server:
 https://nvd-shopping-online.onrender.com
