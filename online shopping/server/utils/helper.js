@@ -5,6 +5,19 @@ import Order from '../models/order.model.js';
 
 const helper = () => { };
 
+helper.updateTotalOrder = async () => {
+  try {
+    const arrays = await Order.find();
+    for (const element of arrays) {
+      element.total = element.cart.totalPrice;
+      element.save();
+      // console.log(typeof (element));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 helper.addPaymentMethodToShippingInfo = async () => {
   try {
     const arrays = await Order.find();

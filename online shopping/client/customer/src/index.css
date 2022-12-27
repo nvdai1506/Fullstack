@@ -172,6 +172,12 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #343a40;
 }
+/* below 1600px */
+@media (max-width: 100em) {
+  .container {
+    padding: 0 0;
+  }
+}
 /* below 1200px */
 @media (max-width: 75em) {
   .grid--big-gap {

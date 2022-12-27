@@ -20,6 +20,7 @@ import PaymentRouter from './routes/payment.route.js';
 
 import Auth from './middlewares/auth.mdw.js';
 import helper from './utils/helper.js';
+import Order from './models/order.model.js';
 
 const app = express();
 
@@ -105,6 +106,8 @@ const PORT = process.env.PORT || 8080;
 mongoose.connect(process.env.MONGODB_URI).then(result => {
   // helper.resetRate();
   // helper.addPaymentMethodToShippingInfo();
+  // helper.addPropertyToModel('percent', 0, Order);
+  // helper.updateTotalOrder();
   app.listen(PORT, function () {
     console.log(`Server is listening at http://localhost:${PORT}`);
   });

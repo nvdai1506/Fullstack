@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import classes from './OrderForm.module.css';
 import AuthConText from '../../context/auth-context';
 import CartContext from '../../context/cart-context';
+import StatusContext from '../../context/status-context';
+import OrderContext from '../../context/order-context';
 import useInput from '../../hooks/use-input';
 import Api from '../../service/api';
-import StatusContext from '../../context/status-context';
 import Payments from './Payments';
 
 function OrderForm() {
@@ -14,6 +15,7 @@ function OrderForm() {
   const { isLoggedIn } = authCtx;
   const cartCtx = useContext(CartContext);
   const statusCtx = useContext(StatusContext);
+  const orderCtx = useContext(OrderContext);
 
   const [clickForm, setClickForm] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('1');
@@ -88,8 +90,17 @@ function OrderForm() {
       totalPrice: cartCtx.totalPrice,
       totalAmount: cartCtx.totalAmount
     }
+    const { percent, vnd, total } = orderCtx.data;
+
+    const dataToPost = {
+      shippingInfo,
+      cart,
+      percent,
+      vnd,
+      total: total
+    }
     if (paymentMethod === '1') {
-      Api.shop.postOrder({ shippingInfo: shippingInfo, cart: cart })
+      Api.shop.postOrder(dataToPost)
         .then(result => { return result.json() })
         .then(data => {
           statusCtx.setValue('success', 'Bạn đã đặt hàng thành công.');
@@ -98,13 +109,15 @@ function OrderForm() {
         .catch(err => {
           navigate('/error');
         })
+    } else if (paymentMethod === '2') {
+      return statusCtx.setValue('error', 'Thanh toán bằng Momo hiện đang bảo trì.');
     } else if (paymentMethod === '3') {
-      Api.shop.postOrder({ shippingInfo: shippingInfo, cart: cart })
+      Api.shop.postOrder(dataToPost)
         .then(result => { return result.json() })
         .then(data => {
           const order_id = data.order._id;
           Api.shop.postPayment({
-            amount: cartCtx.totalPrice,
+            amount: total,
             bankCode: '',
             orderDescription: `Thanh toan don hang _${order_id}`,
             orderType: 'billpayment',

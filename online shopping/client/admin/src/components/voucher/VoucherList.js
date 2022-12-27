@@ -14,7 +14,7 @@ function VoucherList({ listIsChange, toggleHandler }) {
   const [rowData, setRowData] = useState([]);
 
   const [columnDefs] = useState([
-    { field: 'captcha', cellStyle: { 'textTransform': 'uppercase' } },
+    { field: 'captcha', cellStyle: { 'textTransform': 'uppercase' }, editable: true },
     { field: 'percent', headerName: '(%)' },
     { field: 'vnd', headerName: 'VND', minWidth: 100 },
     { field: 'fromDate', headerName: 'From' },

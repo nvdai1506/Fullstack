@@ -54,7 +54,7 @@ function DetailsChart(props) {
             type: 'column',
             xKey: 'parent',
             yKeys: keys,
-            label: {},
+            // label: {},
         }],
         theme: {
             baseTheme: 'ag-default',

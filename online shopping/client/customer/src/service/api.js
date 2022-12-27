@@ -160,6 +160,11 @@ Api.shop = {
         const requestParams = requestParamsFunc(`/payment/create_payment_url`, 'POST', params);
         return request(requestParams);
     },
+    // voucher
+    checkVoucher: function (params) {
+        const requestParams = requestParamsFunc(`/shop/voucher-check`, 'POST', params);
+        return request(requestParams);
+    },
 }
 Api.user = {
     login: function (params) {

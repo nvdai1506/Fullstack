@@ -45,4 +45,5 @@
 .voucher_btn:active {
   background-color: #f76707;
   color: white;
+  transform: scale(1.05) rotate(-1deg);
 }

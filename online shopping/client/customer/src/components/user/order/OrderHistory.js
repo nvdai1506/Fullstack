@@ -11,7 +11,7 @@ function OrderHistory() {
   const { changeState } = orderCtx;
   const [orders, setOrders] = useState([]);
   useEffect(() => {
-    console.log('orderHistory');
+    // console.log('orderHistory');
     Api.user.getOrders()
       .then(result => { return result.json() })
       .then(data => {

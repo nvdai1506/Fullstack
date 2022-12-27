@@ -25,5 +25,10 @@ router.get('/rate/:rateId', shopController.getRate);
 
 router.post('/order', shopController.postOrder);
 router.patch('/order/:orderId', shopController.updateOrder);
+// voucher
+router.post('/voucher-check', [
+  body('captcha').trim().not().isEmpty().withMessage('Captch must be not empty!'),
+], shopController.checkVoucher);
+
 
 export default router;

@@ -147,6 +147,9 @@
   .cart_item {
     padding-left: 0;
   }
+  .close {
+    top: -300%;
+  }
 }
 
 /* 367 */

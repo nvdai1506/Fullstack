@@ -21,7 +21,7 @@ function Product() {
   const [listProducts, setListProducts] = useState([]);
   const [selectValues, setSelectValues] = useState();
   const [enteredSearch, setentEredSearch] = useState('');
-  const [voucherIsOpen, setVoucherIsOpen] = useState(true);
+  const [voucherIsOpen, setVoucherIsOpen] = useState(false);
   const searchHandler = event => {
     setentEredSearch(event.target.value);
   };

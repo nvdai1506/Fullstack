@@ -82,7 +82,12 @@ function Voucher({ onCloseVoucherHandler }) {
         }
       })
       .catch(err => {
-        statusCtx.setValue('error', 'Can not create voucher!');
+        console.log(err);
+        if (err.status === 409) {
+          statusCtx.setValue('error', 'Captcha is existed.');
+        } else {
+          statusCtx.setValue('error', 'Can not create voucher!');
+        }
       });
   }
 

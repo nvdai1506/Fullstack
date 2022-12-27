@@ -1,4 +1,5 @@
 import { validationResult } from 'express-validator';
+import moment from 'moment/moment.js';
 
 import Catalog from '../models/catalog.model.js';
 import ChildCatalog from '../models/childCatalog.model.js';
@@ -6,6 +7,8 @@ import Product from '../models/product.model.js';
 import Order from '../models/order.model.js';
 import User from '../models/user.model.js';
 import Rate from '../models/rate.model.js';
+import Voucher from '../models/voucher.model.js';
+
 
 
 import errorHandler from '../utils/errorHandler.js';
@@ -127,12 +130,11 @@ shop.postOrder = async (req, res, next) => {
         return next(errorHandler.throwErr(errors.errors[0].msg, 422));
     }
 
-    const cart = req.body.cart;
-    const shippingInfo = req.body.shippingInfo;
+    const { cart, shippingInfo, percent, vnd, total } = req.body;
     const email = shippingInfo.email;
 
     try {
-        const order = new Order({ cart: cart, shippingInfo: shippingInfo });
+        const order = new Order({ cart, shippingInfo, percent, vnd, total });
         const result = await order.save();
 
         const user = await User.find({ email: email });
@@ -172,5 +174,36 @@ shop.updateOrder = async (req, res, next) => {
         next(errorHandler.defaultErr(error));
     }
 }
+// voucher
+shop.checkVoucher = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return next(errorHandler.throwErr(errors.errors[0].msg, 422));
+    }
 
+    const captcha = req.body.captcha;
+    console.log(captcha);
+    const lowcaseCaptcha = captcha.toLowerCase();
+
+    try {
+        const vouchers = await Voucher.find({ captcha: lowcaseCaptcha });
+        if (vouchers.length <= 0) {
+            throw errorHandler.throwErr('Voucher is not exist!', 204);
+        }
+        const currentDate = moment().format();
+        const fromDate = moment(vouchers[0].fromDate).format();
+        const toDate = moment(vouchers[0].toDate).format();
+        if (currentDate < fromDate) {
+            throw errorHandler.throwErr(`${fromDate}`, 406);
+        }
+        if (fromDate < currentDate && currentDate < toDate) {
+            res.status(200).json({ percent: vouchers[0].percent, vnd: vouchers[0].vnd });
+        } else {
+            throw errorHandler.throwErr('Voucher is expired!', 410);
+        }
+
+    } catch (error) {
+        next(errorHandler.defaultErr(error));
+    }
+}
 export default shop;

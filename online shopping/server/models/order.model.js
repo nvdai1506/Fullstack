@@ -52,7 +52,19 @@ const orderSchema = new Schema(
         shippingStatus: {
             type: Number, //0: shipping  1:delivered 2:cancel
             default: 0
-        }
+        },
+        percent: {
+            type: Number,
+            default: 0
+        },
+        vnd: {
+            type: Number,
+            default: 0
+        },
+        total: {
+            type: Number,
+            default: 0
+        },
     },
     { timestamps: true }
 );

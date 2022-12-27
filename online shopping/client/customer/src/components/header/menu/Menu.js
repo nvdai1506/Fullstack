@@ -12,7 +12,6 @@ function Menu() {
     setHideClass(`${classes.enable_menu_hide}`);
   }
   const onClickItemHandler = () => {
-    console.log('click item');
     setHideClass(`${classes.disable_menu_hide}`);
   }
   return (

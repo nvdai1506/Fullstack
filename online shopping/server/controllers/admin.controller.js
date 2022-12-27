@@ -669,7 +669,7 @@ admin.getHistory = async (req, res, next) => {
         try {
             const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
             for (const order of orders) {
-                history[i - 1].turnovers += order.cart.totalPrice;
+                history[i - 1].turnovers += order.total;
             }
 
         } catch (error) {
@@ -690,7 +690,12 @@ admin.postVoucher = async (req, res, next) => {
     }
     const { captcha, percent, vnd, fromDate, toDate } = req.body;
     console.log(fromDate);
+    console.log(toDate);
     try {
+        const existVoucher = await Voucher.find({ captcha: captcha });
+        if (existVoucher.length > 0) {
+            throw errorHandler.throwErr('Captcha is existed.', 409);
+        }
         const voucher = new Voucher({
             captcha,
             percent,
