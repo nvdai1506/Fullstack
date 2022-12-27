@@ -63,3 +63,10 @@
     font-size: 1.4rem;
   }
 }
+/* 400px */
+@media (max-width: 25em) {
+  .date span {
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+}

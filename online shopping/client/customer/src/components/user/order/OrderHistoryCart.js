@@ -46,7 +46,7 @@ function OrderHistoryCart({ order }) {
             <span className={status === 1 && shippingStatus === 1 ? classes.status_sucess : (status === 2 ? classes.status_canceled : classes.status_processing)}>
               {(status === 1 && shippingStatus === 1 && status !== 2) ? '(Thành Công) ' : (status === 2 ? '(Đã Huỷ) ' : 'Đang xử lý ')}
             </span>
-            {createdAt !== updatedAt ? updatedAt.split('T')[0] : ''}
+            {createdAt !== updatedAt && shippingStatus !== 0 ? updatedAt.split('T')[0] : ''}
           </p>
         </div>
 
