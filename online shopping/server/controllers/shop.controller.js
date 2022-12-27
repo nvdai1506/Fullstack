@@ -59,11 +59,16 @@ shop.getProductByType = async (req, res, next) => {
         let products = [];
         if (Number(level) === 1) {
             const parent = await Catalog.find({ value: value });
+            if (parent.length === 0) {
+                res.status(200).json({ product: [] });
+            }
             products = await Product.find({ parentCatalog: parent[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
             // console.log(products[0]);
         } else {
             const child = await ChildCatalog.find({ value: value });
-
+            if (child.length === 0) {
+                res.status(200).json({ product: [] });
+            }
             products = await Product.find({ childCatalog: child[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
         }
         res.status(200).json({ product: products });

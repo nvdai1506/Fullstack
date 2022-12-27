@@ -66,6 +66,15 @@ function App() {
             <Route path='quan-tay' element={<Shop endpoint='quan-tay?level=2' title={'Quần Tây'} />} />
             <Route path='quan-jean' element={<Shop endpoint='quan-jean?level=2' title={'Quần Jean'} />} />
             <Route path='quan-short' element={<Shop endpoint='quan-short?level=2' title={'Quần short'} />} />
+            <Route path='phu-kien' element={<Shop endpoint='phu-kien?level=1' title={'Phụ Kiện'} />} />
+            <Route path='non' element={<Shop endpoint='non?level=2' title={'Nón'} />} />
+            <Route path='that-lung' element={<Shop endpoint='that-lung?level=2' title={'Thắt Lưng'} />} />
+            <Route path='bao-lo-tui' element={<Shop endpoint='bao-lo-tui?level=2' title={'Bao Lô - Túi'} />} />
+            <Route path='giay-dep' element={<Shop endpoint='giay-dep?level=1' title={'Giày Dép'} />} />
+            <Route path='sandals' element={<Shop endpoint='sandals?level=2' title={'Sandals'} />} />
+            <Route path='giay-tay' element={<Shop endpoint='giay-tay?level=2' title={'Giày Tây'} />} />
+            <Route path='giay-the-thao' element={<Shop endpoint='giay-the-thao?level=2' title={'Giày Thể thao'} />} />
+
           </Route>
           <Route path='/signup' element={<Auth loginMode={false} />} />
           <Route path='/login' element={<Auth loginMode={true} />} />

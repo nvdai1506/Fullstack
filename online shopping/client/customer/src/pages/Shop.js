@@ -24,6 +24,7 @@ function Shop({ endpoint, title }) {
       .then(result => { return result.json() })
       .then(data => {
         setProducts(data.product);
+        // console.log(data.product);
       })
       .catch(err => {
         navigate('/error');
@@ -67,6 +68,7 @@ function Shop({ endpoint, title }) {
       <FilterSelection />
       <hr />
       <h1 className={classes.title}>{title}</h1>
+      {currentPageData.length === 0 && <div className={classes.no_product_container}><p className={classes.no_product}>Mặt hàng chưa được bày bán...</p></div>}
       <ListProduct listProduct={currentPageData} numCols={5} />
       <div className={classes.pagination}>
 

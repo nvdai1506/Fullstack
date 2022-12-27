@@ -90,7 +90,7 @@ function ProductList_Aggrid(props) {
         }
         console.log(event.data);
         productEditHandler({
-            'parentCatalog': event.data.parentCatalog,
+            'parentCatalog': event.data.parentCatalog._id,
             'childCatalog': event.data.childCatalog._id,
             'id': event.data._id,
             'image': `${process.env.REACT_APP_DOMAIN}/${event.data.imageUrl}`,
