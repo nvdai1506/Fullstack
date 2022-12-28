@@ -59,9 +59,9 @@ function Footer() {
             <h1 className={classes.footer_title}>Tài Khoản</h1>
           </div>
           <div className={classes.items}>
-            <Link className={classes.footer_link}>Đăng ký tài khoản</Link>
+            <Link to='/signup' className={classes.footer_link}>Đăng ký tài khoản</Link>
             <br />
-            <Link className={classes.footer_link}>Đăng nhập</Link>
+            <Link to='/login' className={classes.footer_link}>Đăng nhập</Link>
             <br />
             <Link className={classes.footer_link}>iOS App</Link>
             <br />

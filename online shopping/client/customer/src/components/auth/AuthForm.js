@@ -33,6 +33,7 @@ function AuthForm({ loginMode }) {
 
   // google
   useEffect(() => {
+    window.scrollTo(0, 0);
     (async () => {
       await loadGapiInsideDOM();
     })();
@@ -158,7 +159,7 @@ function AuthForm({ loginMode }) {
   return (
     <div className={classes.main}>
       <form className={classes.authform} onSubmit={submitHandler}>
-        <h3>Login Here</h3>
+        <h3>{loginMode ? 'Đăng Nhập' : 'Đăng Ký'}</h3>
         <div className={classes.form_input}>
           <label htmlFor="username">Username</label>
           <input ref={emailInputRef} type="text" placeholder="Email" id="username" />
