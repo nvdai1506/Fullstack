@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaBars } from 'react-icons/fa';
 
 import classes from './Menu.module.css';
@@ -7,11 +7,23 @@ import Ul from './ul/Ul';
 function Menu() {
   const [hideClass, setHideClass] = useState(classes.disable_menu_hide);
 
+  const [clickIcon, setClickIcon] = useState(false);
+
+  useEffect(() => {
+    if (clickIcon) {
+      setHideClass(`${classes.enable_menu_hide}`);
+    } else {
+      setHideClass(`${classes.disable_menu_hide}`);
+    }
+  }, [clickIcon]);
+
   const onClickMenuIconHandler = () => {
     // navigate('/user/');
+    setClickIcon(!clickIcon);
     setHideClass(`${classes.enable_menu_hide}`);
   }
   const onClickItemHandler = () => {
+    setClickIcon(false);
     setHideClass(`${classes.disable_menu_hide}`);
   }
   return (

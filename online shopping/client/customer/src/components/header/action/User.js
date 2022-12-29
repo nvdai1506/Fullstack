@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 import classes from './User.module.css';
@@ -11,6 +11,15 @@ function User() {
 
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
+  const [clickIcon, setClickIcon] = useState(false);
+
+  useEffect(() => {
+    if (clickIcon) {
+      setHide_ul_classes(`${classes.hide_ul_container} ${classes.enable_hide_ul_container}`);
+    } else {
+      setHide_ul_classes(`${classes.hide_ul_container} ${classes.disable_hide_ul_container}`);
+    }
+  }, [clickIcon]);
 
   const logoutHandler = () => {
     authCtx.logout();
@@ -19,9 +28,11 @@ function User() {
   }
   const onClickUserIconHandler = () => {
     // navigate('/user/');
+    setClickIcon(!clickIcon);
     setHide_ul_classes(`${classes.hide_ul_container} ${classes.enable_hide_ul_container}`);
   }
   const onClickItem = () => {
+    setClickIcon(false);
     setHide_ul_classes(`${classes.hide_ul_container} ${classes.disable_hide_ul_container}`);
 
   }
