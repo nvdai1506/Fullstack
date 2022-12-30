@@ -21,44 +21,49 @@ function CartList() {
 
   const onBlurVoucherInputHanlder = event => {
     const captcha = voucherInput.current.value;
-    Api.shop.checkVoucher({ captcha })
-      .then(result => {
-        // console.log('rel: ', result);
-        if (result.status === 204) {
-          throw { status: result.status };
-        } else {
-          return result.json();
-        }
-      })
-      .then(data => {
-        let total = cartCtx.totalPrice;
-        if (data.percent !== 0) {
-          total -= cartCtx.totalPrice * data.percent / 100;
-        }
-        if (data.vnd !== 0) {
-          total -= data.vnd;
-        }
-        setCaptcha({ ...data, total: total });
-        orderCtx.setData({ ...data, total: total });
-      })
-      .catch(error => {
-        // console.log(error);
-        if (error.status === 204) {
-          statusCtx.setValue('error', 'Mã giảm giá không tồn tại.');
-        } else if (error.status === 406) {
-          error.json().then(err => {
-            const newDate = moment(err.message).format('DD-MM-YYYY');
-            statusCtx.setValue('error', `Mã giảm giá này sử dụng từ ngày ${newDate} .`);
-          })
-        } else if (error.status === 410) {
-          statusCtx.setValue('error', 'Mã giảm giá đã hết hạn.')
-        } else {
-          statusCtx.setValue('error', 'Có lỗi xảy ra.')
-        }
-        setCaptcha({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
-        orderCtx.setData({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
+    if (captcha === '') {
+      return;
+    } else {
+      Api.shop.checkVoucher({ captcha })
+        .then(result => {
+          // console.log('rel: ', result);
+          if (result.status === 204) {
+            throw { status: result.status };
+          } else {
+            return result.json();
+          }
+        })
+        .then(data => {
+          let total = cartCtx.totalPrice;
+          if (data.percent !== 0) {
+            total -= cartCtx.totalPrice * data.percent / 100;
+          }
+          if (data.vnd !== 0) {
+            total -= data.vnd;
+          }
+          setCaptcha({ ...data, total: total });
+          orderCtx.setData({ ...data, total: total });
+        })
+        .catch(error => {
+          // console.log(error);
+          if (error.status === 204) {
+            statusCtx.setValue('error', 'Mã giảm giá không tồn tại.');
+          } else if (error.status === 406) {
+            error.json().then(err => {
+              const newDate = moment(err.message).format('DD-MM-YYYY');
+              statusCtx.setValue('error', `Mã giảm giá này sử dụng từ ngày ${newDate} .`);
+            })
+          } else if (error.status === 410) {
+            statusCtx.setValue('error', 'Mã giảm giá đã hết hạn.')
+          } else {
+            statusCtx.setValue('error', 'Có lỗi xảy ra.')
+          }
+          setCaptcha({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
+          orderCtx.setData({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
 
-      })
+        })
+    }
+
   }
   return (
     <div className={classes.container}>
