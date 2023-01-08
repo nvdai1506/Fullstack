@@ -6,7 +6,6 @@ ARG MONGODB_URI=mongodb+srv://ochimot:Vandai1506@cluster0.bhpjcf9.mongodb.net/on
 ARG WEBPUSH_PUBLIC_KEY=BGA6DWy9kcp3ExfMLsRJX4XdfqU89KZenuIJy9zShBNFzb2B2aBRlFUOGLgRatB5T9xCRbGQYsUboERR7oZj1xY
 ARG WEBPUSH_PRIVATE_KEY=6LA-TnI2PMQ9FLUMyWsIeGt5PEJfgTFEYCwfwGnfHLA
 FROM redis
-COPY redis.conf /usr/local/etc/redis/redis.conf
 CMD [ "redis-server"]
 FROM node:16-alpine
 WORKDIR "/app"
