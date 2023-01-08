@@ -7,7 +7,7 @@ ARG WEBPUSH_PUBLIC_KEY=BGA6DWy9kcp3ExfMLsRJX4XdfqU89KZenuIJy9zShBNFzb2B2aBRlFUOG
 ARG WEBPUSH_PRIVATE_KEY=6LA-TnI2PMQ9FLUMyWsIeGt5PEJfgTFEYCwfwGnfHLA
 FROM redis
 COPY redis.conf /usr/local/etc/redis/redis.conf
-CMD ["redis-server", "--bind", "redis", "--port", "6379"]
+CMD [ "redis-server"]
 FROM node:16-alpine
 WORKDIR "/app"
 COPY ./package.json ./
