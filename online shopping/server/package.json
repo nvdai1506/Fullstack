@@ -27,7 +27,9 @@
     "nodemon": "^2.0.20",
     "qs": "^6.11.0",
     "randomstring": "^1.2.3",
-    "uuid": "^9.0.0"
+    "redis": "^4.5.1",
+    "uuid": "^9.0.0",
+    "web-push": "^3.5.0"
   },
   "development": {
     "corsOriginWhitelist": [

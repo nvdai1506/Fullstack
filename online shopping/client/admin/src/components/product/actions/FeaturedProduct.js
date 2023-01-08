@@ -10,7 +10,7 @@ function FeaturedProduct(props) {
     if (event.target.checked) {
       Api.admin.addFeaturedProduct({ productId: props.data._id })
         .then(result => {
-          console.log(result);
+          // console.log(result);
           if (result.status === 200) {
             statusCtx.setValue('success', `${props.data._id} is added to Featured Products.`);
           }

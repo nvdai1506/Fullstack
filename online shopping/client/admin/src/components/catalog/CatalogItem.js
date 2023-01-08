@@ -25,7 +25,7 @@ function CatalogItem(props) {
 
         <div className={classes.main}>
             <div>
-                <h3>{props.name} - {props.value}</h3>
+                <h3>{props.name}({props.value})</h3>
             </div>
             <div>
                 <Button className={classes.btn} onClick={onEditHandler}>Edit</Button>

@@ -35,8 +35,27 @@ function App() {
   const cartCtx = useContext(CartContext);
   const { getAll } = useIndexedDB('cart');
   useEffect(() => {
+    // const showNotification = () => {
+    //   const notification = new Notification("Message from NVD!", {
+    //     body: 'New voucher for you',
+    //     icon: 'https://drive.google.com/file/d/1y_M9nw1ODS3kBPprIvu4G5W1y2nQZXpb/view?usp=share_link'
+    //   })
+    //   notification.onclick = (e) => {
+    //     window.location.href = 'http://localhost:3001';
+    //   }
+    // }
+    // const notif = Notification.permission;
+
+    // if (notif === 'default') {
+    //   Notification.requestPermission()
+    //     .then(permission => {
+    //       console.log(permission);
+    //     })
+    // }
+    // if (notif === 'granted') {
+    //   showNotification();
+    // }
     getAll().then(cartFromDB => {
-      // console.log(cartFromDB);
       if (cartFromDB.length !== 0) {
         cartCtx.initCart(cartFromDB[0]);
       }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 const OrderContext = React.createContext({
   data: {},
@@ -14,9 +14,9 @@ const initialData = {
 export const OrderContextProvider = (props) => {
   const [data, setData] = useState(initialData);
 
-  const DataHandler = (obj) => {
+  const DataHandler = useCallback((obj) => {
     setData(obj);
-  };
+  }, []);
   const ClearDataHandler = () => {
     setData(initialData);
   };

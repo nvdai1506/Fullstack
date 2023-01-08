@@ -18,7 +18,7 @@ function ProductList_Aggrid(props) {
     const gridRef = useRef();
     const [rowData, setRowData] = useState([]);
     const [columnDefs] = useState([
-        { field: '_id', headerName: '#' },
+        { field: '_id', headerName: '#', editable: true },
         { field: 'title' },
         { field: 'parentCatalog.name', headerName: 'Catalog' },
         { field: 'childCatalog.title', headerName: 'Type' },
@@ -88,7 +88,7 @@ function ProductList_Aggrid(props) {
         if (colId === 'delete' || colId === 'featuredProduct' || colId === 'sale') {
             return;
         }
-        console.log(event.data);
+        // console.log(event.data);
         productEditHandler({
             'parentCatalog': event.data.parentCatalog._id,
             'childCatalog': event.data.childCatalog._id,

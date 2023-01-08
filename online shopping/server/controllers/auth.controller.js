@@ -122,7 +122,7 @@ auth.refresh = async (req, res, next) => {
         // decode to get userID
         const { userId } = jwt.verify(accessToken, process.env.ACCESSTOKEN_SECRET_KEY, opts);
         const user = await User.findById(userId);
-        console.log(user);
+        // console.log(user);
         if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }

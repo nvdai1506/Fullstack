@@ -213,7 +213,7 @@ user.getCart = async (req, res, next) => {
         if (!user) {
             throw errorHandler.throwErr('Could not find user!', 401);
         }
-        res.json({ cart: user.cart });
+        res.status(200).json({ cart: user.cart });
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }

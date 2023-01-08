@@ -20,7 +20,7 @@ function Order() {
     }
 
     const viewHandler = useCallback((items, total) => {
-        setView({ items: items, total: total });
+        setView({ items: items, total: total.toLocaleString() });
     }, []);
 
     const onCloseModalHandler = () => {

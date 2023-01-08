@@ -91,7 +91,6 @@ function OrderForm() {
       totalAmount: cartCtx.totalAmount
     }
     const { percent, vnd, total } = orderCtx.data;
-
     const dataToPost = {
       shippingInfo,
       cart,

@@ -16,9 +16,12 @@ function MainNavigation() {
         authCtx.logout();
         navigate('/login');
     }
+    const onClickLogoHandler = () => {
+        navigate('/');
+    }
     return (
         <header className={classes.headerNav}>
-            <div className={classes.logo}>Admin</div>
+            <div className={classes.logo} onClick={onClickLogoHandler}>Admin</div>
             <nav>
                 <ul>
                     {isLoggedIn &&
@@ -55,7 +58,7 @@ function MainNavigation() {
             </nav>
         </header>
     );
-    
+
 }
 
 export default MainNavigation

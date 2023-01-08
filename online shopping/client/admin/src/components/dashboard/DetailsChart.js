@@ -16,7 +16,7 @@ function DetailsChart(props) {
                     return result.json();
                 })
                 .then(data => {
-                    // console.log(data.overview);
+                    // console.log(data);
                     const newOverview = [];
                     const keysValue = [];
                     const overview = data.overview;

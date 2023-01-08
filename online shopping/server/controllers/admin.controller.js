@@ -14,6 +14,8 @@ import Voucher from '../models/voucher.model.js';
 
 
 import errorHandler from '../utils/errorHandler.js';
+import { setCache, getCache, delCache } from '../utils/redis.js';
+import pushNotification from '../utils/notification.js';
 
 
 let admin = () => { }
@@ -84,12 +86,15 @@ admin.addCatalog = async (req, res, next) => {
         return next(errorHandler.throwErr(errors.errors[0].msg, 422));
     }
     const name = req.body.name;
+    const value = req.body.value;
 
     const catalog = new Catalog({
-        name: name
+        name,
+        value
     })
     try {
         const result = await catalog.save();
+        delCache('catalogs');
         res.status(201).json({ mess: "Catalog is added.", id: result._id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -117,7 +122,7 @@ admin.updateCatalog = async (req, res, next) => {
         catalog.name = newName;
         catalog.value = newValue;
         await catalog.save();
-
+        delCache('catalogs');
         res.status(200).json({ mess: "Catalog is updated." });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -136,6 +141,7 @@ admin.deleteCatalog = async (req, res, next) => {
         if (!result) {
             throw next(errorHandler.throwErr('Id is in correct.', 422));
         }
+        delCache('catalogs');
         res.status(200).json({ mess: "Catalog is deleted!", _id: id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -157,9 +163,8 @@ admin.addChildCatalog = async (req, res, next) => {
     }
     const parentId = req.body.parent;
     const title = req.body.title;
-
-
-
+    const value = req.body.value;
+    console.log(value);
     try {
         const child = await ChildCatalog.findOne({ title: title });
         if (child !== null) {
@@ -179,7 +184,8 @@ admin.addChildCatalog = async (req, res, next) => {
         }
         const childCatalog = new ChildCatalog({
             parent: parentId,
-            title: title
+            title: title,
+            value: value
         });
         const result = await childCatalog.save();
         const catalog = await Catalog.findById(parentId);
@@ -189,6 +195,8 @@ admin.addChildCatalog = async (req, res, next) => {
         }
         catalog.ChildCatalogs.push(result._id);
         await catalog.save();
+        delCache('ChildCatalogs');
+        delCache('catalogs');
         res.status(201).json({ mess: "ChildCatalog is added.", id: result._id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -234,6 +242,9 @@ admin.updateChildCatalog = async (req, res, next) => {
         child.value = newValue;
 
         await child.save();
+        delCache('ChildCatalogs');
+        delCache('catalogs');
+
         res.status(200).json({ mess: "Data is updated.", id: child._id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -256,6 +267,8 @@ admin.deleteChildCatalog = async (req, res, next) => {
             await parent.save();
         }
         await ChildCatalog.findByIdAndDelete(childId);
+        delCache('ChildCatalogs');
+        delCache('catalogs');
         res.status(200).json({ mess: `${childId} is deleted.` })
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -298,6 +311,7 @@ admin.addProduct = async (req, res, next) => {
         const productResult = await product.save();
         childCatalog.products.push(product._id);
         await childCatalog.save();
+        delCache('getProducts');
         res.status(200).json({ mess: "Product is added.", id: productResult._id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -348,7 +362,8 @@ admin.updateProduct = async (req, res, next) => {
         product.parentCatalog = newParentCatalog;
 
         const result = await product.save();
-
+        delCache('getProducts');
+        delCache(`getProductById/${productId}`);
         res.status(200).json({ mess: "Product is updated.", id: result._id });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -372,7 +387,16 @@ admin.deleteProduct = async (req, res, next) => {
             await childCatalog.save();
         }
         const result = await Product.findByIdAndDelete(productId);
-
+        delCache('getProducts');
+        delCache(`getProductById/${productId}`);
+        if (product.featuredProduct === 1) {
+            const parentCatalog = await Catalog.findById(product.parentCatalog);
+            if (parentCatalog) {
+                delCache(`featuredProducts/${parentCatalog.value}`);
+                parentCatalog.featuredProducts.pull(productId);
+                await parentCatalog.save();
+            }
+        }
         res.status(200).json({ mess: `${result._id} is deleted!` });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -405,6 +429,9 @@ admin.addFeaturedProduct = async (req, res, next) => {
         await product.save();
         parentCatalog.featuredProducts.push(productId);
         const result = await parentCatalog.save();
+        // console.log(result.value);
+        delCache(`getProducts`);
+        delCache(`featuredProducts/${result.value}`);
         res.status(200).json({ featuredProducts: result.featuredProducts });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -427,6 +454,8 @@ admin.deleteFeaturedProduct = async (req, res, next) => {
         if (parentCatalog) {
             parentCatalog.featuredProducts.pull(productId);
             const result = await parentCatalog.save();
+            delCache(`featuredProducts/${result.value}`);
+            delCache(`getProducts`);
             res.status(200).json({ featuredProducts: result.featuredProducts });
         } else {
             res.status(404).json({ mess: "Not found Catalog!" });
@@ -456,6 +485,20 @@ admin.onSale = async (req, res, next) => {
         }
         product.sale = Number(percent);
         const result = await product.save();
+        delCache('getProducts');
+        const parentCatalog = await Catalog.findById(result.parentCatalog);
+        if (parentCatalog) {
+            delCache(`featuredProducts/${parentCatalog.value}`);
+            parentCatalog.featuredProducts.pull(productId);
+        }
+        if (percent >= 50) {
+            pushNotification('all',
+                'Dành tặng khách hàng đã ghé thăm NVD Shop',
+                `Sản phẩm "${result.title}" đang giảm giá "${percent}%".\n Click tới sản phẩm >>>>`,
+                'sale',
+                result._id
+            )
+        }
         res.status(200).json({ product: result });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -475,10 +518,8 @@ admin.getOrderByStatus = async (req, res, next) => {
         return next(errorHandler.throwErr('Do not have permission!', 401));
     }
     const status = req.params.status; // 0 1 
-
     try {
         const orders = await Order.find({ shippingStatus: status, }).populate({ path: 'cart.items.product', select: ['title', 'price'] });
-
         res.status(200).json({ orders: orders });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -587,61 +628,67 @@ admin.getOverview = async (req, res, next) => {
     const type = req.body.type;
     // console.log(startDate, '-', endDate, '-', type);
     try {
-        if (type === 'catalog') {
-            const catalogs = await Catalog.find();
-            for (const catalog of catalogs) {
-                overview.push({
-                    _id: catalog._id,
-                    name: catalog.name,
-                    turnovers: 0
-                })
-            }
-        } else if (type === 'childCatalog') {
-            const childs = await ChildCatalog.find().populate('parent', 'name');
-            for (const child of childs) {
-                overview.push({
-                    _id: child._id,
-                    parent: child.parent.name,
-                    name: child.title,
-                    turnovers: 0
-                })
-            }
-        }
-
-        const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
-
-        for (const order of orders) {
-            const items = order.cart.items;
-            for (const item of items) {
-                // const { product: productId, quantity } = item;
-                const productId = item.id;
-                const quantity = item.amount;
-                try {
-                    // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
-
-                    const product = await Product.findById(productId);
-
-                    let id;
-                    if (type === 'catalog') {
-                        id = product.parentCatalog;
-
-                    } else if (type === 'childCatalog') {
-                        id = product.childCatalog;
-                    }
-                    const index = overview.findIndex(c => {
-                        return (c._id.toString() === id.toString())
-                    });
-                    overview[index].turnovers += product.price * quantity;
-
-                } catch (error) {
-                    continue;
+        const Cache = await getCache(`getOverview/${type}-${startDate}-${endDate}`);
+        if (Cache !== null) {
+            res.status(200).json({ overview: JSON.parse(Cache) });
+        } else {
+            if (type === 'catalog') {
+                const catalogs = await Catalog.find();
+                for (const catalog of catalogs) {
+                    overview.push({
+                        _id: catalog._id,
+                        name: catalog.name,
+                        turnovers: 0
+                    })
+                }
+            } else if (type === 'childCatalog') {
+                const childs = await ChildCatalog.find().populate('parent', 'name');
+                for (const child of childs) {
+                    overview.push({
+                        _id: child._id,
+                        parent: child.parent.name,
+                        name: child.title,
+                        turnovers: 0
+                    })
+                    // console.log('child: ', child._id);
                 }
             }
+            // console.log(overview);
+            const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day').toDate() } });
+            for (const order of orders) {
+                const items = order.cart.items;
+                for (const item of items) {
+                    // const { product: productId, quantity } = item;
+                    const productId = item.id;
+                    const quantity = item.amount;
+                    try {
+                        // const query = [{ path: 'parentCatalog', select: 'name' }, { path: 'childCatalog', select: 'title' }];
 
+                        const product = await Product.findById(productId);
+                        // console.log(product);
+
+                        let id;
+                        if (type === 'catalog') {
+                            id = product.parentCatalog;
+
+                        } else if (type === 'childCatalog') {
+                            id = product.childCatalog;
+                        }
+                        const index = overview.findIndex(c => {
+                            return (c._id.toString() === id.toString())
+                        });
+                        overview[index].turnovers += product.price * quantity;
+
+                    } catch (error) {
+                        continue;
+                    }
+                }
+
+            }
+            // console.log(overview);
+            setCache(`getOverview/${type}-${startDate}-${endDate}`, overview);
+            res.status(200).json({ overview: overview });
         }
-        // console.log(overview);
-        res.status(200).json({ overview: overview });
-
     } catch (error) {
         next(errorHandler.throwErr('Something wrong with order!', 401));
     }
@@ -650,34 +697,40 @@ admin.getHistory = async (req, res, next) => {
     if (req.accessTokenPayload.role === 0) {
         return next(errorHandler.throwErr('Do not have permission!', 401));
     }
-    const history = [];
-    const year = moment().format('YYYY');
+    const Cache = await getCache(`getHistory`);
+    if (Cache !== null) {
+        res.status(200).json({ history: JSON.parse(Cache) });
+    } else {
 
-    for (let i = 1; i <= 12; i++) {
-        history.push({ month: i, turnovers: 0 });
-        // history[i].month = i;
-        let startDate;
-        let endDate;
-        if (i >= 10) {
-            startDate = moment(`${year}-${i}`).startOf('month');
-            endDate = moment(`${year}-${i}`).endOf('month');
-        } else {
-            startDate = moment(`${year}-0${i}`).startOf('month');
-            endDate = moment(`${year}-0${i}`).endOf('month');
-        }
-        // console.log(startDate, '-', endDate);
-        try {
-            const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
-            for (const order of orders) {
-                history[i - 1].turnovers += order.total;
+        const history = [];
+        const year = moment().format('YYYY');
+
+        for (let i = 1; i <= 12; i++) {
+            history.push({ month: i, turnovers: 0 });
+            // history[i].month = i;
+            let startDate;
+            let endDate;
+            if (i >= 10) {
+                startDate = moment(`${year}-${i}`).startOf('month');
+                endDate = moment(`${year}-${i}`).endOf('month');
+            } else {
+                startDate = moment(`${year}-0${i}`).startOf('month');
+                endDate = moment(`${year}-0${i}`).endOf('month');
             }
+            // console.log(startDate, '-', endDate);
+            try {
+                const orders = await Order.find({ status: 1, shippingStatus: 1, createdAt: { $gte: startDate, $lte: moment(endDate).endOf('day') } });
+                for (const order of orders) {
+                    history[i - 1].turnovers += order.total;
+                }
 
-        } catch (error) {
-            return next(errorHandler.throwErr('Something wrong with order!', 401));
+            } catch (error) {
+                return next(errorHandler.throwErr('Something wrong with order!', 401));
+            }
         }
+        setCache(`getHistory`, history);
+        res.status(200).json({ history: history });
     }
-    res.status(200).json({ history: history });
-
 }
 // voucher
 admin.postVoucher = async (req, res, next) => {
@@ -704,6 +757,12 @@ admin.postVoucher = async (req, res, next) => {
             toDate,
         });
         const result = await voucher.save();
+        delCache('getVouchers');
+        pushNotification('all',
+            'Dành tặng cho khách hàng ghé thăm NVD Shop',
+            `Mã giảm giá (${percent !== 0 ? percent : vnd}${percent !== 0 ? '%' : 'VND'}): ${result.captcha}`,
+            'voucher'
+        )
         res.status(201).json({ voucher: result });
     } catch (error) {
         next(errorHandler.defaultErr(error));
@@ -714,8 +773,14 @@ admin.getVouchers = async (req, res, next) => {
         return next(errorHandler.throwErr('Do not have permission!', 401));
     }
     try {
-        const vouchers = await Voucher.find();
-        res.status(200).json({ vouchers: vouchers });
+        const Cache = await getCache(`getVouchers`);
+        if (Cache !== null) {
+            res.status(200).json({ vouchers: JSON.parse(Cache) });
+        } else {
+            const vouchers = await Voucher.find();
+            setCache(`getVouchers`, vouchers);
+            res.status(200).json({ vouchers: vouchers });
+        }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -727,6 +792,7 @@ admin.deleteVoucher = async (req, res, next) => {
     const voucherId = req.params.voucherId;
     try {
         await Voucher.findByIdAndDelete(voucherId);
+        delCache('getVouchers');
         res.status(200).json({ mess: 'Voucher is deleted.' });
     } catch (error) {
         next(errorHandler.defaultErr(error));

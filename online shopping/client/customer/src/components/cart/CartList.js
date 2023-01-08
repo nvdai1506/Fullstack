@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import moment from 'moment/moment';
 import classes from './CartList.module.css';
 import CartItem from './CartItem';
@@ -12,12 +12,20 @@ function CartList() {
   const statusCtx = useContext(StatusContext);
   const cartCtx = useContext(CartContext);
   const orderCtx = useContext(OrderContext);
+  const { data, setData } = orderCtx;
+  const { totalPrice } = cartCtx;
+  // orderCtx.setData({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
   const voucherInput = useRef('');
   const [captcha, setCaptcha] = useState({ percent: 0, vnd: 0, total: cartCtx.totalPrice });
+
   let classValue = classes.cart_list_container;
   if (cartCtx.items.length === 0) {
     classValue += ` ${classes.no_cart_list_container}`
   }
+
+  useEffect(() => {
+    setData({ ...data, total: totalPrice });
+  }, [totalPrice, setData]);
 
   const onBlurVoucherInputHanlder = event => {
     const captcha = voucherInput.current.value;

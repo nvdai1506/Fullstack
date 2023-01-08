@@ -74,7 +74,7 @@ function AuthForm({ loginMode }) {
         authCtx.login(data);
         setIsLoading(false);
         if (previousPath) {
-          console.log(previousPath);
+          // console.log(previousPath);
           setPreviousPath(null);
           navigate('/');
         } else {
