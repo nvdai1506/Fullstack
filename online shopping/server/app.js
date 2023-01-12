@@ -10,7 +10,6 @@ import mongoose from 'mongoose';
 import cors from "cors";
 import { v4 } from 'uuid';
 import multer from 'multer';//serve for files
-// import redisClient from './utils/redis.js';
 
 import AdminRouter from './routes/admin.route.js';
 import AuthRouter from './routes/auth.route.js';

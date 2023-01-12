@@ -34,7 +34,7 @@ user.changePassword = async (req, res, next) => {
     const userId = req.accessTokenPayload.userId;
     const oldPassword = req.body.oldPassword;
     const newPassword = req.body.newPassword;
-    console.log(req.body);
+    // console.log(req.body);
 
     try {
         const user = await User.findById(userId);
@@ -105,7 +105,7 @@ user.rating = async (req, res, next) => {
             throw errorHandler.throwErr('Could not find Product!', 401);
         }
         const rateId = product.rate;
-        console.log('rateId: ', rateId);
+        // console.log('rateId: ', rateId);
         const rate = await Rate.findById(rateId);
         if (!rate) {
             throw errorHandler.throwErr('Could not find Rate!', 401);
@@ -114,10 +114,10 @@ user.rating = async (req, res, next) => {
 
         const rates = rate.rate;
         const existedUser = rates.filter(r => { return r.user.toString() === userId.toString() && r.order.toString() === orderId.toString() })
-        console.log('existedUser: ', existedUser);
+        // console.log('existedUser: ', existedUser);
 
         if (existedUser.length > 0) {
-            console.log('existedUser');
+            // console.log('existedUser');
             const order = await Order.findById(orderId);
             if (order.status === 1 && order.shippingStatus === 1) {
                 const indexOfProduct = order.cart.items.findIndex(item => item.id.toString() === productId.toString() && item.rate === undefined);
@@ -145,7 +145,7 @@ user.rating = async (req, res, next) => {
                 // console.log(order.cart.items[indexOfProduct]);
                 order.cart.items[indexOfProduct] = { ...order.cart.items[indexOfProduct], rate: rateId };
                 const order_result = await order.save();
-                console.log(order_result._id);
+                // console.log(order_result._id);
                 // console.log(order_result.cart.items[indexOfProduct]);
                 res.status(200).json({ rateId: result._id });
             } else {

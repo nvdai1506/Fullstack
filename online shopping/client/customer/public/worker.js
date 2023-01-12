@@ -1,5 +1,8 @@
-const HOST_DOMAIN = 'http://localhost:8080';
-const DOMAIN = 'http://localhost:3001'
+// const HOST_DOMAIN = 'http://localhost:8080';
+// const DOMAIN = 'http://localhost:3001'
+const HOST_DOMAIN = 'https://nvd-shopping-online.onrender.com'
+const DOMAIN = 'https://react-project-a389a.web.app'
+
 
 console.log("Service Worker Loaded...");
 self.addEventListener("push", e => {

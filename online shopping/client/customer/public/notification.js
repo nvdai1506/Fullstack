@@ -1,7 +1,9 @@
 
 
 const publicVapidKey = 'BGA6DWy9kcp3ExfMLsRJX4XdfqU89KZenuIJy9zShBNFzb2B2aBRlFUOGLgRatB5T9xCRbGQYsUboERR7oZj1xY';
-const DOMAIN = 'http://localhost:8080';
+// const DOMAIN = 'http://localhost:8080';
+const DOMAIN = 'https://react-project-a389a.web.app';
+
 
 let notif = Notification.permission;
 if (notif === 'default') {
@@ -39,6 +41,7 @@ async function send() {
       if (serviceWorker.state == "activated") {
         //If push subscription wasnt done yet have to do here
         // console.log("sw already activated - Do watever needed here");
+        subscribeForPushNotification(reg);
       }
       serviceWorker.addEventListener("statechange", function (e) {
         // console.log("sw statechange : ", e.target.state);
