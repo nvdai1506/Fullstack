@@ -10,22 +10,22 @@ import Rate from '../models/rate.model.js';
 import Voucher from '../models/voucher.model.js';
 
 import errorHandler from '../utils/errorHandler.js';
-// import { getCache, setCache } from '../utils/redis.js';
+import { getCache, setCache } from '../utils/redis.js';
 
 let shop = () => { }
 
 // Catalog
 shop.getCatalog = async (req, res, next) => {
     try {
-        // const Cache = await getCache(`catalogs`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ catalogs: JSON.parse(Cache) });
-        // } else {
-        const catalogs = await Catalog.find()
-            .populate({ path: 'ChildCatalogs', model: 'ChildCatalog' });
-        // setCache(`catalogs`, catalogs);
-        res.status(200).json({ catalogs: catalogs });
-        // }
+        const Cache = await getCache(`catalogs`);
+        if (Cache !== null) {
+            res.status(200).json({ catalogs: JSON.parse(Cache) });
+        } else {
+            const catalogs = await Catalog.find()
+                .populate({ path: 'ChildCatalogs', model: 'ChildCatalog' });
+            setCache(`catalogs`, catalogs);
+            res.status(200).json({ catalogs: catalogs });
+        }
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500;
@@ -37,14 +37,14 @@ shop.getCatalog = async (req, res, next) => {
 shop.getChildCatalog = async (req, res, next) => {
     const parentId = req.params.catalogId;
     try {
-        // const Cache = await getCache(`ChildCatalogs`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ ChildCatalogs: JSON.parse(Cache) });
-        // } else {
-        const ChildCatalogs = await ChildCatalog.find({ parent: parentId });
-        // setCache(`ChildCatalogs`, ChildCatalogs);
-        res.status(200).json({ ChildCatalogs: ChildCatalogs });
-        // }
+        const Cache = await getCache(`ChildCatalogs`);
+        if (Cache !== null) {
+            res.status(200).json({ ChildCatalogs: JSON.parse(Cache) });
+        } else {
+            const ChildCatalogs = await ChildCatalog.find({ parent: parentId });
+            setCache(`ChildCatalogs`, ChildCatalogs);
+            res.status(200).json({ ChildCatalogs: ChildCatalogs });
+        }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -54,14 +54,14 @@ shop.getChildCatalog = async (req, res, next) => {
 // <<<<<<<<<<<<product>>>>>>>>>>>>>>>
 shop.getProducts = async (req, res, next) => {
     try {
-        // const Cache = await getCache(`getProducts`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ products: JSON.parse(Cache) });
-        // } else {
-        const products = await Product.find().populate({ path: 'childCatalog', select: 'title' }).populate({ path: 'parentCatalog', select: 'name' });
-        // setCache(`getProducts`, products);
-        res.status(200).json({ products: products });
-        // }
+        const Cache = await getCache(`getProducts`);
+        if (Cache !== null) {
+            res.status(200).json({ products: JSON.parse(Cache) });
+        } else {
+            const products = await Product.find().populate({ path: 'childCatalog', select: 'title' }).populate({ path: 'parentCatalog', select: 'name' });
+            setCache(`getProducts`, products);
+            res.status(200).json({ products: products });
+        }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -72,29 +72,29 @@ shop.getProductByType = async (req, res, next) => {
     const level = req.query.level;
     // console.log(value, level);
     try {
-        // const Cache = await getCache(`getProductByType/${value}?level=${level}`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ product: JSON.parse(Cache) });
-        // } else {
-        let products = [];
-
-        if (Number(level) === 1) {
-            const parent = await Catalog.find({ value: value });
-            if (parent.length === 0) {
-                res.status(200).json({ product: [] });
-            }
-            products = await Product.find({ parentCatalog: parent[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
-            // console.log(products[0]);
+        const Cache = await getCache(`getProductByType/${value}?level=${level}`);
+        if (Cache !== null) {
+            res.status(200).json({ product: JSON.parse(Cache) });
         } else {
-            const child = await ChildCatalog.find({ value: value });
-            if (child.length === 0) {
-                res.status(200).json({ product: [] });
+            let products = [];
+
+            if (Number(level) === 1) {
+                const parent = await Catalog.find({ value: value });
+                if (parent.length === 0) {
+                    res.status(200).json({ product: [] });
+                }
+                products = await Product.find({ parentCatalog: parent[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
+                // console.log(products[0]);
+            } else {
+                const child = await ChildCatalog.find({ value: value });
+                if (child.length === 0) {
+                    res.status(200).json({ product: [] });
+                }
+                products = await Product.find({ childCatalog: child[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
             }
-            products = await Product.find({ childCatalog: child[0]._id }).populate({ path: 'rate', select: ['total', 'average'] });
+            setCache(`getProductByType/${value}?level=${level}`, products);
+            res.status(200).json({ product: products });
         }
-        // setCache(`getProductByType/${value}?level=${level}`, products);
-        res.status(200).json({ product: products });
-        // }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -102,17 +102,17 @@ shop.getProductByType = async (req, res, next) => {
 shop.getProductById = async (req, res, next) => {
     const productId = req.params.productId;
     try {
-        // const Cache = await getCache(`getProductById/${productId}`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ product: JSON.parse(Cache) });
-        // } else {
-        const product = await Product.findById(productId).populate({ path: 'rate', select: ['total', 'average'] });
-        if (!product) {
-            throw errorHandler.throwErr('Could not find product!', 422);
+        const Cache = await getCache(`getProductById/${productId}`);
+        if (Cache !== null) {
+            res.status(200).json({ product: JSON.parse(Cache) });
+        } else {
+            const product = await Product.findById(productId).populate({ path: 'rate', select: ['total', 'average'] });
+            if (!product) {
+                throw errorHandler.throwErr('Could not find product!', 422);
+            }
+            setCache(`getProductById/${productId}`, product);
+            res.status(200).json({ product: product });
         }
-        // setCache(`getProductById/${productId}`, product);
-        res.status(200).json({ product: product });
-        // }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -120,15 +120,15 @@ shop.getProductById = async (req, res, next) => {
 shop.getProductsByChildCatalogId = async (req, res, next) => {
     const childCatalogId = req.params.childCatalogId;
     try {
-        // const Cache = await getCache(`getProductsByChildCatalogId/${childCatalogId}`);
-        // if (Cache !== null) {
-        //     res.status(200).json({ products: JSON.parse(Cache) });
-        // } else {
-        const childCatalog = await ChildCatalog.findById(childCatalogId).populate('products');
-        const products = childCatalog.products;
-        // setCache(`getProductsByChildCatalogId/${childCatalogId}`, products);
-        res.status(200).json({ products: products });
-        // }
+        const Cache = await getCache(`getProductsByChildCatalogId/${childCatalogId}`);
+        if (Cache !== null) {
+            res.status(200).json({ products: JSON.parse(Cache) });
+        } else {
+            const childCatalog = await ChildCatalog.findById(childCatalogId).populate('products');
+            const products = childCatalog.products;
+            setCache(`getProductsByChildCatalogId/${childCatalogId}`, products);
+            res.status(200).json({ products: products });
+        }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }
@@ -138,25 +138,25 @@ shop.getProductsByChildCatalogId = async (req, res, next) => {
 shop.getFeaturedProducts = async (req, res, next) => {
     const CatalogValue = req.params.CatalogValue;
     try {
-        // const pCache = await getCache(`featuredProducts/${CatalogValue}`);
-        // if (pCache !== null) {
-        //     res.status(200).json({ products: JSON.parse(pCache) });
-        // } else {
+        const pCache = await getCache(`featuredProducts/${CatalogValue}`);
+        if (pCache !== null) {
+            res.status(200).json({ products: JSON.parse(pCache) });
+        } else {
 
-        const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' })
-            .populate({
-                path: 'featuredProducts',
-                populate: {
-                    path: 'rate',
-                    model: 'Rate',
-                    select: ['total', 'average'],
-                },
-            });
-        // console.log(catalog);
-        // setCache(`featuredProducts/${CatalogValue}`, catalog);
+            const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' })
+                .populate({
+                    path: 'featuredProducts',
+                    populate: {
+                        path: 'rate',
+                        model: 'Rate',
+                        select: ['total', 'average'],
+                    },
+                });
+            // console.log(catalog);
+            setCache(`featuredProducts/${CatalogValue}`, catalog);
 
-        res.status(200).json({ products: catalog });
-        // }
+            res.status(200).json({ products: catalog });
+        }
     } catch (error) {
         next(errorHandler.defaultErr(error));
     }

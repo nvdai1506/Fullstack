@@ -1,0 +1,51 @@
+version: "3"
+services:
+  redis:
+    image: "redis"
+    restart: unless-stopped
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+  backend:
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    ports:
+      - "8080:8080"
+    volumes:
+      # - /app/node_modules
+      - ./server:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ACCESSTOKEN_SECRET_KEY=nVdai1506
+      - ACCESSTOKEN_EXPIRES_IN=1d
+      - MONGODB_URI=mongodb+srv://ochimot:Vandai1506@cluster0.bhpjcf9.mongodb.net/onlineShop
+      - WEBPUSH_PUBLIC_KEY=BGA6DWy9kcp3ExfMLsRJX4XdfqU89KZenuIJy9zShBNFzb2B2aBRlFUOGLgRatB5T9xCRbGQYsUboERR7oZj1xY
+      - WEBPUSH_PRIVATE_KEY=6LA-TnI2PMQ9FLUMyWsIeGt5PEJfgTFEYCwfwGnfHLA
+  frontend-admin:
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client/admin
+    ports:
+      - "3000:3000"
+    volumes:
+      # - /app/node_modules
+      - ./client/admin:/app
+    environment:
+      - REACT_APP_DOMAIN=http://localhost:8080
+  frontend-client:
+    restart: on-failure
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client/customer
+    ports:
+      - "3001:3001"
+    volumes:
+      # - /app/node_modules
+      - ./client/customer:/app
+    environment:
+      - REACT_APP_DOMAIN=http://localhost:8080
+      - REACT_APP_GOOGLE_CLIENT_ID=294663668712-s4ae7le7q6jmjqn2bmtlilpabvk06drl.apps.googleusercontent.com
+      - REACT_APP_Facebook_APP_ID=488211450087339
+      - REACT_APP_SECRET_KEY_TO_UPDATE_ORDER=nVdai1506

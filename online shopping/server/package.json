@@ -30,21 +30,5 @@
     "redis": "^4.5.1",
     "uuid": "^9.0.0",
     "web-push": "^3.5.0"
-  },
-  "development": {
-    "corsOriginWhitelist": [
-      "http://localhost:3000"
-    ]
-  },
-  "headers": [
-    {
-      "source": "*",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
-    }
-  ]
+  }
 }

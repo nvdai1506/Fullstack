@@ -2,7 +2,7 @@
 
 const publicVapidKey = 'BGA6DWy9kcp3ExfMLsRJX4XdfqU89KZenuIJy9zShBNFzb2B2aBRlFUOGLgRatB5T9xCRbGQYsUboERR7oZj1xY';
 // const DOMAIN = 'http://localhost:8080';
-const DOMAIN = 'https://react-project-a389a.web.app';
+const DOMAIN = 'https://nvd-shopping-online.onrender.com';
 
 
 let notif = Notification.permission;
@@ -20,34 +20,34 @@ if (notif === 'default') {
 
 async function send() {
   // Register Service Worker
-  // console.log("Registering service worker...");
+  console.log("Registering service worker...");
   navigator.serviceWorker.register("./worker.js", {
     scope: "/"
   }).then(function (reg) {
     var serviceWorker;
     if (reg.installing) {
       serviceWorker = reg.installing;
-      // console.log('Service worker installing');
+      console.log('Service worker installing');
     } else if (reg.waiting) {
       serviceWorker = reg.waiting;
-      // console.log('Service worker installed & waiting');
+      console.log('Service worker installed & waiting');
     } else if (reg.active) {
       serviceWorker = reg.active;
-      // console.log('Service worker active');
+      console.log('Service worker active');
     }
 
     if (serviceWorker) {
-      // console.log("sw current state", serviceWorker.state);
+      console.log("sw current state", serviceWorker.state);
       if (serviceWorker.state == "activated") {
         //If push subscription wasnt done yet have to do here
-        // console.log("sw already activated - Do watever needed here");
+        console.log("sw already activated - Do watever needed here");
         subscribeForPushNotification(reg);
       }
       serviceWorker.addEventListener("statechange", function (e) {
-        // console.log("sw statechange : ", e.target.state);
+        console.log("sw statechange : ", e.target.state);
         if (e.target.state == "activated") {
           // use pushManger for subscribing here.
-          // console.log("Just now activated. now we can subscribe for push notification")
+          console.log("Just now activated. now we can subscribe for push notification")
           subscribeForPushNotification(reg);
         }
       });
@@ -63,7 +63,7 @@ async function subscribeForPushNotification(reg) {
   // console.log("Service Worker Registered...");
 
   // Register Push
-  // console.log("Registering Push...");
+  console.log("Registering Push...");
   const subscription = await reg.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
@@ -71,7 +71,7 @@ async function subscribeForPushNotification(reg) {
   // console.log("Push Registered...");
 
   // Send Push Notification
-  // console.log("Sending Push...");
+  console.log("Sending Push...");
   await fetch(`${DOMAIN}/notification/subscribe`, {
     method: "POST",
     body: JSON.stringify({ subscription: subscription, topic: 'all' }),

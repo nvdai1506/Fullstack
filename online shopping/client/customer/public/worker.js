@@ -1,7 +1,7 @@
 // const HOST_DOMAIN = 'http://localhost:8080';
-// const DOMAIN = 'http://localhost:3001'
+// const CLIENT_DOMAIN = 'http://localhost:3001'
 const HOST_DOMAIN = 'https://nvd-shopping-online.onrender.com'
-const DOMAIN = 'https://react-project-a389a.web.app'
+const CLIENT_DOMAIN = 'https://react-project-a389a.web.app'
 
 
 console.log("Service Worker Loaded...");
@@ -14,7 +14,7 @@ self.addEventListener("push", e => {
   e.waitUntil(
     self.registration.showNotification(title, {
       body: message + '\n Thông báo từ NVD Shop.',
-      icon: `${DOMAIN}/images/favicon.png`,
+      icon: `${CLIENT_DOMAIN}/images/favicon.png`,
       tag: tag,
       data: productId
     })
@@ -23,8 +23,8 @@ self.addEventListener("push", e => {
 self.addEventListener('notificationclick', (event) => {
   const { tag, data } = event.notification;
   if (tag === 'voucher') {
-    clients.openWindow(DOMAIN);
+    clients.openWindow(CLIENT_DOMAIN);
   } else if (tag === 'sale') {
-    clients.openWindow(`${DOMAIN}/product/${data}`);
+    clients.openWindow(`${CLIENT_DOMAIN}/product/${data}`);
   }
 });
