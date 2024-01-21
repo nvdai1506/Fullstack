@@ -1,14 +1,14 @@
 on:
   push:
     branches:
-      - master
+      - abc
 
 jobs:
   local-prepare:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16.x ]
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
       - name: Setup node follow on node-versions
@@ -19,7 +19,7 @@ jobs:
 
       - name: Install JS dependencies
         run: yarn
-            
+
       - name: Re-build source with yarn and zip folder dist.zip
         run: |
           yarn build
@@ -32,8 +32,8 @@ jobs:
           username: ${{secrets.USER_PRODUCTION}}
           key: ${{secrets.FILE_PEM_PRODUCTION}}
           port: 22
-          source: './dist.zip'
-          target: '~/server/'
+          source: "./dist.zip"
+          target: "~/server/"
 
       - name: unzip file dist.zip
         uses: appleboy/ssh-action@master
@@ -64,8 +64,8 @@ jobs:
           username: ${{secrets.USER_PRODUCTION}}
           key: ${{secrets.FILE_PEM_PRODUCTION}}
           port: 22
-          source: './node_modules.zip'
-          target: '~/server/'
+          source: "./node_modules.zip"
+          target: "~/server/"
 
       - name: Unzip node_modules
         if: contains(steps.changed-files.outputs.all_changed_files, 'package.json')
