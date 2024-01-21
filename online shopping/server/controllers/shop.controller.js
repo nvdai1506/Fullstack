@@ -139,10 +139,9 @@ shop.getFeaturedProducts = async (req, res, next) => {
     const CatalogValue = req.params.CatalogValue;
     try {
         const pCache = await getCache(`featuredProducts/${CatalogValue}`);
-        if (pCache !== null) {
+        if (pCache !== null && JSON.parse(pCache).length > 0) {
             res.status(200).json({ products: JSON.parse(pCache) });
         } else {
-
             const catalog = await Catalog.find({ value: CatalogValue }).populate({ path: 'featuredProducts' })
                 .populate({
                     path: 'featuredProducts',
@@ -154,6 +153,7 @@ shop.getFeaturedProducts = async (req, res, next) => {
                 });
             // console.log(catalog);
             setCache(`featuredProducts/${CatalogValue}`, catalog);
+            console.log('catalog:', catalog)
 
             res.status(200).json({ products: catalog });
         }

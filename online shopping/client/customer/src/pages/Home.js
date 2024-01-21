@@ -13,15 +13,15 @@ function Home() {
       const result = await Api.shop.getFeaturedProducts(`${value}`);
       const data = await result.json();
       // console.log(data);
-      const products = data.products[0].featuredProducts;
+      const products = data?.products[0]?.featuredProducts;
       // console.log(products);
-      if (products.length < 8) {
+      if (products?.length < 8) {
         const result2 = await Api.shop.getProductByType(`${value}?level=1`)
         const data2 = await result2.json();
         for (const e of data2.product) {
           if (e.featuredProduct === 0) {
             products.push(e);
-            if (products.length >= 8) {
+            if (products?.length >= 8) {
               break;
             }
           }

@@ -1,0 +1,91 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  local-prepare:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node follow on node-versions
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: c-hive/gha-yarn-cache@v2
+
+      - name: Install JS dependencies
+        run: yarn
+            
+      - name: Re-build source with yarn and zip folder dist.zip
+        run: |
+          yarn build
+          zip -r dist.zip dist
+
+      - name: scp file dist.zip to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.HOST_PRODUCTION}}
+          username: ${{secrets.USER_PRODUCTION}}
+          key: ${{secrets.FILE_PEM_PRODUCTION}}
+          port: 22
+          source: './dist.zip'
+          target: '~/server/'
+
+      - name: unzip file dist.zip
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST_PRODUCTION}}
+          username: ${{secrets.USER_PRODUCTION}}
+          key: ${{secrets.FILE_PEM_PRODUCTION}}
+          port: 22
+          script: |
+            mkdir -p server
+            cd server
+            sudo rm -rf dist
+            unzip -o dist.zip
+
+      - name: Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v34.2.0
+
+      - name: Zip node_modules
+        if: contains(steps.changed-files.outputs.all_changed_files, 'package.json')
+        run: |
+          zip -r node_modules.zip node_modules
+      - name: Move node_modules to server
+        if: contains(steps.changed-files.outputs.all_changed_files, 'package.json')
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.HOST_PRODUCTION}}
+          username: ${{secrets.USER_PRODUCTION}}
+          key: ${{secrets.FILE_PEM_PRODUCTION}}
+          port: 22
+          source: './node_modules.zip'
+          target: '~/server/'
+
+      - name: Unzip node_modules
+        if: contains(steps.changed-files.outputs.all_changed_files, 'package.json')
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST_PRODUCTION}}
+          username: ${{secrets.USER_PRODUCTION}}
+          key: ${{secrets.FILE_PEM_PRODUCTION}}
+          port: 22
+          script: |
+            cd server
+            unzip -o node_modules
+
+      - name: Run pm2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST_PRODUCTION}}
+          username: ${{secrets.USER_PRODUCTION}}
+          key: ${{secrets.FILE_PEM_PRODUCTION}}
+          port: 22
+          script: |
+            cd server
+            pm2 restart backend

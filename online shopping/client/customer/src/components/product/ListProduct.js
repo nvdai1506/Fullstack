@@ -6,7 +6,7 @@ function ListProduct({ listProduct, numCols }) {
     // console.log(listProduct);
     return (
         <div className={`grid grid--${numCols}-cols grid--big-gap ${classes.list_product}`}>
-            {listProduct.map(p => <ProductItem key={p._id + '-' + Math.floor(Math.random() * 10000)} product={p} />)}
+            {listProduct && listProduct?.map(p => <ProductItem key={p._id + '-' + Math.floor(Math.random() * 10000)} product={p} />)}
         </div>
     )
 }

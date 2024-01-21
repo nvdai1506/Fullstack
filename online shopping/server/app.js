@@ -17,7 +17,6 @@ import UserRouter from './routes/user.route.js';
 import ShopRouter from './routes/shop.route.js';
 import PaymentRouter from './routes/payment.route.js';
 import NotificationRouter from './routes/notification.route.js';
-ion
 import Auth from './middlewares/auth.mdw.js';
 
 // import helper from './utils/helper.js';
@@ -113,7 +112,11 @@ app.get('/hello', (req, res, next) => {
 // pushNotification('all', 'test title', 'message test', 'tag test');
 
 const PORT = process.env.PORT || 8080;
-mongoose.connect(process.env.MONGODB_URI).then(result => {
+console.log('process.env.MONGODB_URI:', process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(result => {
   // helper.resetRate();
   // helper.addPaymentMethodToShippingInfo();
   // helper.addPropertyToModel('percent', 0, Order);

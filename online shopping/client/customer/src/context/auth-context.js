@@ -39,54 +39,57 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem('x-access-token', data.accessToken);
     localStorage.setItem('x-refreshToken', data.refreshToken);
     // send request to get cart of user
-    Api.user.getCart()
-      .then((result) => {
-        return result.json();
-      })
-      .then(data => {
-        const cart = data.cart;
-        console.log(cart);
-        if (cart.totalPrice === 0) {
-          const newFormatItems = cartCtx.items.map(item => {
-            return {
-              product: item.id,
-              amount: item.amount,
-              currentSize: item.size
-            }
-          })
-          const newCartFormat = {
-            items: newFormatItems,
-            totalPrice: cartCtx.totalPrice,
-            totalAmount: cartCtx.totalAmount
-          };
-          Api.user.updateCart({ cart: newCartFormat })
-            .then(result => { return result.json(); })
-            .then(data => {
-              console.log(data);
+    if (userIsLoggedIn) {
+      Api.user.getCart()
+        .then((result) => {
+          return result.json();
+        })
+        .then(data => {
+          const cart = data.cart;
+          console.log(cart);
+          if (cart.totalPrice === 0) {
+            const newFormatItems = cartCtx.items.map(item => {
+              return {
+                product: item.id,
+                amount: item.amount,
+                currentSize: item.size
+              }
             })
-            .catch(err => { console.log(err); })
-        } else {
-          const newFormatItems = cart.items.map(item => {
-            const p = item.product;
-            return {
-              id: p._id,
-              title: p.title,
-              price: p.price,
-              imageUrl: p.imageUrl,
-              size: item.currentSize,
-              amount: item.amount
-            }
-          })
-          // console.log('newFormatItems: ', newFormatItems);
-          const newCartFormat = {
-            items: newFormatItems,
-            totalPrice: cart.totalPrice,
-            totalAmount: cart.totalAmount
-          };
-          cartCtx.initCart({ cart: newCartFormat });
-        }
-      })
-      .catch(err => { console.log(err); })
+            const newCartFormat = {
+              items: newFormatItems,
+              totalPrice: cartCtx.totalPrice,
+              totalAmount: cartCtx.totalAmount
+            };
+            Api.user.updateCart({ cart: newCartFormat })
+              .then(result => { return result.json(); })
+              .then(data => {
+                console.log(data);
+              })
+              .catch(err => { console.log(err); })
+          } else {
+            const newFormatItems = cart.items.map(item => {
+              const p = item.product;
+              return {
+                id: p._id,
+                title: p.title,
+                price: p.price,
+                imageUrl: p.imageUrl,
+                size: item.currentSize,
+                amount: item.amount
+              }
+            })
+            // console.log('newFormatItems: ', newFormatItems);
+            const newCartFormat = {
+              items: newFormatItems,
+              totalPrice: cart.totalPrice,
+              totalAmount: cart.totalAmount
+            };
+            cartCtx.initCart({ cart: newCartFormat });
+          }
+        })
+        .catch(err => { console.log(err); })
+    }
+
   };
 
   const contextValue = {
