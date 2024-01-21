@@ -19,7 +19,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy code to server
-        run: scp -r . ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
+        run: scp -r ./cicd.txt ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
 
       - name: SSH into server and trigger Docker build
         run: |
