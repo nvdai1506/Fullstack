@@ -20,7 +20,3 @@ jobs:
 
       - name: Deploy code to server
         run: scp -r ./cicd.txt ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/home/ubuntu
-
-      - name: SSH into server and trigger Docker build
-        run: |
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'cd /home/ubuntu && docker-compose up -d'
