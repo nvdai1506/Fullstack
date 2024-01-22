@@ -1,3 +1,5 @@
+name: Deploy Docker Compose
+
 on:
   push:
     branches:
@@ -6,13 +8,28 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: scp file nginx to server
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "./online shopping/nginx.conf"
+          source: "./online\ shopping/docker-compose.yml"
           target: "~/server/"
+
+      - name: Run docker-compose on server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/server/
+            docker-compose up -d
